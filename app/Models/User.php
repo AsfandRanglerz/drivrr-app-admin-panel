@@ -58,4 +58,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Permission::class, 'component_permission', 'user_id', 'permission_id');
     }
+    public function review()
+    {
+        return $this->hasMany(Review::class,'owner_id','driver_id');
+    }
 }

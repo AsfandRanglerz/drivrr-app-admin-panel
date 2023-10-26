@@ -6,7 +6,12 @@ use App\Controllers\JobController;
 use App\Controllers\ProfileController;
 use App\Controllers\DocumentController;
 use App\Controllers\DriverVehicleController;
-use App\Http\Controllers\Api\AuthController;
+use App\Controllers\JobController;
+use App\Controllers\HelpAndSupportController;
+use App\Controllers\OwnerJobsController;
+use App\Controllers\ReviewController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +33,7 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('change-password', 'AuthController@change_password');
 });
 
+
 Route::middleware(['auth:sanctum'])->group(function () {
    Route::get('logout', 'Api\AuthController@logout');
    //edit-user-profile
@@ -40,11 +46,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
    Route::get('driver-vehicle-create/{id}','Api\DriverVehicleController@create');
    Route::post('driver-vehicle-add/{id}','Api\DriverVehicleController@store');
    //owner-jobs
-   Route::post('owner-index/{id}','Api\JobController@store');
+   Route::post('owners-jobs/{id}','Api\JobController@jobStore');
+   //users-queries
    Route::post('user-query/{id}','Api\HelpAndSupportController@queryStore');
    //get owners jobs
    Route::get('owners-jobs-show/{id}','Api\OwnerJobsController@index');
+
 });
+
+Route::post('owners-reviews','Api\ReviewController@ownerReview');
+Route::get('driver-reviews/{id}','Api\ReviewController@showFeedBackToDriver');
 
 
 
