@@ -40,7 +40,7 @@
                                     <i data-feather="users"></i><span>Business Owner</span>
                                 </a>
                             </li>
-                            @elseif (auth()->guard('admin')->check())
+                        @elseif (auth()->guard('admin')->check())
                             <li class="dropdown {{ request()->is('admin/businessOwner*') ? 'active' : '' }}">
                                 <a href="{{ route('businessOwner.index') }}" class="nav-link">
                                     <i data-feather="users"></i><span>Business Owner</span>
@@ -55,7 +55,7 @@
                                     <i data-feather="users"></i><span>Driver</span>
                                 </a>
                             </li>
-                            @elseif (auth()->guard('admin')->check())
+                        @elseif (auth()->guard('admin')->check())
                             <li class="dropdown {{ request()->is('admin/driver*') ? 'active' : '' }}">
                                 <a href="{{ route('driver.index') }}" class="nav-link">
                                     <i data-feather="users"></i><span>Driver</span>
@@ -70,7 +70,7 @@
                                     <i data-feather="users"></i><span>Sub Admin</span>
                                 </a>
                             </li>
-                            @elseif (auth()->guard('admin')->check())
+                        @elseif (auth()->guard('admin')->check())
                             <li class="dropdown {{ request()->is('admin/subadmin*') ? 'active' : '' }}">
                                 <a href="{{ route('subadmin.index') }}" class="nav-link">
                                     <i data-feather="users"></i><span>Sub Admin</span>
