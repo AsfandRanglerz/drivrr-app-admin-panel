@@ -4,6 +4,6 @@
 <p>This is your account password.</p>
 <h3>{{$password}}</h3>
 
-Thanks,<br>
+Thanks, <br>
 {{ config('app.name') }}
 @endcomponent
