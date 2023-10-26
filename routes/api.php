@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Controllers\AuthController;
+use App\Controllers\JobController;
+// use Illuminate\Support\Facades\Route;
 use App\Controllers\ProfileController;
 use App\Controllers\DocumentController;
 use App\Controllers\DriverVehicleController;
-use App\Controllers\JobController;
+use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
