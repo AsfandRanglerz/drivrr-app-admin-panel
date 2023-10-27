@@ -2,11 +2,10 @@
 
 use Illuminate\Http\Request;
 use App\Controllers\JobController;
-// use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route;
 use App\Controllers\ProfileController;
 use App\Controllers\DocumentController;
 use App\Controllers\DriverVehicleController;
-use App\Controllers\JobController;
 use App\Controllers\HelpAndSupportController;
 use App\Controllers\OwnerJobsController;
 use App\Controllers\ReviewController;
@@ -26,8 +25,11 @@ use App\Controllers\ReviewController;
 
 Route::group(['namespace' => 'Api'], function () {
 
-    Route::post('register', 'AuthController@register');
-    Route::post('login', 'AuthController@login')->name('login');
+    Route::post('register/{id}', 'AuthController@register');
+    Route::post('register-otp-send', 'AuthController@user_otp_register_send');
+    Route::post('register-otp-verify', 'AuthController@user_otp_register_verify');
+    Route::post('login-otp-send', 'AuthController@user_otp_login_send')->name('login-otp-send');
+    Route::post('login-otp-verify', 'AuthController@user_otp_login_verify')->name('login-otp-verify');
     Route::post('reset-password', 'AuthController@reset_password');
     Route::post('verify-otp', 'AuthController@verify_code');
     Route::post('change-password', 'AuthController@change_password');
