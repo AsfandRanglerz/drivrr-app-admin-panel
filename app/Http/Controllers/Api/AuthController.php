@@ -56,9 +56,8 @@ class AuthController extends Controller
         } else {
             $user->roles()->sync(2);
         }
-        $otp = random_int(0000,9999);
+        // $otp = random_int(0000,9999);
         $token = $user->createToken($request->email)->plainTextToken;
-
         return response()->json([
             'message' => "Added successfully.",
             'status' => "success.",
@@ -67,66 +66,66 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function user_otp_register_send(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            // 'password' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return $this->sendError($validator->errors()->first());
-        }
-        $user = User::where('email', $request->email)->first();
-        if($user)
-        {
-            DB::table('user_register_with_otps')->where('email',$request->email)->delete();
-            $login_otp = random_int(1000, 9999);
-            $token = Str::random(30);
-            DB::table('user_register_with_otps')->insert([
-                'email' => $request->email,
-                'token' => $token,
-                'otp' => $login_otp,
-            ]);
-            Mail::to($request->email)->send(new LoginUserWithOtp($login_otp));
-            return response()->json([
-                'message'=>'Login OTP send to your email successfully.',
-                'status'=>'success',
-            ],200);
-        }
-        else
-        {
-            return response()->json([
-                'message'=>'The user is not exist.',
-                'status'=>'failed',
-            ],401);
-        }
-    }
-    public function user_otp_register_verify(Request $request)
-    {
-        $validator = Validator::make($request->all(),[
-            'otp'=>'required',
-        ]);
-        if(!$validator)
-        {
-            return $this->sendError($validator->errors()->first());
-        }
+    // public function user_otp_register_send(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'email' => 'required|email',
+    //         // 'password' => 'required',
+    //     ]);
+    //     if ($validator->fails()) {
+    //         return $this->sendError($validator->errors()->first());
+    //     }
+    //     $user = User::where('email', $request->email)->first();
+    //     if($user)
+    //     {
+    //         DB::table('user_register_with_otps')->where('email',$request->email)->delete();
+    //         $login_otp = random_int(1000, 9999);
+    //         $token = Str::random(30);
+    //         DB::table('user_register_with_otps')->insert([
+    //             'email' => $request->email,
+    //             'token' => $token,
+    //             'otp' => $login_otp,
+    //         ]);
+    //         Mail::to($request->email)->send(new LoginUserWithOtp($login_otp));
+    //         return response()->json([
+    //             'message'=>'Login OTP send to your email successfully.',
+    //             'status'=>'success',
+    //         ],200);
+    //     }
+    //     else
+    //     {
+    //         return response()->json([
+    //             'message'=>'The user is not exist.',
+    //             'status'=>'failed',
+    //         ],401);
+    //     }
+    // }
+    // public function user_otp_register_verify(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(),[
+    //         'otp'=>'required',
+    //     ]);
+    //     if(!$validator)
+    //     {
+    //         return $this->sendError($validator->errors()->first());
+    //     }
 
-        $user_otp = DB::table('user_register_with_otps')->where('otp',$request->otp)->first();
-        if($user_otp)
-        {
-            return response()->json([
-                'message'=>'OTP verify successfully.',
-                'status'=>'success',
-            ],200);
-        }
-        else
-        {
-            return response()->json([
-                'message'=>'OTP verification failed.',
-                'status'=>'Failed',
-            ]);
-        }
-    }
+    //     $user_otp = DB::table('user_register_with_otps')->where('otp',$request->otp)->first();
+    //     if($user_otp)
+    //     {
+    //         return response()->json([
+    //             'message'=>'OTP verify successfully.',
+    //             'status'=>'success',
+    //         ],200);
+    //     }
+    //     else
+    //     {
+    //         return response()->json([
+    //             'message'=>'OTP verification failed.',
+    //             'status'=>'Failed',
+    //         ]);
+    //     }
+    // }
 
     //user_login
 

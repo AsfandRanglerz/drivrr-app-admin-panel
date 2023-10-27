@@ -26,8 +26,6 @@ use App\Controllers\ReviewController;
 Route::group(['namespace' => 'Api'], function () {
 
     Route::post('register/{id}', 'AuthController@register');
-    Route::post('register-otp-send', 'AuthController@user_otp_register_send');
-    Route::post('register-otp-verify', 'AuthController@user_otp_register_verify');
     Route::post('login-otp-send', 'AuthController@user_otp_login_send')->name('login-otp-send');
     Route::post('login-otp-verify', 'AuthController@user_otp_login_verify')->name('login-otp-verify');
     Route::post('reset-password', 'AuthController@reset_password');
