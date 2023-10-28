@@ -27,8 +27,8 @@ Route::group(['namespace' => 'Api'], function () {
 
     Route::post('register/{id}', 'AuthController@register');
     Route::get('/checkEmailExists', 'AuthController@checkEmailExists');
-    Route::post('/login-otp-send', 'AuthController@user_otp_login_send')->name('login-otp-send');
-    Route::post('/login-otp-verify', 'AuthController@user_otp_login_verify')->name('login-otp-verify');
+    Route::post('login-otp-send', 'AuthController@user_otp_login_send')->name('login-otp-send');
+    Route::post('login-otp-verify', 'AuthController@user_otp_login_verify')->name('login-otp-verify');
     Route::post('reset-password', 'AuthController@reset_password');
     Route::post('verify-otp', 'AuthController@verify_code');
     Route::post('change-password', 'AuthController@change_password');
