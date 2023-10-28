@@ -65,6 +65,15 @@ class AuthController extends Controller
             // 'data' => $user,
         ], 200);
     }
+    public function checkEmailExists(Request $request)
+    {
+        $email = $request->input('email');
+
+        // Check if the email already exists in the users table
+        $exists = User::where('email', $email)->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
 
     // public function user_otp_register_send(Request $request)
     // {
@@ -142,9 +151,8 @@ class AuthController extends Controller
         if ($user->is_active == 0) {
             return response()->json(['message' => 'Your user is not active'], 401);
         }
-        if($user)
-        {
-            DB::table('user_login_with_otps')->where('email',$request->email)->delete();
+        if ($user) {
+            DB::table('user_login_with_otps')->where('email', $request->email)->delete();
             $login_otp = random_int(1000, 9999);
             $token = Str::random(30);
             DB::table('user_login_with_otps')->insert([
@@ -154,45 +162,39 @@ class AuthController extends Controller
             ]);
             // $otp = $login_otp;
             // dd($otp);
-              Mail::to($request->email)->send(new LoginUserWithOtp($login_otp));
-        //    Mail::to($request->email)->send(new ForgotPassword($otp));
+            Mail::to($request->email)->send(new LoginUserWithOtp($login_otp));
+            //    Mail::to($request->email)->send(new ForgotPassword($otp));
             return response()->json([
-                'message'=>'Login OTP send to your email successfully.',
-                'status'=>'success',
-            ],200);
-        }
-        else
-        {
+                'message' => 'Login OTP send to your email successfully.',
+                'status' => 'success',
+            ], 200);
+        } else {
             return response()->json([
-                'message'=>'The user is not exist.',
-                'status'=>'failed',
-            ],401);
+                'message' => 'The user is not exist.',
+                'status' => 'failed',
+            ], 401);
         }
     }
 
     public function user_otp_login_verify(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'otp'=>'required',
+        $validator = Validator::make($request->all(), [
+            'otp' => 'required',
         ]);
-        if(!$validator)
-        {
+        if (!$validator) {
             return $this->sendError($validator->errors()->first());
         }
 
-        $user_otp = DB::table('user_login_with_otps')->where('otp',$request->otp)->first();
-        if($user_otp)
-        {
+        $user_otp = DB::table('user_login_with_otps')->where('otp', $request->otp)->first();
+        if ($user_otp) {
             return response()->json([
-                'message'=>'OTP verify successfully.',
-                'status'=>'success',
-            ],200);
-        }
-        else
-        {
+                'message' => 'OTP verify successfully.',
+                'status' => 'success',
+            ], 200);
+        } else {
             return response()->json([
-                'message'=>'OTP verification failed.',
-                'status'=>'Failed',
+                'message' => 'OTP verification failed.',
+                'status' => 'Failed',
             ]);
         }
     }

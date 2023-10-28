@@ -26,6 +26,7 @@ use App\Controllers\ReviewController;
 Route::group(['namespace' => 'Api'], function () {
 
     Route::post('register/{id}', 'AuthController@register');
+    Route::get('/checkEmailExists', 'AuthController@checkEmailExists');
     Route::post('login-otp-send', 'AuthController@user_otp_login_send')->name('login-otp-send');
     Route::post('login-otp-verify', 'AuthController@user_otp_login_verify')->name('login-otp-verify');
     Route::post('reset-password', 'AuthController@reset_password');
@@ -35,27 +36,26 @@ Route::group(['namespace' => 'Api'], function () {
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
-   Route::get('logout', 'Api\AuthController@logout');
-   //edit-user-profile
-   Route::post('edit-profile/{id}','Api\ProfileController@update');
-   //user-documents
-   Route::get('document-index/{id}','Api\DocumentController@index');
-   Route::get('document-index/{id}','Api\DocumentController@index');
-   //user-vehicles
-   Route::get('driver-vehicle-index/{id}','Api\DriverVehicleController@index');
-   Route::get('driver-vehicle-create/{id}','Api\DriverVehicleController@create');
-   Route::post('driver-vehicle-add/{id}','Api\DriverVehicleController@store');
-   //owner-jobs
-   Route::post('owners-jobs/{id}','Api\JobController@jobStore');
-   //users-queries
-   Route::post('user-query/{id}','Api\HelpAndSupportController@queryStore');
-   //get owners jobs
-   Route::get('owners-jobs-show/{id}','Api\OwnerJobsController@index');
-
+    Route::get('logout', 'Api\AuthController@logout');
+    //edit-user-profile
+    Route::post('edit-profile/{id}', 'Api\ProfileController@update');
+    //user-documents
+    Route::get('document-index/{id}', 'Api\DocumentController@index');
+    Route::get('document-index/{id}', 'Api\DocumentController@index');
+    //user-vehicles
+    Route::get('driver-vehicle-index/{id}', 'Api\DriverVehicleController@index');
+    Route::get('driver-vehicle-create/{id}', 'Api\DriverVehicleController@create');
+    Route::post('driver-vehicle-add/{id}', 'Api\DriverVehicleController@store');
+    //owner-jobs
+    Route::post('owners-jobs/{id}', 'Api\JobController@jobStore');
+    //users-queries
+    Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
+    //get owners jobs
+    Route::get('owners-jobs-show/{id}', 'Api\OwnerJobsController@index');
 });
 
-Route::post('owners-reviews','Api\ReviewController@ownerReview');
-Route::get('driver-reviews/{id}','Api\ReviewController@showFeedBackToDriver');
+Route::post('owners-reviews', 'Api\ReviewController@ownerReview');
+Route::get('driver-reviews/{id}', 'Api\ReviewController@showFeedBackToDriver');
 
 
 
