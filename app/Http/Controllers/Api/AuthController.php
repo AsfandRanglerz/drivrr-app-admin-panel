@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use App\Mail\ForgotPassword;
 use App\Mail\LoginUserWithOtp;
+use App\Mail\ActiveUserStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -53,8 +54,10 @@ class AuthController extends Controller
 
         if ($id == 3) {
             $user->roles()->sync(3);
+            Mail::to($user->email)->send(new ActiveUserStatus($id));
         } else {
             $user->roles()->sync(2);
+            Mail::to($user->email)->send(new ActiveUserStatus($id));
         }
         // $otp = random_int(0000,9999);
         $token = $user->createToken($request->email)->plainTextToken;
