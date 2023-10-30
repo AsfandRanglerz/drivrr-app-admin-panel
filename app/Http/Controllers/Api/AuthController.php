@@ -141,7 +141,6 @@ class AuthController extends Controller
 
     //user_login
 
-
     // public function user_otp_login_send(Request $request)
     // {
     //     $validator = Validator::make($request->all(), [
@@ -152,15 +151,6 @@ class AuthController extends Controller
     //         return $this->sendError($validator->errors()->first());
     //     }
     //     $user = User::where('email', $request->email)->first();
-    //     $user = User::where('email', $request->email)->first();
-
-    //     if ($user) {
-    //         // User is registered
-    //         return response()->json(['userRegistered' => true]);
-    //     } else {
-    //         // User is not registered
-    //         return response()->json(['userRegistered' => false]);
-    //     }
     //     if ($user->is_active == 0) {
     //         return response()->json(['message' => 'Your user is not active'], 401);
     //     }
@@ -192,22 +182,21 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            // 'password' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError($validator->errors()->first());
+            return response()->json(['message' => $validator->errors()->first(), 'status' => 'failed'], 400);
         }
 
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
-            // User is not registered
-            return response()->json(['messages' => 'The user is not registered.', 'status' => 'failed'], 401);
+            return response()->json(['message' => 'The user is not registered.', 'status' => 'failed'], 401);
         }
-        if ($user->is_active == 0) {
-            return response()->json(['message' => 'Your user is not active', 'status' => 'failed'], 401);
-        }
+
+        // if ($user->is_active == 0) {
+        //     return response()->json(['message' => 'Your user is not active', 'status' => 'failed'], 401);
+        // }
 
         // Continue with OTP generation and sending
         DB::table('user_login_with_otps')->where('email', $request->email)->delete();
@@ -226,6 +215,7 @@ class AuthController extends Controller
             'status' => 'success',
         ], 200);
     }
+
 
     public function user_otp_login_verify(Request $request)
     {
