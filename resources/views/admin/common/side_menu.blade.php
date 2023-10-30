@@ -101,12 +101,12 @@
             {{-- Roles & Permissions --}}
             @if (auth()->guard('web')->check() &&
                     auth()->guard('web')->user()->can('Roles & Permissions'))
-                <li class="dropdown {{ request()->is('admin/roles-permission') ? 'active' : '' }}">
-                    <a href="{{ route('roles-permission.index') }}" class="nav-link"><i class="fa fa-key"></i><span>Roles & Permissions</span></a>
+                <li class="dropdown {{ request()->is('admin/rolespermission') ? 'active' : '' }}">
+                    <a href="{{ route('rolespermission.index') }}" class="nav-link"><i class="fa fa-key"></i><span>Roles & Permissions</span></a>
                 </li>
             @elseif (auth()->guard('admin')->check())
-                <li class="dropdown {{ request()->is('admin/roles-permission') ? 'active' : '' }}">
-                    <a href="{{ route('roles-permission.index') }}" class="nav-link"><i class="fa fa-key"></i><span>Roles & Permissions</span></a>
+                <li class="dropdown {{ request()->is('admin/rolespermission') ? 'active' : '' }}">
+                    <a href="{{ route('rolespermission.index') }}" class="nav-link"><i class="fa fa-key"></i><span>Roles & Permissions</span></a>
                 </li>
             @endif
             {{-- Privacy policies --}}
