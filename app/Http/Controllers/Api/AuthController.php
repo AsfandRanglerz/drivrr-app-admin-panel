@@ -54,8 +54,10 @@ class AuthController extends Controller
 
         if ($id == 3) {
             $user->roles()->sync(3);
+            Mail::to($user->email)->send(new ActiveUserStatus($id));
         } else {
             $user->roles()->sync(2);
+            Mail::to($user->email)->send(new ActiveUserStatus($id));
         }
         // $otp = random_int(0000,9999);
         $token = $user->createToken($request->email)->plainTextToken;
@@ -65,6 +67,15 @@ class AuthController extends Controller
             'token' => $token,
             // 'data' => $user,
         ], 200);
+    }
+    public function checkEmailExists(Request $request)
+    {
+        $email = $request->input('email');
+
+        // Check if the email already exists in the users table
+        $exists = User::where('email', $email)->exists();
+
+        return response()->json(['exists' => $exists]);
     }
 
     // public function user_otp_register_send(Request $request)
@@ -130,73 +141,113 @@ class AuthController extends Controller
 
     //user_login
 
-    public function user_otp_login_send(Request $request , $id)
+    // public function user_otp_login_send(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'email' => 'required|email',
+    //         // 'password' => 'required',
+    //     ]);
+    //     if ($validator->fails()) {
+    //         return $this->sendError($validator->errors()->first());
+    //     }
+    //     $user = User::where('email', $request->email)->first();
+    //     if ($user->is_active == 0) {
+    //         return response()->json(['message' => 'Your user is not active'], 401);
+    //     }
+    //     if ($user) {
+    //         DB::table('user_login_with_otps')->where('email', $request->email)->delete();
+    //         $login_otp = random_int(1000, 9999);
+    //         $token = Str::random(30);
+    //         DB::table('user_login_with_otps')->insert([
+    //             'email' => $request->email,
+    //             'token' => $token,
+    //             'otp' => $login_otp,
+    //         ]);
+    //         // $otp = $login_otp;
+    //         // dd($otp);
+    //         Mail::to($request->email)->send(new LoginUserWithOtp($login_otp));
+    //         //    Mail::to($request->email)->send(new ForgotPassword($otp));
+    //         return response()->json([
+    //             'message' => 'Login OTP send to your email successfully.',
+    //             'status' => 'success',
+    //         ], 200);
+    //     } else {
+    //         return response()->json([
+    //             'message' => 'The user is not exist.',
+    //             'status' => 'failed',
+    //         ], 401);
+    //     }
+    // }
+    public function user_otp_login_send(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            // 'password' => 'required',
         ]);
+
         if ($validator->fails()) {
-            return $this->sendError($validator->errors()->first());
-        }
-        $user = User::where('email', $request->email)->first();
-        if ($user->is_active == 0) {
-            return response()->json(['message' => 'Your user is not active'], 401);
+            return response()->json(['message' => $validator->errors()->first(), 'status' => 'failed'], 400);
         }
 
-        if($user)
-        {
-            DB::table('user_login_with_otps')->where('email',$request->email)->delete();
-            $login_otp = random_int(1000, 9999);
-            $token = Str::random(30);
-            DB::table('user_login_with_otps')->insert([
-                'email' => $request->email,
-                'token' => $token,
-                'otp' => $login_otp,
-            ]);
-            // $otp = $login_otp;
-            // dd($otp);
-              Mail::to($request->email)->send(new LoginUserWithOtp($login_otp));
-        //    Mail::to($request->email)->send(new ForgotPassword($otp));
-            return response()->json([
-                'message'=>'Login OTP send to your email successfully.',
-                'status'=>'success',
-            ],200);
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'The user is not registered.', 'status' => 'failed'], 401);
         }
-        else
-        {
-            return response()->json([
-                'message'=>'The user is not exist.',
-                'status'=>'failed',
-            ],401);
-        }
+
+        // if ($user->is_active == 0) {
+        //     return response()->json(['message' => 'Your user is not active', 'status' => 'failed'], 401);
+        // }
+
+        // Continue with OTP generation and sending
+        DB::table('user_login_with_otps')->where('email', $request->email)->delete();
+        $login_otp = random_int(1000, 9999);
+        $token = Str::random(30);
+        DB::table('user_login_with_otps')->insert([
+            'email' => $request->email,
+            'token' => $token,
+            'otp' => $login_otp,
+        ]);
+
+        Mail::to($request->email)->send(new LoginUserWithOtp($login_otp));
+
+        return response()->json([
+            'message' => 'Login OTP sent to your email successfully.',
+            'status' => 'success',
+        ], 200);
     }
+
 
     public function user_otp_login_verify(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'otp'=>'required',
+        $validator = Validator::make($request->all(), [
+            'otp' => 'required',
         ]);
-        if(!$validator)
-        {
+        if (!$validator) {
             return $this->sendError($validator->errors()->first());
         }
 
-        $user_otp = DB::table('user_login_with_otps')->where('otp',$request->otp)->first();
-        if($user_otp)
-        {
+        $user_otp = DB::table('user_login_with_otps')->where('otp', $request->otp)->first();
+        if ($user_otp) {
             return response()->json([
-                'message'=>'OTP verify successfully.',
-                'status'=>'success',
-            ],200);
+                'message' => 'OTP verify successfully.',
+                'status' => 'success',
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'OTP verification failed.',
+                'status' => 'Failed',
+            ]);
         }
-        else
-        {
-            return response()->json([
-                'message'=>'OTP verification failed.',
-                'status'=>'Failed',
-iled',
-elete();
+    }
+
+    // public function reset_password(Request $request)
+    // {
+    //     $validate = Validator::make($request->all(), [
+    //         'email' => 'required|email',
+    //     ]);
+    //     $user = User::where('email', $request->email)->first();
+    //     if ($user) {
+    //         DB::table('password_resets')->where('email', $request->email)->delete();
     //         $otp = random_int(1000, 9999);
     //         $token = Str::random(30);
     //         DB::table('password_resets')->insert([
