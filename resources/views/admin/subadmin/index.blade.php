@@ -13,9 +13,13 @@
                                 </div>
                             </div>
                             <div class="card-body table-striped table-bordered table-responsive">
-
-                                <a class="btn btn-success mb-3" href="{{ route('subAdmin.create') }}">Add Sub Admin</a>
-
+                                @if (auth()->guard('web')->check() &&
+                                        auth()->guard('web')->user()->can('create') &&
+                                        auth()->guard('web')->user()->hasRole('subadmin'))
+                                    <a class="btn btn-success mb-3" href="{{ route('subAdmin.create') }}">Add Sub Admin</a>
+                                @elseif (auth()->guard('admin')->check())
+                                    <a class="btn btn-success mb-3" href="{{ route('subAdmin.create') }}">Add Sub Admin</a>
+                                @endif
 
                                 <table class="table text-center" id="table_id_events">
                                     <thead>
@@ -64,47 +68,101 @@
 
                                                 <td
                                                     style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
-
-                                                    @if ($subAdmin->is_active == 1)
-                                                        <a href="{{ route('subAdmin.status', ['id' => $subAdmin->id]) }}"
-                                                            class="btn btn-success">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                height="24" viewBox="0 0 24 24" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round"
-                                                                class="feather feather-toggle-left">
-                                                                <rect x="1" y="5" width="22" height="14"
-                                                                    rx="7" ry="7"></rect>
-                                                                <circle cx="16" cy="12" r="3"></circle>
-                                                            </svg>
-                                                        </a>
-                                                    @else
-                                                        <a href="{{ route('subAdmin.status', ['id' => $subAdmin->id]) }}"
-                                                            class="btn btn-danger">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                height="24" viewBox="0 0 24 24" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round"
-                                                                class="feather feather-toggle-right">
-                                                                <rect x="1" y="5" width="22" height="14"
-                                                                    rx="7" ry="7"></rect>
-                                                                <circle cx="8" cy="12" r="3"></circle>
-                                                            </svg>
-                                                        </a>
+                                                    @if (auth()->guard('web')->check() &&
+                                                            auth()->guard('web')->user()->can('status') &&
+                                                            auth()->guard('web')->user()->hasRole('subadmin'))
+                                                        @if ($subAdmin->is_active == 1)
+                                                            <a href="{{ route('subAdmin.status', ['id' => $subAdmin->id]) }}"
+                                                                class="btn btn-success">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                                    class="feather feather-toggle-left">
+                                                                    <rect x="1" y="5" width="22" height="14"
+                                                                        rx="7" ry="7"></rect>
+                                                                    <circle cx="16" cy="12" r="3"></circle>
+                                                                </svg>
+                                                            </a>
+                                                        @else
+                                                            <a href="{{ route('subAdmin.status', ['id' => $subAdmin->id]) }}"
+                                                                class="btn btn-danger">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                                    class="feather feather-toggle-right">
+                                                                    <rect x="1" y="5" width="22" height="14"
+                                                                        rx="7" ry="7"></rect>
+                                                                    <circle cx="8" cy="12" r="3"></circle>
+                                                                </svg>
+                                                            </a>
+                                                        @endif
+                                                    @elseif (auth()->guard('admin')->check())
+                                                        @if ($subAdmin->is_active == 1)
+                                                            <a href="{{ route('subAdmin.status', ['id' => $subAdmin->id]) }}"
+                                                                class="btn btn-success">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                                    class="feather feather-toggle-left">
+                                                                    <rect x="1" y="5" width="22" height="14"
+                                                                        rx="7" ry="7"></rect>
+                                                                    <circle cx="16" cy="12" r="3">
+                                                                    </circle>
+                                                                </svg>
+                                                            </a>
+                                                        @else
+                                                            <a href="{{ route('subAdmin.status', ['id' => $subAdmin->id]) }}"
+                                                                class="btn btn-danger">
+                                                                <svg xmlns="http://w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                                    class="feather feather-toggle-right">
+                                                                    <rect x="1" y="5" width="22" height="14"
+                                                                        rx="7" ry="7"></rect>
+                                                                    <circle cx="8" cy="12" r="3">
+                                                                    </circle>
+                                                                </svg>
+                                                            </a>
+                                                        @endif
                                                     @endif
 
-                                                    <a class="btn btn-info"
-                                                        href="{{ route('subAdmin.edit', $subAdmin->id) }}">Edit</a>
 
 
-                                                    <form method="post"
-                                                        action="{{ route('subAdmin.destroy', $subAdmin->id) }}">
-                                                        @csrf
-                                                        <input name="_method" type="hidden" value="DELETE">
-                                                        <button type="submit" class="btn btn-danger btn-flat show_confirm"
-                                                            data-toggle="tooltip">Delete</button>
-                                                    </form>
 
+                                                    @if (auth()->guard('web')->check() &&
+                                                            auth()->guard('web')->user()->can('edit') &&
+                                                            auth()->guard('web')->user()->hasRole('subadmin'))
+                                                        <a class="btn btn-info"
+                                                            href="{{ route('subAdmin.edit', $subAdmin->id) }}">Edit</a>
+                                                    @elseif (auth()->guard('admin')->check())
+                                                        <a class="btn btn-info"
+                                                            href="{{ route('subAdmin.edit', $subAdmin->id) }}">Edit</a>
+                                                    @endif
+                                                    @if (auth()->guard('web')->check() &&
+                                                            auth()->guard('web')->user()->can('delete') &&
+                                                            auth()->guard('web')->user()->hasRole('subadmin'))
+                                                        <form method="post"
+                                                            action="{{ route('subAdmin.destroy', $subAdmin->id) }}">
+                                                            @csrf
+                                                            <input name="_method" type="hidden" value="DELETE">
+                                                            <button type="submit"
+                                                                class="btn btn-danger btn-flat show_confirm"
+                                                                data-toggle="tooltip">Delete</button>
+                                                        </form>
+                                                    @elseif (auth()->guard('admin')->check())
+                                                        <form method="post"
+                                                            action="{{ route('subAdmin.destroy', $subAdmin->id) }}">
+                                                            @csrf
+                                                            <input name="_method" type="hidden" value="DELETE">
+                                                            <button type="submit"
+                                                                class="btn btn-danger btn-flat show_confirm"
+                                                                data-toggle="tooltip">Delete</button>
+                                                        </form>
+                                                    @endif
 
                                                 </td>
                                             </tr>
