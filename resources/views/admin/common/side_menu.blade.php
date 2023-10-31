@@ -3,7 +3,7 @@
         <div class="sidebar-brand">
             <a href="#"> <img alt="image" src="{{ asset('public/admin/assets/img/blacklogo.png') }}"
                     class="header-logo" />
-                    {{-- <span class="logo-name">Drivrr</span> --}}
+                {{-- <span class="logo-name">Drivrr</span> --}}
             </a>
         </div>
         <ul class="sidebar-menu">
@@ -13,12 +13,12 @@
                     auth()->guard('web')->user()->can('Dashboard'))
                 <li class="dropdown {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                     <a href="{{ url('/admin/dashboard') }}" class="nav-link"><i
-                        class="fas fa-th-large"></i><span>Dashboard</span></a>
+                            class="fas fa-th-large"></i><span>Dashboard</span></a>
                 </li>
             @elseif (auth()->guard('admin')->check())
                 <li class="dropdown {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                     <a href="{{ url('/admin/dashboard') }}" class="nav-link"><i
-                        class="fas fa-th-large"></i><span>Dashboard</span></a>
+                            class="fas fa-th-large"></i><span>Dashboard</span></a>
                 </li>
             @endif
             {{-- User Mangement --}}
@@ -89,18 +89,18 @@
                 <li class="dropdown {{ request()->is('admin/vehicle*') ? 'active' : '' }}">
                     <a href="{{ route('vehicle.index') }}" class="nav-link">
                         <i class="fas fa-bus"></i>
-                            <span>Vehicles</span></a>
+                        <span>Vehicles</span></a>
                 </li>
             @elseif (auth()->guard('admin')->check())
                 <li class="dropdown {{ request()->is('admin/vehicle*') ? 'active' : '' }}">
                     <a href="{{ route('vehicle.index') }}" class="nav-link">
                         <i class="fas fa-bus"></i>
-                            <span>Vehicles</span></a>
+                        <span>Vehicles</span></a>
                 </li>
             @endif
             {{-- Roles & Permissions --}}
             {{-- @if (auth()->guard('web')->check() &&
-                    auth()->guard('web')->user()->can('Roles & Permissions'))
+    auth()->guard('web')->user()->can('Roles & Permissions'))
                 <li class="dropdown {{ request()->is('admin/rolespermission') ? 'active' : '' }}">
                     <a href="{{ route('rolespermission.index') }}" class="nav-link"><i class="fa fa-key"></i><span>Roles & Permissions</span></a>
                 </li>
