@@ -178,6 +178,46 @@ class AuthController extends Controller
     //         ], 401);
     //     }
     // }
+
+    // ###########################OTP CODE#########################
+    // public function user_otp_login_send(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'email' => 'required|email',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return response()->json(['message' => $validator->errors()->first(), 'status' => 'failed'], 400);
+    //     }
+
+    //     $user = User::where('email', $request->email)->first();
+
+    //     if (!$user) {
+    //         return response()->json(['message' => 'The user is not registered.', 'status' => 'failed'], 401);
+    //     }
+
+    //     // if ($user->is_active == 0) {
+    //     //     return response()->json(['message' => 'Your user is not active', 'status' => 'failed'], 401);
+    //     // }
+
+    //     // Continue with OTP generation and sending
+    //     DB::table('user_login_with_otps')->where('email', $request->email)->delete();
+    //     $login_otp = random_int(1000, 9999);
+    //     $token = Str::random(30);
+    //     DB::table('user_login_with_otps')->insert([
+    //         'email' => $request->email,
+    //         'token' => $token,
+    //         'otp' => $login_otp,
+    //     ]);
+
+    //     Mail::to($request->email)->send(new LoginUserWithOtp($login_otp));
+
+    //     return response()->json([
+    //         'message' => 'Login OTP sent to your email successfully.',
+    //         'status' => 'success',
+    //     ], 200);
+    // }
+    ############OTP CODE END ###########################
     public function user_otp_login_send(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -194,27 +234,53 @@ class AuthController extends Controller
             return response()->json(['message' => 'The user is not registered.', 'status' => 'failed'], 401);
         }
 
-        // if ($user->is_active == 0) {
-        //     return response()->json(['message' => 'Your user is not active', 'status' => 'failed'], 401);
-        // }
+        // Check the user's roleId and if the email matches for roleId 2
+        if ($user->roles->where('id', 2)->count() > 0 && $user->email === $request->email) {
+            // Continue with OTP generation and sending for roleId 2
+            DB::table('user_login_with_otps')->where('email', $request->email)->delete();
+            $login_otp = random_int(1000, 9999);
+            $token = Str::random(30);
+            DB::table('user_login_with_otps')->insert([
+                'email' => $request->email,
+                'token' => $token,
+                'otp' => $login_otp,
+            ]);
 
-        // Continue with OTP generation and sending
-        DB::table('user_login_with_otps')->where('email', $request->email)->delete();
-        $login_otp = random_int(1000, 9999);
-        $token = Str::random(30);
-        DB::table('user_login_with_otps')->insert([
-            'email' => $request->email,
-            'token' => $token,
-            'otp' => $login_otp,
-        ]);
+            Mail::to($request->email)->send(new LoginUserWithOtp($login_otp));
 
-        Mail::to($request->email)->send(new LoginUserWithOtp($login_otp));
+            return response()->json([
+                'message' => 'Login OTP sent to your email successfully for roleId 2.',
+                'status' => 'success',
+                'roleId' => 2, // Include roleId in the response
+            ], 200);
+        } elseif ($user->roles->where('id', 3)->count() > 0 && $user->email === $request->email) {
+            // Continue with OTP generation and sending for roleId 3
+            DB::table('user_login_with_otps')->where('email', $request->email)->delete();
+            $login_otp = random_int(1000, 9999);
+            $token = Str::random(30);
+            DB::table('user_login_with_otps')->insert([
+                'email' => $request->email,
+                'token' => $token,
+                'otp' => $login_otp,
+            ]);
 
-        return response()->json([
-            'message' => 'Login OTP sent to your email successfully.',
-            'status' => 'success',
-        ], 200);
+            Mail::to($request->email)->send(new LoginUserWithOtp($login_otp));
+
+            return response()->json([
+                'message' => 'Login OTP sent to your email successfully for roleId 3.',
+                'status' => 'success',
+                'roleId' => 3, // Include roleId in the response
+            ], 200);
+        } else {
+            return response()->json(['message' => 'You are not allowed to send OTP.', 'status' => 'failed'], 401);
+        }
     }
+
+
+
+
+
+
 
 
     public function user_otp_login_verify(Request $request)
