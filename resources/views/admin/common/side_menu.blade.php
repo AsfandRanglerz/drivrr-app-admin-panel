@@ -124,7 +124,7 @@
             @endif
             {{-- Term & Conditions --}}
             @if (auth()->guard('web')->check() &&
-                    auth()->guard('web')->user()->can('Term & Conditions'))
+                    auth()->guard('web')->user()->can('Term&Conditions'))
                 <li class="dropdown {{ request()->is('admin/term-condition') ? 'active' : '' }}">
                     <a href="{{ url('/admin/term-condition') }}" class="nav-link">
                         <i class="fas fa-globe"></i><span>Term & Conditions</span></a>
