@@ -20,53 +20,61 @@
                             class="fas fa-th-large"></i><span>Dashboard</span></a>
                 </li>
             @endif
-            <li class="dropdown">
-                <a href="#" class="menu-toggle nav-link has-dropdown"><i class="fa fa-users"></i>
-                    <span>UserManagement</span></a>
-                <ul class="dropdown-menu active">
-                    {{-- Business Owner --}}
-                    @if (auth()->guard('web')->check() &&
-                            auth()->guard('web')->user()->can('Business Owner'))
-                        <li class="dropdown {{ request()->is('admin/businessOwner*') ? 'active' : '' }}">
-                            <a href="{{ route('businessOwner.index') }}" class="nav-link"><i
-                                    data-feather="users"></i><span>Business Owner</span></a>
-                        </li>
-                    @elseif (auth()->guard('admin')->check())
-                        <li class="dropdown {{ request()->is('admin/businessOwner*') ? 'active' : '' }}">
-                            <a href="{{ route('businessOwner.index') }}" class="nav-link"><i
-                                    data-feather="users"></i><span>Business Owner</span></a>
-                        </li>
-                    @endif
-                    {{-- Driver --}}
-                    @if (auth()->guard('web')->check() &&
-                            auth()->guard('web')->user()->can('Driver'))
-                        <li class="dropdown {{ request()->is('admin/driver*') ? 'active' : '' }}">
-                            <a href="{{ route('driver.index') }}" class="nav-link"><i
-                                    data-feather="users"></i><span>Driver</span></a>
-                        </li>
-                    @elseif (auth()->guard('admin')->check())
-                        <li class="dropdown {{ request()->is('admin/driver*') ? 'active' : '' }}">
-                            <a href="{{ route('driver.index') }}" class="nav-link"><i
-                                    data-feather="users"></i><span>Driver</span></a>
-                        </li>
-                    @endif
-                    {{-- Sub Admin --}}
-                    @if (auth()->guard('web')->check() &&
-                            auth()->guard('web')->user()->can('SubAdmin'))
-                        <li class="dropdown {{ request()->is('admin/subadmin*') ? 'active' : '' }}">
-                            <a href="{{ route('subadmin.index') }}" class="nav-link"><i
-                                    data-feather="users"></i><span>Sub
-                                    Admin</span></a>
-                        </li>
-                    @elseif (auth()->guard('admin')->check())
-                        <li class="dropdown {{ request()->is('admin/subadmin*') ? 'active' : '' }}">
-                            <a href="{{ route('subadmin.index') }}" class="nav-link"><i
-                                    data-feather="users"></i><span>Sub
-                                    Admin</span></a>
-                        </li>
-                    @endif
-                </ul>
-            </li>
+            {{-- User Mangement --}}
+            @if (
+                (auth()->guard('web')->check() &&
+                    (auth()->guard('web')->user()->can('Business Owner') ||
+                        auth()->guard('web')->user()->can('Driver') ||
+                        auth()->guard('web')->user()->can('SubAdmin'))) ||
+                    auth()->guard('admin')->check())
+                <li class="dropdown">
+                    <a href="#" class="menu-toggle nav-link has-dropdown"><i class="fa fa-users"></i>
+                        <span>UserManagement</span></a>
+                    <ul class="dropdown-menu active">
+                        {{-- Business Owner --}}
+                        @if (auth()->guard('web')->check() &&
+                                auth()->guard('web')->user()->can('Business Owner'))
+                            <li class="dropdown {{ request()->is('admin/businessOwner*') ? 'active' : '' }}">
+                                <a href="{{ route('businessOwner.index') }}" class="nav-link"><i
+                                        data-feather="users"></i><span>Business Owner</span></a>
+                            </li>
+                        @elseif (auth()->guard('admin')->check())
+                            <li class="dropdown {{ request()->is('admin/businessOwner*') ? 'active' : '' }}">
+                                <a href="{{ route('businessOwner.index') }}" class="nav-link"><i
+                                        data-feather="users"></i><span>Business Owner</span></a>
+                            </li>
+                        @endif
+                        {{-- Driver --}}
+                        @if (auth()->guard('web')->check() &&
+                                auth()->guard('web')->user()->can('Driver'))
+                            <li class="dropdown {{ request()->is('admin/driver*') ? 'active' : '' }}">
+                                <a href="{{ route('driver.index') }}" class="nav-link"><i
+                                        data-feather="users"></i><span>Driver</span></a>
+                            </li>
+                        @elseif (auth()->guard('admin')->check())
+                            <li class="dropdown {{ request()->is('admin/driver*') ? 'active' : '' }}">
+                                <a href="{{ route('driver.index') }}" class="nav-link"><i
+                                        data-feather="users"></i><span>Driver</span></a>
+                            </li>
+                        @endif
+                        {{-- Sub Admin --}}
+                        @if (auth()->guard('web')->check() &&
+                                auth()->guard('web')->user()->can('SubAdmin'))
+                            <li class="dropdown {{ request()->is('admin/subadmin*') ? 'active' : '' }}">
+                                <a href="{{ route('subadmin.index') }}" class="nav-link"><i
+                                        data-feather="users"></i><span>Sub
+                                        Admin</span></a>
+                            </li>
+                        @elseif (auth()->guard('admin')->check())
+                            <li class="dropdown {{ request()->is('admin/subadmin*') ? 'active' : '' }}">
+                                <a href="{{ route('subadmin.index') }}" class="nav-link"><i
+                                        data-feather="users"></i><span>Sub
+                                        Admin</span></a>
+                            </li>
+                        @endif
+                    </ul>
+                </li>
+            @endif
             {{-- Vehicles --}}
             @if (auth()->guard('web')->check() &&
                     auth()->guard('web')->user()->can('Vehicles'))
