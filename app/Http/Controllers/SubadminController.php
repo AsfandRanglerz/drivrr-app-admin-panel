@@ -145,7 +145,7 @@ class SubadminController extends Controller
     public function storePermissions(Request $request, $userId)
     {
         $permissions = $request->input('permissions');
-// return $permissions;
+
         $success = true;
 
         DB::beginTransaction();
