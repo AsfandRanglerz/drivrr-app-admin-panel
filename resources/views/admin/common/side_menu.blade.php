@@ -99,7 +99,7 @@
                 </li>
             @endif
             {{-- Roles & Permissions --}}
-            @if (auth()->guard('web')->check() &&
+            {{-- @if (auth()->guard('web')->check() &&
                     auth()->guard('web')->user()->can('Roles & Permissions'))
                 <li class="dropdown {{ request()->is('admin/rolespermission') ? 'active' : '' }}">
                     <a href="{{ route('rolespermission.index') }}" class="nav-link"><i class="fa fa-key"></i><span>Roles & Permissions</span></a>
@@ -108,7 +108,7 @@
                 <li class="dropdown {{ request()->is('admin/rolespermission') ? 'active' : '' }}">
                     <a href="{{ route('rolespermission.index') }}" class="nav-link"><i class="fa fa-key"></i><span>Roles & Permissions</span></a>
                 </li>
-            @endif
+            @endif --}}
             {{-- Privacy policies --}}
             @if (auth()->guard('web')->check() &&
                     auth()->guard('web')->user()->can('Privacy policies'))

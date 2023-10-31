@@ -14,8 +14,7 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $permissions = ['Dashboard', 'Business Owner', 'Driver', 'SubAdmin', 'Vehicles', 'Roles & Permissions', 'Privacy policies', 'Term
-        & Conditions', 'Help & Support'];
+        $permissions = ['Dashboard', 'Business Owner', 'Driver', 'SubAdmin', 'Vehicles', 'Roles & Permissions', 'Privacy policies', 'Term&Conditions', 'Help & Support'];
 
         foreach ($permissions as $permission) {
             if (!Permission::where('name', $permission)->where('guard_name', 'web')->exists()) {
