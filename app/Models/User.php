@@ -62,4 +62,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class,'owner_id','driver_id');
     }
+    public function user_login_with_otps()
+    {
+        return $this->hasOne(UserLoginWithOtp::class,'user_id');
+    }
 }

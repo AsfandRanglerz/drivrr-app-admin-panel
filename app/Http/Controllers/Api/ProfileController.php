@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
+
     public function update(Request $request ,$id)
     {
         $validator = Validator::make($request->all(),
@@ -24,23 +26,15 @@ class ProfileController extends Controller
             return $this->sendError($validator->errors()->first());
         }
         $user = User::find($id);
-        if($request->hasFile('image'))
-        {
-             $destination = 'public/admin/assets/images/users'.$user->image;
-             if(File::exists($destination) || File::exists($user->image))
-            {
-                File::delete($destination);
-                File::delete($user->image);
-            }
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
-                $extension = $file->getClientOriginalExtension();
-                $filename = time() . '.' . $extension;
-                $file->move('public/admin/assets/images/users', $filename);
-                $image = 'public/admin/assets/images/users/' . $filename;
-            }
-        else
-        {
-                $image = $user->image;
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move(public_path('admin/assets/images/users/'), $filename);
+            $image = 'public/admin/assets/images/users/' . $filename;
+        }
+        else {
+            $image = 'public/admin/assets/images/users/owner.png';
         }
 
         $user->update([

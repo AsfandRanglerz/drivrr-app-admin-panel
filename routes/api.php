@@ -24,6 +24,7 @@ use App\Controllers\ReviewController;
 */
 
 Route::group(['namespace' => 'Api'], function () {
+    Route::post('login', 'AuthController@login')->name('login');
 
     Route::post('register/{id}', 'AuthController@register');
     Route::get('/checkEmailExists', 'AuthController@checkEmailExists');
@@ -35,11 +36,12 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('change-password', 'AuthController@change_password');
 });
 
+Route::get('user-profile', 'Api\ProfileController@show');
+Route::post('edit-profile/{id}', 'Api\ProfileController@update');
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('logout', 'Api\AuthController@logout');
     //edit-user-profile
-    Route::post('edit-profile/{id}', 'Api\ProfileController@update');
     //user-documents
     Route::get('document-index/{id}', 'Api\DocumentController@index');
     Route::get('document-index/{id}', 'Api\DocumentController@index');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\UserLoginWithOtp;
 use Illuminate\Support\Str;
 use App\Mail\ForgotPassword;
 use App\Mail\LoginUserWithOtp;
@@ -229,7 +230,7 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)->first();
-
+        $userId = $user->id;
         if (!$user) {
             return response()->json(['message' => 'The user is not registered.', 'status' => 'failed'], 401);
         }
@@ -244,14 +245,15 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'token' => $token,
                 'otp' => $login_otp,
+                'user_id' => $userId,
             ]);
 
             Mail::to($request->email)->send(new LoginUserWithOtp($login_otp));
-
             return response()->json([
                 'message' => 'Login OTP sent to your email successfully for roleId 2.',
                 'status' => 'success',
                 'roleId' => 2, // Include roleId in the response
+                'id' => $userId,
             ], 200);
         } elseif ($user->roles->where('id', 3)->count() > 0 && $user->email === $request->email) {
             // Continue with OTP generation and sending for roleId 3
@@ -262,6 +264,7 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'token' => $token,
                 'otp' => $login_otp,
+                'user_id' => $userId,
             ]);
 
             Mail::to($request->email)->send(new LoginUserWithOtp($login_otp));
@@ -270,6 +273,7 @@ class AuthController extends Controller
                 'message' => 'Login OTP sent to your email successfully for roleId 3.',
                 'status' => 'success',
                 'roleId' => 3, // Include roleId in the response
+                'id' => $userId,
             ], 200);
         } else {
             return response()->json(['message' => 'You are not allowed to send OTP.', 'status' => 'failed'], 401);
@@ -291,12 +295,17 @@ class AuthController extends Controller
         if (!$validator) {
             return $this->sendError($validator->errors()->first());
         }
-
         $user_otp = DB::table('user_login_with_otps')->where('otp', $request->otp)->first();
+        $user_id = $user_otp->user_id;
+        $user_data = User::find($user_id);
+        $token = Str::random(30);
+
         if ($user_otp) {
             return response()->json([
                 'message' => 'OTP verify successfully.',
                 'status' => 'success',
+                'token' =>  $token,
+                'data' => $user_data,
             ], 200);
         } else {
             return response()->json([
