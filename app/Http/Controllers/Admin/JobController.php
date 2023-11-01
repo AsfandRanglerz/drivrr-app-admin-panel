@@ -19,14 +19,26 @@ class JobController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function index($id)
+    // {
+    //     $data = User::with('job')->find($id);
+    //     $jobs = $data->job;
+    //     foreach ($jobs as $job) {
+    //         $vehicle = $job->vehicle->id;
+    //         return view('admin.owner.jobs.index', compact('data', 'vehicle'));
+    //     }
+    // }
     public function index($id)
     {
-        $data = User::with('job')->find($id);
+        $data = User::with('job.vehicle')->find($id); // Eager loading to avoid N+1 query issues
         $jobs = $data->job;
+        $vehicles = [];
+
         foreach ($jobs as $job) {
-            $vehicle = $job->vehicle->id;
-            return view('admin.owner.jobs.index', compact('data', 'vehicle'));
+            $vehicles[] = $job->vehicle->id;
         }
+
+        return view('admin.owner.jobs.index', compact('data', 'vehicles'));
     }
 
     /**
