@@ -65,8 +65,7 @@ class AuthController extends Controller
             ]);
             $user->roles()->sync(3);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
-        }
-        else {
+        } else {
             $user = User::create([
                 'fname' => $request->fname,
                 'lname' => $request->lname,
@@ -433,10 +432,16 @@ class AuthController extends Controller
     // }
 
 
-    public function logout()
+    public function logout(Request $request)
     {
-        if (auth()->check()) {
-            auth()->user()->tokens()->delete();
+        // return $request;
+        if (auth('web')->check() || auth('admin')->check()) {
+            $user = auth('web')->check() ? auth('web')->user() : auth('admin')->user();
+return $user;
+            $user->tokens->each(function ($token, $key) {
+                $token->delete();
+            });
+
             return response()->json([
                 "message" => "Logout successfully.",
                 "status" => "success",

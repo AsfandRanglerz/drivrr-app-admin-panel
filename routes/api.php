@@ -38,9 +38,9 @@ Route::group(['namespace' => 'Api'], function () {
 
 Route::get('user-profile', 'Api\ProfileController@show');
 Route::post('edit-profile/{id}', 'Api\ProfileController@update');
+Route::post('logout', 'Api\AuthController@logout');
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('logout', 'Api\AuthController@logout');
     //edit-user-profile
     //user-documents
     Route::get('document-index/{id}', 'Api\DocumentController@index');
