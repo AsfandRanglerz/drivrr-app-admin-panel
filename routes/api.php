@@ -10,8 +10,6 @@ use App\Controllers\HelpAndSupportController;
 use App\Controllers\OwnerJobsController;
 use App\Controllers\ReviewController;
 
-
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,9 +36,8 @@ Route::group(['namespace' => 'Api'], function () {
 
 Route::get('user-profile', 'Api\ProfileController@show');
 Route::post('edit-profile/{id}', 'Api\ProfileController@update');
-Route::post('logout', 'Api\AuthController@logout');
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function (){
     //edit-user-profile
     //user-documents
     Route::get('document-index/{id}', 'Api\DocumentController@index');
@@ -55,15 +52,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
     //get owners jobs
     Route::get('owners-jobs-show/{id}', 'Api\OwnerJobsController@index');
+
+
 });
 
 Route::post('owners-reviews', 'Api\ReviewController@ownerReview');
 Route::get('driver-reviews/{id}', 'Api\ReviewController@showFeedBackToDriver');
 
+Route::post('logout', 'Api\AuthController@logout');
 
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-
     return $request->user();
 });

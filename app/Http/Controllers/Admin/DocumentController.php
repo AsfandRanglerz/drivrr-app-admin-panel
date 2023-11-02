@@ -154,9 +154,16 @@ class DocumentController extends Controller
 
     public function status(Request $request, $id, $key)
     {
+        $status=$request->check;
+
         $data = Document::find($id);
         $user = User::find($key);
-        $data->update(['is_active' => $data->is_active == 0 ? '1' : '0']);
+
+          $data->is_active=$status;
+          $data->save();
+
+
+
         $verify['is_active'] = $data->is_active;
         $verify['name'] = $data->name;
         $reason = $request->reason;

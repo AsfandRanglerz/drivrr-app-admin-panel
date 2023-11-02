@@ -53,7 +53,7 @@ class AuthController extends Controller
         //     // 'password' => Hash::make($request->password),
         //     // 'image' => $image,
         // ]);
-        $image = 'public/admin/assets/images/users/1675332882.jpg';
+
         if ($id == 3) {
             $user = User::create([
                 'fname' => $request->fname,
@@ -61,7 +61,8 @@ class AuthController extends Controller
                 'phone' => $request->phone,
                 'email' => $request->email,
                 'role_id' => 3,
-                'image' => $image,
+
+                // 'image' => $image,
             ]);
             $user->roles()->sync(3);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
@@ -72,7 +73,8 @@ class AuthController extends Controller
                 'phone' => $request->phone,
                 'email' => $request->email,
                 'role_id' => 2,
-                'image' => $image,
+                // 'password' => Hash::make($request->password),
+                // 'image' => $image,
             ]);
             $user->roles()->sync(2);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
@@ -296,14 +298,6 @@ class AuthController extends Controller
             return response()->json(['message' => 'You are not allowed to send OTP.', 'status' => 'failed'], 401);
         }
     }
-
-
-
-
-
-
-
-
     public function user_otp_login_verify(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -333,6 +327,17 @@ class AuthController extends Controller
             ]);
         }
     }
+
+  public function logout(Request $request)
+{
+    auth()->user()->tokens()->delete();
+    return response([
+        'message' => 'Logout Success',
+        'status' => 'success'
+    ], 200);
+}
+
+
 
     // public function reset_password(Request $request)
     // {
@@ -432,25 +437,4 @@ class AuthController extends Controller
     // }
 
 
-    public function logout(Request $request)
-    {
-        // return $request;
-        if (auth('web')->check() || auth('admin')->check()) {
-            $user = auth('web')->check() ? auth('web')->user() : auth('admin')->user();
-return $user;
-            $user->tokens->each(function ($token, $key) {
-                $token->delete();
-            });
-
-            return response()->json([
-                "message" => "Logout successfully.",
-                "status" => "success",
-            ], 200);
-        } else {
-            return response()->json([
-                "message" => "Invalid token.",
-                "status" => "failed",
-            ], 400);
-        }
     }
-}
