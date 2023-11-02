@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Job;
+use App\Models\Review;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -170,6 +173,13 @@ class BusinessOwnerController extends Controller
      */
     public function destroy($id)
     {
+        // if(Review::where('user_id', $id)->delete() ||  Review::where('user_id', $id) || Question::where('user_id', $id))
+        // {
+        //     User::destroy($id);
+        // }
+        // Job::where('user_id', $id)->delete();
+        // Review::where('user_id', $id)->delete();
+        // Question::where('user_id', $id)->delete();
         User::destroy($id);
         return redirect()->back()->with(['status' => true, 'message' => 'Business Owner Deleted successfully.']);
     }

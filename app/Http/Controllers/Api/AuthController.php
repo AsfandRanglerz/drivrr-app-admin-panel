@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\RoleUser;
 use App\Models\UserLoginWithOtp;
 use Illuminate\Support\Str;
 use App\Mail\ForgotPassword;
@@ -44,19 +45,36 @@ class AuthController extends Controller
         // } else {
         //     $image = 'public/admin/assets/images/users/1675332882.jpg';
         // }
-        $user = User::create([
-            'fname' => $request->fname,
-            'lname' => $request->lname,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            // 'password' => Hash::make($request->password),
-            // 'image' => $image,
-        ]);
-
+        // $user = User::create([
+        //     'fname' => $request->fname,
+        //     'lname' => $request->lname,
+        //     'phone' => $request->phone,
+        //     'email' => $request->email,
+        //     // 'password' => Hash::make($request->password),
+        //     // 'image' => $image,
+        // ]);
+        $image = 'public/admin/assets/images/users/1675332882.jpg';
         if ($id == 3) {
+            $user = User::create([
+                'fname' => $request->fname,
+                'lname' => $request->lname,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'role_id' => 3,
+                'image' => $image,
+            ]);
             $user->roles()->sync(3);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
-        } else {
+        }
+        else {
+            $user = User::create([
+                'fname' => $request->fname,
+                'lname' => $request->lname,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'role_id' => 2,
+                'image' => $image,
+            ]);
             $user->roles()->sync(2);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
         }
@@ -298,6 +316,8 @@ class AuthController extends Controller
         $user_otp = DB::table('user_login_with_otps')->where('otp', $request->otp)->first();
         $user_id = $user_otp->user_id;
         $user_data = User::find($user_id);
+        // $user_role = User::with('roles')->find($user_id);
+
         $token = Str::random(30);
 
         if ($user_otp) {

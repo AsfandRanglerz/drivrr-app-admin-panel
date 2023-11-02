@@ -37,7 +37,6 @@ class JobController extends Controller
         foreach ($jobs as $job) {
             $vehicles[] = $job->vehicle->id;
         }
-
         return view('admin.owner.jobs.index', compact('data', 'vehicles'));
     }
 
@@ -60,7 +59,7 @@ class JobController extends Controller
     public function store(Request $request)
     {
         //
-        
+
     }
 
     /**

@@ -274,7 +274,7 @@
                     <div class="modal-header pb-1 border-0">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    {{-- <div class="modal-body">
                         <div class="mb-2">
                             <form action="{{route('document.status',['id' => $document->id, $data->id])}}">
                                 @csrf
@@ -285,7 +285,24 @@
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                         </form>
+                    </div> --}}
+                    <div class="modal-body">
+                        <div class="mb-2">
+                            @if(isset($document) && isset($data))
+                                <form action="{{ route('document.status', ['id' => $document->id, 'key' => $data->id]) }}">
+                                    @csrf
+                                    <h5>Reason</h5>
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" required name="reason"></textarea>
+                        </div>
+                        <div class="text-end mt-1">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                        </form>
+                            @else
+                                <p>No records found</p>
+                            @endif
                     </div>
+
                 </div>
             </div>
         </div>

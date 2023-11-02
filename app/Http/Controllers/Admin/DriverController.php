@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\Job;
+use App\Models\Review;
+use App\Models\Question;
 use App\Models\Document;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -175,6 +178,15 @@ class DriverController  extends Controller
      */
     public function destroy($id)
     {
+        // Delete associated data
+        // if(Document::where('user_id', $id) ||  Review::where('user_id', $id) || Question::where('user_id', $id))
+        // {
+        //     User::destroy($id);
+        // }
+        // Document::where('user_id', $id)->delete();
+        // Review::where('user_id', $id)->delete();
+        // Question::where('user_id', $id)->delete();
+        // // Then delete the user
         User::destroy($id);
         return redirect()->back()->with(['status' => true, 'message' => 'Driver Deleted successfully']);
     }
