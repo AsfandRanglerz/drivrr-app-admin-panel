@@ -86,9 +86,10 @@ class DriverController  extends Controller
             'lname' => $request->lname,
             'phone' => $request->phone,
             'email' => $request->email,
+            'image' => $image,
             'role_id' => 2,
             // 'password' => Hash::make($password),
-        ] + ['image' => $image]);
+        ]);
 
         /** assign the role  */
         $driver->roles()->sync(3);

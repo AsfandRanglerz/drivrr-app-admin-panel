@@ -56,7 +56,7 @@ Route::middleware(['auth:sanctum'])->group(function (){
 Route::post('owners-reviews', 'Api\ReviewController@ownerReview');
 Route::get('driver-reviews/{id}', 'Api\ReviewController@showFeedBackToDriver');
  //users-queries
- Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
+    Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
 Route::post('logout', 'Api\AuthController@logout');
 
 

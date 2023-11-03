@@ -98,6 +98,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     //owner-jobs
     Route::get('owner-job/{id}', [JobController::class, 'index'])->name('owner-job.index');
     Route::get('owner-job-edit/{id}', [JobController::class, 'edit'])->name('owner-job.edit');
+    Route::get('owner-job-show/{id}', [JobController::class, 'show'])->name('owner-job.show');
     Route::post('owner-job-update/{id}', [JobController::class, 'update'])->name('owner-job.update');
     Route::delete('owner-job-destroy/{id}', [JobController::class, 'destroy'])->name('owner-job.destroy');
     ######## Roles&Permission######

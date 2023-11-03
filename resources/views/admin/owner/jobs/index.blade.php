@@ -58,6 +58,11 @@
                                                     </td>
                                                     <td
                                                         style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
+                                                        <a class="btn btn-secondary text-info fa fa-eye"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModal"
+                                                        href="#">
+                                                </a>
                                                         @if ($item->is_active == 0)
                                                             <a href="{{ route('owner-job.status', ['id' => $item->id,$data->id]) }}"
                                                                 class="btn btn-success"><svg
@@ -84,7 +89,7 @@
                                                                     <circle cx="8" cy="12" r="3">
                                                                     </circle>
                                                                 </svg></a>
-                                                        @endif
+                                                         @endif
                                                         <a class="btn btn-info"
                                                             href="{{ route('owner-job.edit', $item->id,) }}">Edit</a>
                                                         <form method="post"
@@ -108,8 +113,32 @@
                         </div>
                     </div>
                 </div>
-            </div>
+
+
+
+
         </section>
+        {{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header pb-1 border-0">
+                        <div class="modal-body">
+                            <div class="mb-2">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <div class="text-center mt-3">
+                                    <div class="d-flex justify-content-center">
+                                        <button >Approved</button>
+                                        <button>Rejected</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+
     </div>
 
 @endsection

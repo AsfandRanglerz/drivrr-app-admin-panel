@@ -70,7 +70,8 @@ class JobController extends Controller
      */
     public function show($id)
     {
-        //
+        $data['job'] = Job::find($id);
+        return response()->json($data);
     }
 
     /**

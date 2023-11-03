@@ -24,7 +24,7 @@
                                             <th>Email</th>
                                             <th>Image</th>
                                             <th>Documents</th>
-                                            <th>Vehicles</th>
+                                            <th>&nbsp;&nbsp;&nbsp;Vehicles&nbsp;&nbsp;&nbsp;</th>
                                             <th>Status</th>
                                             <th scope="col">Actions</th>
                                         </tr>
@@ -47,18 +47,18 @@
                                                     <a href="{{ route('document.index', $driver->id) }}">View</a>
                                                     {{-- @foreach ($counter as $count) --}}
                                                     @if ($driver->documentCount)
-                                                        <span>{{ $driver->documentCount }}</span>
+                                                        <span class="px-2 py-1 rounded text-white bg-info">{{ $driver->documentCount }}</span>
                                                     @else
-                                                        <span>0</span>
+                                                        <span class="px-2 py-1 rounded text-white bg-info">0</span>
                                                     @endif
                                                     {{-- @endforeach --}}
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('driver-vehicle.index', $driver->id) }}">View</a>
+                                                    <a  href="{{ route('driver-vehicle.index', $driver->id) }}">View</a>
                                                     @if ($driver->vehicleCount)
-                                                        <span>{{ $driver->vehicleCount }}</span>
+                                                        <span class="px-2 py-1 rounded text-white bg-info">{{ $driver->vehicleCount }}</span>
                                                     @else
-                                                        <span>0</span>
+                                                        <span class="px-2 py-1 rounded text-white bg-info">0</span>
                                                     @endif
                                                 </td>
 

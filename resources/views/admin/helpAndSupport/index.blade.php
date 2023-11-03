@@ -137,7 +137,7 @@
                 <div class="modal-body">
                     <form action="{{ route('send-response.send', $owners->id) }}">
                         @csrf
-                        <input type="text" value="{{ $owners->id }}">
+                        {{-- <input type="text" value="{{ $owners->id }}"> --}}
                         <div class="mb-2">
                             <h5>Message</h5>
                             <textarea class="form-control" id="text_area1" rows="3" name="message" required></textarea>
@@ -182,7 +182,7 @@
                         <div class="modal-body">
                             <form action="{{ route('send-response.send', $drivers->id) }}">
                                 @csrf
-                                <input type="text" value="{{ $drivers->id }}">
+                                {{-- <input type="text" value="{{ $drivers->id }}"> --}}
                                 <div class="mb-2">
                                     <h5>Message</h5>
                                     <textarea class="form-control" id="text_area1" rows="3" name="message" required></textarea>

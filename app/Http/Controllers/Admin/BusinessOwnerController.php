@@ -75,11 +75,12 @@ class BusinessOwnerController extends Controller
             'lname' => $request->lname,
             'phone' => $request->phone,
             'email' => $request->email,
+            'image' => $image,
             'role_id' => 2,
             // 'password' => Hash::make($password),
             // 'email' => $request->email,
             // 'role_id'=> 1,
-        ] + ['image' => $image]);
+        ]);
         /* assign the role  */
         $owner->roles()->sync(2);
         $message['email'] = $request->email;
