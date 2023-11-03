@@ -307,7 +307,6 @@
                     data: data,
                     success: function(response) {
                         toastr.success(response.message);
-
                         $form.closest('.modal').modal('hide');
                     },
                     error: function(error) {
