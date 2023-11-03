@@ -48,17 +48,15 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::post('driver-vehicle-add/{id}', 'Api\DriverVehicleController@store');
     //owner-jobs
     Route::post('owners-jobs/{id}', 'Api\JobController@jobStore');
-    //users-queries
-    Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
+
     //get owners jobs
     Route::get('owners-jobs-show/{id}', 'Api\OwnerJobsController@index');
-
-
 });
 
 Route::post('owners-reviews', 'Api\ReviewController@ownerReview');
 Route::get('driver-reviews/{id}', 'Api\ReviewController@showFeedBackToDriver');
-
+ //users-queries
+ Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
 Route::post('logout', 'Api\AuthController@logout');
 
 

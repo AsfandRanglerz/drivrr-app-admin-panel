@@ -86,7 +86,8 @@ class DriverController  extends Controller
             'lname' => $request->lname,
             'phone' => $request->phone,
             'email' => $request->email,
-            'password' => Hash::make($password),
+            'role_id' => 2,
+            // 'password' => Hash::make($password),
         ] + ['image' => $image]);
 
         /** assign the role  */

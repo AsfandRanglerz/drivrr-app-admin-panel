@@ -65,7 +65,7 @@ class BusinessOwnerController extends Controller
             $image = 'public/admin/assets/images/users/' . $filename;
         }
         else {
-            $image = 'public/admin/assets/images/users/owner.png';
+            $image = 'public/admin/assets/images/users/owner.jpg';
         }
 
         /**generate random password */
@@ -75,7 +75,8 @@ class BusinessOwnerController extends Controller
             'lname' => $request->lname,
             'phone' => $request->phone,
             'email' => $request->email,
-            'password' => Hash::make($password),
+            'role_id' => 2,
+            // 'password' => Hash::make($password),
             // 'email' => $request->email,
             // 'role_id'=> 1,
         ] + ['image' => $image]);
