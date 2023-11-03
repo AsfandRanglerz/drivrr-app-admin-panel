@@ -152,28 +152,24 @@ class DocumentController extends Controller
     //     return redirect()->back()->with(['status' => true, 'message' => 'Status Updated successfully.']);
     // }
 
-    public function status(Request $request, $id, $key)
-    {
-        $status=$request->check;
-
-        $data = Document::find($id);
-        $user = User::find($key);
-
-          $data->is_active=$status;
-          $data->save();
-
-
-
-        $verify['is_active'] = $data->is_active;
-        $verify['name'] = $data->name;
-        $reason = $request->reason;
-        if ($verify['is_active'] == 0) {
-            // return $reason;
-            Mail::to($user->email)->send(new RejectDocumentInfo($reason));
-            return redirect()->back()->with(['status' => true, 'message' => 'Document rejection reason is sended.']);
-        } else {
-            Mail::to($user->email)->send(new VerifyDocument($verify));
-            return redirect()->back()->with(['status' => true, 'message' => 'Status Updated successfully.']);
+        public function status(Request $request, $id, $key)
+        {
+            $status=$request->check;
+            // return $status;
+            $data = Document::find($id);
+            $user = User::find($key);
+            $data->is_active=$status;
+            $data->save();
+            $verify['is_active'] = $data->is_active;
+            $verify['name'] = $data->name;
+            $reason = $request->reason;
+            if ($verify['is_active'] == 2) {
+                // return $reason;
+                Mail::to($user->email)->send(new RejectDocumentInfo($reason));
+                return redirect()->back()->with(['status' => true, 'message' => 'Document rejection reason is sended.']);
+            } else {
+                Mail::to($user->email)->send(new VerifyDocument($verify));
+                return redirect()->back()->with(['status' => true, 'message' => 'Document approved successfully.']);
+            }
         }
-    }
 }

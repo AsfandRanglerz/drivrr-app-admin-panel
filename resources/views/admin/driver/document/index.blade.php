@@ -210,21 +210,30 @@
                                                             <div class="badge badge-danger badge-shadow">Rejected</div>
                                                         @endif
                                                     </td>
+
                                                     <td
                                                         style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
                                                     @if ($document->is_active == 0)
+
                                                         <a href="{{route('document.status',['id' => $document->id , 'key' => $data->id,'check'=>1])}}"
-                                                        class="btn btn-success text-black">Approved</a>
+                                                        class="btn btn-success text-white">
+                                                        &#x2713
+                                                        </a>
+
                                                         <a href="{{route('document.status',['id' => $document->id , 'key' => $data->id,'check'=>2])}}"
                                                            data-bs-toggle="modal"
                                                            data-bs-target="#exampleModal"
-                                                        class="btn btn-danger text-black">Rejected</a>
+                                                        class="btn btn-danger">
+                                                        &#10005
+                                                        </a>
+
                                                     @elseif ($document->is_active == 1)
-                                                        <a href="{{ route('document.status', ['id' => $document->id, $data->id]) }}"
+
+                                                        <a href="{{ route('document.status', ['id' => $document->id, $data->id , 'check'=>2]) }}"
                                                             class="btn btn-success" data-bs-toggle="modal"
                                                             data-bs-target="#exampleModal">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="28"
+                                                                height="23" viewBox="0 0 24 24" fill="none"
                                                                 stroke="currentColor"
                                                                 stroke-width="2"stroke-linecap="round"
                                                                 stroke-linejoin="round"class="feather feather-toggle-left">
@@ -233,11 +242,11 @@
                                                                 <circle cx="16" cy="12" r="3">
                                                                 </circle>
                                                             </svg></a>
-                                                        @else
-                                                            <a href="{{ route('document.status', ['id' => $document->id, $data->id]) }}"
+                                                     @else
+                                                         <a href="{{ route('document.status', ['id' => $document->id, $data->id , 'check'=>1]) }}"
                                                                 class="btn btn-danger"><svg
-                                                                    xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                    height="24" viewBox="0 0 24 24" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg" width="28"
+                                                                    height="23" viewBox="0 0 24 24" fill="none"
                                                                     stroke="currentColor" stroke-width="2"
                                                                     stroke-linecap="round" stroke-linejoin="round"
                                                                     class="feather feather-toggle-right">

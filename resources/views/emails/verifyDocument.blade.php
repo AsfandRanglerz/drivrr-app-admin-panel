@@ -1,7 +1,7 @@
 @component('mail::message')
 # Document Activation Status
 
-The body of your message.
+Hello,
 
 @if ($verify['is_active'] == 1)
 Your {{ $verify['name'] }} has been approved.
