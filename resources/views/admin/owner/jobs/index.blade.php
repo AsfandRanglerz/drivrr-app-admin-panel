@@ -58,56 +58,51 @@ integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="ano
                                                             <div class="badge badge-danger badge-shadow">Cancled</div>
                                                         @endif
                                                     </td>
-                                                    <td
-                                                        style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
-                                                        {{-- <a class="btn btn-secondary text-info fa fa-eye"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#permissionModal"
-                                                        href="{{route('owner-job.show',$item->id)}}">
-                                                </a> --}}
-                                                        {{-- <form action="" method="GET" id="jobForm"> --}}
-                                                        {{-- @csrf --}}
-                                                        <button class="view text-info btn btn-secondary fa fa-eye" data-patient-id="{{$item->id}}"></button>
+                                                    <td>
+<div class=""   style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
 
-                                                        {{-- </form> --}}
+    <button class="view text-info btn btn-secondary fa fa-eye" data-patient-id="{{$item->id}}"></button>
 
-                                                        @if ($item->is_active == 0)
-                                                            <a href="{{ route('owner-job.status', ['id' => $item->id, $data->id]) }}"
-                                                                class="btn btn-success"><svg
-                                                                    xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                    height="24" viewBox="0 0 24 24" fill="none"
-                                                                    stroke="currentColor"
-                                                                    stroke-width="2"stroke-linecap="round"
-                                                                    stroke-linejoin="round"class="feather feather-toggle-left">
-                                                                    <rect x="1" y="5" width="22" height="14"
-                                                                        rx="7" ry="7"></rect>
-                                                                    <circle cx="16" cy="12" r="3">
-                                                                    </circle>
-                                                                </svg></a>
-                                                        @else
-                                                            <a href="{{ route('owner-job.status', ['id' => $item->id, $data->id]) }}"
-                                                                class="btn btn-danger"><svg
-                                                                    xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                    height="24" viewBox="0 0 24 24" fill="none"
-                                                                    stroke="currentColor" stroke-width="2"
-                                                                    stroke-linecap="round" stroke-linejoin="round"
-                                                                    class="feather feather-toggle-right">
-                                                                    <rect x="1" y="5" width="22" height="14"
-                                                                        rx="7" ry="7"></rect>
-                                                                    <circle cx="8" cy="12" r="3">
-                                                                    </circle>
-                                                                </svg></a>
-                                                        @endif
-                                                        <a class="btn btn-info"
-                                                            href="{{ route('owner-job.edit', $item->id) }}">Edit</a>
-                                                        <form method="post"
-                                                            action="{{ route('owner-job.destroy', $item->id) }}">
-                                                            @csrf
-                                                            <input name="_method" type="hidden" value="DELETE">
-                                                            <button type="submit"
-                                                                class="btn btn-danger btn-flat show_confirm"
-                                                                data-toggle="tooltip">Delete</button>
-                                                        </form>
+    {{-- </form> --}}
+
+    @if ($item->is_active == 0)
+        <a href="{{ route('owner-job.status', ['id' => $item->id, $data->id]) }}"
+            class="btn btn-success"><svg
+                xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor"
+                stroke-width="2"stroke-linecap="round"
+                stroke-linejoin="round"class="feather feather-toggle-left">
+                <rect x="1" y="5" width="22" height="14"
+                    rx="7" ry="7"></rect>
+                <circle cx="16" cy="12" r="3">
+                </circle>
+            </svg></a>
+    @else
+        <a href="{{ route('owner-job.status', ['id' => $item->id, $data->id]) }}"
+            class="btn btn-danger"><svg
+                xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"
+                class="feather feather-toggle-right">
+                <rect x="1" y="5" width="22" height="14"
+                    rx="7" ry="7"></rect>
+                <circle cx="8" cy="12" r="3">
+                </circle>
+            </svg></a>
+    @endif
+    <a class="btn btn-info"
+        href="{{ route('owner-job.edit', $item->id) }}">Edit</a>
+    <form method="post"
+        action="{{ route('owner-job.destroy', $item->id) }}">
+        @csrf
+        <input name="_method" type="hidden" value="DELETE">
+        <button type="submit"
+            class="btn btn-danger btn-flat show_confirm"
+            data-toggle="tooltip">Delete</button>
+    </form>
+</div>
                                                     </td>
                                                 @endif
                                             </tr>
