@@ -15,19 +15,22 @@ class ProfileController extends Controller
     public function show($id)
     {
         // Fetch user data by ID
-        $user = User::find($id);
+        $user_data = User::with('roles')->find($id);
 
-        if (!$user) {
+        if ($user_data) {
+            $role_id = $user_data->roles->first()->pivot->role_id;
+            $user_data['role_id'] = $role_id;
+
             return response()->json([
-                'message' => 'User not found',
-                'status' => 'error',
+                'status' => 'success',
+                'data' => $user_data,
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'User not found.',
+                'status' => 'Failed',
             ], 404);
         }
-
-        return response()->json([
-            'user' => $user,
-            'status' => 'success',
-        ], 200);
     }
     public function update(Request $request ,$id)
     {
