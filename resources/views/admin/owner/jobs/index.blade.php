@@ -1,6 +1,8 @@
 @extends('admin.layout.app')
 @section('title', 'index')
 @section('content')
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <div class="main-content" style="min-height: 562px;">
         <section class="section">
             <div class="section-body">
@@ -65,9 +67,8 @@
                                                 </a> --}}
                                                         {{-- <form action="" method="GET" id="jobForm"> --}}
                                                         {{-- @csrf --}}
-                                                        <button type="button" id="patientViewModal"
-                                                            data-patient-id="{{ $item['id'] }}"
-                                                            class="btn btn-secondary text-info fa fa-eye"></button>
+                                                        <button class="view text-info btn btn-secondary fa fa-eye" data-patient-id="{{$item->id}}"></button>
+
                                                         {{-- </form> --}}
 
                                                         @if ($item->is_active == 0)
@@ -150,41 +151,52 @@
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <li><a class="close-link" data-bs-dismiss="modal"><i class="fa fa-close"></i></a>
-                        </li>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background: none; border: none; float: right; ">
+                            <span style="color: red;">&#x274C;</span>
+                        </button>
                     </div>
+
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-12 col-sm-12 ">
+                            <div class="col-md-12">
                                 <div class="x_content">
-                                    <div class="col-md-6 col-sm-6  profile_left">
+                                    <div class="row">
+                                        <div class="col-md-12 text-center mb-3">
+                                            <h2>Job Details</h2>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="pickup">Pickup</label>
+                                            <input type="text" id="pickup" placeholder="Pickup" class="form-control mb-2 pickup" readonly>
 
-                                        <br />
-                                    </div>
-                                    <div class="col-md-6 col-sm-6 ">
-                                        <div class="profile_title">
-                                            <div class="col-md-12 text-center">
-                                                <h2><span class="pickupv"></span> Job Details</h2>
-                                            </div>
+                                            <label for="destination">Destination</label>
+                                            <input type="text" id="destination" placeholder="Destination" class="form-control mb-2 destination" readonly>
+
+                                            <label for="date">Date</label>
+                                            <input type="text" id="date" placeholder="Date" class="form-control mb-2 date" readonly>
+
+                                            <label for="time">Time</label>
+                                            <input type="text" id="time" placeholder="Time" class="form-control mb-2 time" readonly>
                                         </div>
-                                        <br>
-                                        <div class="left col-md-7 col-sm-7">
-                                            <input type="text" placeholder="Pickup"
-                                                class="form-control mb-2 pickup" readonly>
-                                            <input type="text" placeholder="Destination"
-                                            class="form-control mb-2 destination" readonly>
-                                            <input type="text" placeholder="Date"
-                                                class="form-control mb-2 date" readonly>
-                                            <input type="text" placeholder="Time"
-                                                class="form-control mb-2 time" readonly>
-                                            <input type="text" placeholder="Duration"
-                                                class="form-control mb-2 duration" readonly>
-                                            <input type="text" placeholder="Service Type"
-                                               class="form-control mb-2 service_type" readonly>
-                                            <input type="text" placeholder="Price"
-                                                class="form-control mb-2 price" readonly>
-                                            <textarea placeholder="Description" class="form-control mb-2 description" rows="3" readonly></textarea>
+                                        <div class="col-md-6">
+                                            <label for="duration">Duration</label>
+                                            <input type="text" id="duration" placeholder="Duration" class="form-control mb-2 duration" readonly>
+
+                                            <label for="service_type">Service Type</label>
+                                            <input type="text" id="service_type" placeholder="Service Type" class="form-control mb-2 service_type" readonly>
+
+                                            <label for="price">Price</label>
+                                            <input type="text" id="price" placeholder="Price" class="form-control mb-2 price" readonly>
+{{--
+                                            <label for="description">Description</label>
+                                            <textarea id="description" placeholder="Description" class="form-control mb-4 description" rows="3" readonly></textarea> --}}
                                         </div>
+
+                                        <div class="col-md-12">
+                                            <label for="description">Description</label>
+                                            <textarea id="description" placeholder="Description" class="form-control mb-4 description" style="height: 120px;" readonly></textarea>
+                                        </div>
+
+
                                     </div>
                                 </div>
                             </div>
@@ -193,6 +205,7 @@
                 </div>
             </div>
         </div>
+
         {{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -224,12 +237,12 @@
             toastr.success('{{ \Illuminate\Support\Facades\Session::get('message') }}');
         </script>
     @endif
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $('#table_id_events').DataTable()
 
         })
-    </script>
+    </script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script type="text/javascript">
         $('.show_confirm').click(function(event) {
@@ -250,37 +263,49 @@
                 });
         });
     </script>
-    <script>
-        //=======================================AJAX Code Of View patient Profile==========================
+
+<script>
+    $(document).ready(function() {
         $(document).on('click', '.view', function(e) {
+
             e.preventDefault();
-            var patientId = $(this).data('patient-id');
-            // alert(patientId);
-            $('#patientViewModal').modal('show');
+            var id = $(this).data('patient-id');
+            console.log("ids",id);
+
+
+
+
             $.ajax({
                 type: "GET",
-                url: "/active-job/" + patientId,
-                dataType: "json",
+                url: "{{URL::to('/admin/active-job')}}", // Assuming correct endpoint and using the patientId
+                data:{
+                    id:id,
+                },
+
                 success: function(response) {
+                  $('#patientViewModal').modal('show');
                     // console.log(response);
+                    // Assuming response contains a 'status' key
                     if (response.status == 200) {
-                        $('#viewpatient_id').val(patientId);
-                        $('.pickup').text(response.jobs.pickup);
-                        $('.destination').text(response.jobs.destination);
-                        $('.date').text(response.jobs.date);
-                        $('.time').text(response.jobs.time);
-                        $('.duration').text(response.jobs.duration);
-                        $('.service_type').text(response.jobs.service_type);
-                        $('.price').text(response.jobs.price);
-                        $('.description').text(response.jobs.description);
+                        $('.pickup').val(response.jobs.pickup);
+                        $('.destination').val(response.jobs.destination);
+                        $('.date').val(response.jobs.date);
+                        $('.time').val(response.jobs.time);
+                        $('.duration').val(response.jobs.duration);
+                        $('.service_type').val(response.jobs.service_type);
+                        $('.price').val(response.jobs.price);
+                        $('.description').val(response.jobs.description);
                     }
+                },
+                error: function(xhr, status, error) {
+                    console.log(error); // Log any errors for debugging
                 }
             });
         });
+    });
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 
 @endsection
