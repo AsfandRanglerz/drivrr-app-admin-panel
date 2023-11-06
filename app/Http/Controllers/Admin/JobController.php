@@ -73,14 +73,16 @@ class JobController extends Controller
     //     $data['job'] = Job::find($id);
     //     return view('admin.owner.jobs.index',$data);
     // }
-    public function show($id)
+    public function show(Request $request)
     {
+        $id=$request->id;
         $jobs= Job::with('vehicle')->find($id);
         //    return $docters;
         if ($jobs) {
             return response()->json([
                 'status' => 200,
                 'jobs' =>    $jobs,
+                'id' =>    $id,
             ]);
         } else {
             return response()->json([
