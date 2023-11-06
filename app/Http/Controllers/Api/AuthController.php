@@ -298,44 +298,95 @@ class AuthController extends Controller
             return response()->json(['message' => 'You are not allowed to send OTP.', 'status' => 'failed'], 401);
         }
     }
+    // public function user_otp_login_verify(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'otp' => 'required',
+    //     ]);
+    //     if (!$validator) {
+    //         return $this->sendError($validator->errors()->first());
+    //     }
+    //     $user_otp = DB::table('user_login_with_otps')->where('otp', $request->otp)->first();
+    //     $user_id = $user_otp->user_id;
+    //     $user_data = User::find($user_id);
+    //     $user_role = User::with('roles')->find($user_id);
+
+    //     $token = Str::random(30);
+
+    //     if ($user_otp) {
+    //         return response()->json([
+    //             'message' => 'OTP verify successfully.',
+    //             'status' => 'success',
+    //             'token' =>  $token,
+    //             'data' => $user_data,
+    //         ], 200);
+    //     } else {
+    //         return response()->json([
+    //             'message' => 'OTP verification failed.',
+    //             'status' => 'Failed',
+    //         ]);
+    //     }
+    // }
     public function user_otp_login_verify(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'otp' => 'required',
         ]);
-        if (!$validator) {
-            return $this->sendError($validator->errors()->first());
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'status' => 'Failed',
+                'errors' => $validator->errors(),
+            ], 422);
         }
+
         $user_otp = DB::table('user_login_with_otps')->where('otp', $request->otp)->first();
+
+        if (!$user_otp) {
+            return response()->json([
+                'message' => 'OTP verification failed.',
+                'status' => 'Failed',
+            ], 400);
+        }
+
         $user_id = $user_otp->user_id;
-        $user_data = User::find($user_id);
-        // $user_role = User::with('roles')->find($user_id);
+        $user_data = User::with('roles')->find($user_id);
 
-        $token = Str::random(30);
+        if ($user_data) {
+            $token = Str::random(30);
 
-        if ($user_otp) {
+            // Access the role_id from the first role in the user's roles relationship
+            $role_id = $user_data->roles->first()->pivot->role_id;
+
+            // Add the role_id to the user data
+            $user_data['role_id'] = $role_id;
+
             return response()->json([
                 'message' => 'OTP verify successfully.',
                 'status' => 'success',
-                'token' =>  $token,
+                'token' => $token,
                 'data' => $user_data,
             ], 200);
         } else {
             return response()->json([
-                'message' => 'OTP verification failed.',
+                'message' => 'User not found.',
                 'status' => 'Failed',
-            ]);
+            ], 404);
         }
     }
 
-  public function logout(Request $request)
-{
-    auth()->user()->tokens()->delete();
-    return response([
-        'message' => 'Logout Success',
-        'status' => 'success'
-    ], 200);
-}
+
+
+
+    public function logout(Request $request)
+    {
+        auth()->user()->tokens()->delete();
+        return response([
+            'message' => 'Logout Success',
+            'status' => 'success'
+        ], 200);
+    }
 
 
 
@@ -437,4 +488,4 @@ class AuthController extends Controller
     // }
 
 
-    }
+}
