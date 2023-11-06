@@ -34,7 +34,7 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('change-password', 'AuthController@change_password');
 });
 
-Route::get('user-profile', 'Api\ProfileController@show');
+Route::get('user-profile/{id}', 'Api\ProfileController@show');
 Route::post('edit-profile/{id}', 'Api\ProfileController@update');
 
 Route::middleware(['auth:sanctum'])->group(function (){

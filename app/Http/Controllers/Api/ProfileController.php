@@ -12,6 +12,23 @@ use Illuminate\Support\Facades\Auth;
 class ProfileController extends Controller
 {
 
+    public function show($id)
+    {
+        // Fetch user data by ID
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found',
+                'status' => 'error',
+            ], 404);
+        }
+
+        return response()->json([
+            'user' => $user,
+            'status' => 'success',
+        ], 200);
+    }
     public function update(Request $request ,$id)
     {
         $validator = Validator::make($request->all(),

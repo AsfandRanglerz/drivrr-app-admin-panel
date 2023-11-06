@@ -58,18 +58,20 @@
                                                     </td>
                                                     <td
                                                         style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
-                                                    {{-- <a class="btn btn-secondary text-info fa fa-eye"
+                                                        {{-- <a class="btn btn-secondary text-info fa fa-eye"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#permissionModal"
                                                         href="{{route('owner-job.show',$item->id)}}">
                                                 </a> --}}
-                                                {{-- <form action="" method="GET" id="jobForm"> --}}
-                                                    {{-- @csrf --}}
-                                                    <button type="submit" id="patientViewModal" data-patient-id="{{ $item['id'] }}" class="btn btn-secondary text-info fa fa-eye"></button>
-                                                {{-- </form> --}}
+                                                        {{-- <form action="" method="GET" id="jobForm"> --}}
+                                                        {{-- @csrf --}}
+                                                        <button type="button" id="patientViewModal"
+                                                            data-patient-id="{{ $item['id'] }}"
+                                                            class="btn btn-secondary text-info fa fa-eye"></button>
+                                                        {{-- </form> --}}
 
                                                         @if ($item->is_active == 0)
-                                                            <a href="{{ route('owner-job.status', ['id' => $item->id,$data->id]) }}"
+                                                            <a href="{{ route('owner-job.status', ['id' => $item->id, $data->id]) }}"
                                                                 class="btn btn-success"><svg
                                                                     xmlns="http://www.w3.org/2000/svg" width="24"
                                                                     height="24" viewBox="0 0 24 24" fill="none"
@@ -82,7 +84,7 @@
                                                                     </circle>
                                                                 </svg></a>
                                                         @else
-                                                            <a href="{{ route('owner-job.status', ['id' => $item->id,$data->id]) }}"
+                                                            <a href="{{ route('owner-job.status', ['id' => $item->id, $data->id]) }}"
                                                                 class="btn btn-danger"><svg
                                                                     xmlns="http://www.w3.org/2000/svg" width="24"
                                                                     height="24" viewBox="0 0 24 24" fill="none"
@@ -94,9 +96,9 @@
                                                                     <circle cx="8" cy="12" r="3">
                                                                     </circle>
                                                                 </svg></a>
-                                                         @endif
+                                                        @endif
                                                         <a class="btn btn-info"
-                                                            href="{{ route('owner-job.edit', $item->id,) }}">Edit</a>
+                                                            href="{{ route('owner-job.edit', $item->id) }}">Edit</a>
                                                         <form method="post"
                                                             action="{{ route('owner-job.destroy', $item->id) }}">
                                                             @csrf
@@ -167,14 +169,21 @@
                                         </div>
                                         <br>
                                         <div class="left col-md-7 col-sm-7">
-                                            <input type="text" placeholder="Pickup" value="{{$item->pickup}}" class="form-control mb-2" readonly>
-                                            <input type="text" placeholder="Destination" value="{{$item->destination}}" class="form-control mb-2" readonly>
-                                            <input type="text" placeholder="Date" value="{{$item->date}}" class="form-control mb-2" readonly>
-                                            <input type="text" placeholder="Time" value="{{$item->time}}" class="form-control mb-2" readonly>
-                                            <input type="text" placeholder="Duration" value="{{$item->duration}}" class="form-control mb-2" readonly>
-                                            <input type="text" placeholder="Service Type" value="{{$item->service_type}}" class="form-control mb-2" readonly>
-                                            <input type="text" placeholder="Price" value="{{$item->price}}" class="form-control mb-2" readonly>
-                                            <textarea placeholder="Description" class="form-control mb-2" rows="3" readonly>{{$item->description}}</textarea>
+                                            <input type="text" placeholder="Pickup"
+                                                class="form-control mb-2 pickup" readonly>
+                                            <input type="text" placeholder="Destination"
+                                            class="form-control mb-2 destination" readonly>
+                                            <input type="text" placeholder="Date"
+                                                class="form-control mb-2 date" readonly>
+                                            <input type="text" placeholder="Time"
+                                                class="form-control mb-2 time" readonly>
+                                            <input type="text" placeholder="Duration"
+                                                class="form-control mb-2 duration" readonly>
+                                            <input type="text" placeholder="Service Type"
+                                               class="form-control mb-2 service_type" readonly>
+                                            <input type="text" placeholder="Price"
+                                                class="form-control mb-2 price" readonly>
+                                            <textarea placeholder="Description" class="form-control mb-2 description" rows="3" readonly></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -270,7 +279,8 @@
         });
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 
 @endsection
