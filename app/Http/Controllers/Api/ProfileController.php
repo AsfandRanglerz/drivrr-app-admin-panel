@@ -31,41 +31,52 @@ class ProfileController extends Controller
             ], 404);
         }
     }
-    public function update(Request $request ,$id)
+    public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),
-        [
-            'fname'=>'required',
-            'lname'=>'required',
-            'phone'=>'required',
-            'email'=>'required|email',
+        $validator = Validator::make($request->all(), [
+            'fname' => 'required',
+            'lname' => 'required',
+            'phone' => 'required',
+            'email' => 'required|email',
         ]);
-        if($validator->fails())
-        {
+
+        if ($validator->fails()) {
             return $this->sendError($validator->errors()->first());
         }
+
         $user = User::find($id);
+
+        if (!$user) {
+            return $this->sendError('User not found', 404);
+        }
+
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
             $file->move(public_path('admin/assets/images/users/'), $filename);
             $image = 'public/admin/assets/images/users/' . $filename;
-        }
-        else {
+        } else {
             $image = 'public/admin/assets/images/users/owner.png';
         }
 
+        // Update user data
         $user->update([
-        'fname' => $request->fname,
-        'lname' => $request->lname,
-        'phone' => $request->phone,
-        'email' => $request->email,
-        'image' => $image,
-         ]);
+            'fname' => $request->fname,
+            'lname' => $request->lname,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'image' => $image,
+        ]);
+
+        // Fetch the updated user data
+        $updatedUser = User::find($id);
+
         return response()->json([
-         'message'=>'your profile is updated successfully.',
-         'status'=>'success'
-        ],200);
+            'message' => 'Your profile is updated successfully.',
+            'status' => 'success',
+            'data' => $updatedUser, // Include the updated user data in the response
+        ], 200);
     }
+
 }
