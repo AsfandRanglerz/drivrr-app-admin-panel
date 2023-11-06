@@ -89,6 +89,7 @@
                 </li>
             @endif
             {{-- Roles & Permissions --}}
+
             {{-- @if (auth()->guard('web')->check() &&
                     auth()->guard('web')->user()->can('Roles & Permissions'))
                 <li class="dropdown {{ request()->is('admin/roles-permission') ? 'active' : '' }}">
@@ -101,6 +102,7 @@
                             data-feather="users"></i><span>Roles & Permissions</span></a>
                 </li>
             @endif --}}
+
             {{-- Privacy policies --}}
             @if (auth()->guard('web')->check() &&
                     auth()->guard('web')->user()->can('Privacy policies'))
