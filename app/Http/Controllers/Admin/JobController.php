@@ -68,12 +68,27 @@ class JobController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // public function show($id)
+    // {
+    //     $data['job'] = Job::find($id);
+    //     return view('admin.owner.jobs.index',$data);
+    // }
     public function show($id)
     {
-        $data['job'] = Job::find($id);
-        return response()->json($data);
+        $jobs= Job::with('vehicle')->find($id);
+        //    return $docters;
+        if ($jobs) {
+            return response()->json([
+                'status' => 200,
+                'jobs' =>    $jobs,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'jobs Not Found',
+            ]);
+        }
     }
-
     /**
      * Show the form for editing the specified resource.
      *

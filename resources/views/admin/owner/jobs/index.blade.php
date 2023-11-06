@@ -58,11 +58,16 @@
                                                     </td>
                                                     <td
                                                         style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
-                                                        <a class="btn btn-secondary text-info fa fa-eye"
+                                                    {{-- <a class="btn btn-secondary text-info fa fa-eye"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModal"
-                                                        href="#">
-                                                </a>
+                                                        data-bs-target="#permissionModal"
+                                                        href="{{route('owner-job.show',$item->id)}}">
+                                                </a> --}}
+                                                {{-- <form action="" method="GET" id="jobForm"> --}}
+                                                    {{-- @csrf --}}
+                                                    <button type="submit" id="patientViewModal" data-patient-id="{{ $item['id'] }}" class="btn btn-secondary text-info fa fa-eye"></button>
+                                                {{-- </form> --}}
+
                                                         @if ($item->is_active == 0)
                                                             <a href="{{ route('owner-job.status', ['id' => $item->id,$data->id]) }}"
                                                                 class="btn btn-success"><svg
@@ -118,6 +123,67 @@
 
 
         </section>
+        {{-- @foreach ($data->job as $item)
+        <div class="col-md-4 col-sm-4  profile_details">
+            <div class="well profile_view">
+                <div class="col-sm-12">
+                    <h4 class="brief"><i>Patients Strategist</i></h4>
+                    <div class="left col-md-7 col-sm-7">
+                        <input type="text" placeholder="Pickup" value="{{$item->pickup}}" class="form-control mb-2" readonly>
+                        <input type="text" placeholder="Destination" value="{{$item->destination}}" class="form-control mb-2" readonly>
+                        <input type="text" placeholder="Date" value="{{$item->date}}" class="form-control mb-2" readonly>
+                        <input type="text" placeholder="Time" value="{{$item->time}}" class="form-control mb-2" readonly>
+                        <input type="text" placeholder="Duration" value="{{$item->duration}}" class="form-control mb-2" readonly>
+                        <input type="text" placeholder="Service Type" value="{{$item->service_type}}" class="form-control mb-2" readonly>
+                        <input type="text" placeholder="Price" value="{{$item->price}}" class="form-control mb-2" readonly>
+                        <textarea placeholder="Description" class="form-control mb-2" rows="3" readonly>{{$item->description}}</textarea>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        @endforeach --}}
+        <div class="modal fade" id="patientViewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <li><a class="close-link" data-bs-dismiss="modal"><i class="fa fa-close"></i></a>
+                        </li>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 ">
+                                <div class="x_content">
+                                    <div class="col-md-6 col-sm-6  profile_left">
+
+                                        <br />
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 ">
+                                        <div class="profile_title">
+                                            <div class="col-md-12 text-center">
+                                                <h2><span class="pickupv"></span> Job Details</h2>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="left col-md-7 col-sm-7">
+                                            <input type="text" placeholder="Pickup" value="{{$item->pickup}}" class="form-control mb-2" readonly>
+                                            <input type="text" placeholder="Destination" value="{{$item->destination}}" class="form-control mb-2" readonly>
+                                            <input type="text" placeholder="Date" value="{{$item->date}}" class="form-control mb-2" readonly>
+                                            <input type="text" placeholder="Time" value="{{$item->time}}" class="form-control mb-2" readonly>
+                                            <input type="text" placeholder="Duration" value="{{$item->duration}}" class="form-control mb-2" readonly>
+                                            <input type="text" placeholder="Service Type" value="{{$item->service_type}}" class="form-control mb-2" readonly>
+                                            <input type="text" placeholder="Price" value="{{$item->price}}" class="form-control mb-2" readonly>
+                                            <textarea placeholder="Description" class="form-control mb-2" rows="3" readonly>{{$item->description}}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         {{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -175,4 +241,36 @@
                 });
         });
     </script>
+    <script>
+        //=======================================AJAX Code Of View patient Profile==========================
+        $(document).on('click', '.view', function(e) {
+            e.preventDefault();
+            var patientId = $(this).data('patient-id');
+            // alert(patientId);
+            $('#patientViewModal').modal('show');
+            $.ajax({
+                type: "GET",
+                url: "/active-job/" + patientId,
+                dataType: "json",
+                success: function(response) {
+                    // console.log(response);
+                    if (response.status == 200) {
+                        $('#viewpatient_id').val(patientId);
+                        $('.pickup').text(response.jobs.pickup);
+                        $('.destination').text(response.jobs.destination);
+                        $('.date').text(response.jobs.date);
+                        $('.time').text(response.jobs.time);
+                        $('.duration').text(response.jobs.duration);
+                        $('.service_type').text(response.jobs.service_type);
+                        $('.price').text(response.jobs.price);
+                        $('.description').text(response.jobs.description);
+                    }
+                }
+            });
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+
 @endsection
