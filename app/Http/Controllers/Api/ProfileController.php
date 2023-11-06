@@ -16,7 +16,6 @@ class ProfileController extends Controller
     {
         // Fetch user data by ID
         $user_data = User::with('roles')->find($id);
-
         if ($user_data) {
             $role_id = $user_data->roles->first()->pivot->role_id;
             $user_data['role_id'] = $role_id;

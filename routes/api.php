@@ -23,7 +23,6 @@ use App\Controllers\ReviewController;
 
 Route::group(['namespace' => 'Api'], function () {
     Route::post('login', 'AuthController@login')->name('login');
-
     Route::post('register/{id}', 'AuthController@register');
     Route::get('/checkEmailExists', 'AuthController@checkEmailExists');
     Route::get('get-user-id', 'AuthController@getUserID');
