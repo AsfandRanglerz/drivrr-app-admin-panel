@@ -39,12 +39,12 @@
                                                 <td>{{ $owner->email }}</td>
                                                 <td>
                                                     @if (file_exists(public_path($owner->image)))
-                                                    <img src="{{ asset($owner->image) }}" alt="" height="50"
-                                                        width="50" class="image">
-                                                @else
-                                                    <img src="{{ asset('public/admin/assets/images/users/owner.jpg') }}"
-                                                        alt="" height="50" width="50" class="image">
-                                                @endif
+                                                        <img src="{{ asset($owner->image) }}" alt="" height="50"
+                                                            width="50" class="image">
+                                                    @else
+                                                        <img src="{{ asset('public/admin/assets/images/users/owner.jpg') }}"
+                                                            alt="" height="50" width="50" class="image">
+                                                    @endif
                                                 </td>
 
 
