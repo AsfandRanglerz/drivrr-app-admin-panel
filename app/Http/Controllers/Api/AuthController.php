@@ -355,11 +355,7 @@ class AuthController extends Controller
 
         if ($user_data) {
             $token = Str::random(30);
-
-            // Access the role_id from the first role in the user's roles relationship
             $role_id = $user_data->roles->first()->pivot->role_id;
-
-            // Add the role_id to the user data
             $user_data['role_id'] = $role_id;
 
             return response()->json([
