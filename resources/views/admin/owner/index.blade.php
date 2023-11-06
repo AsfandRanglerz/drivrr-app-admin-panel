@@ -13,7 +13,8 @@
                                 </div>
                             </div>
                             <div class="card-body table-striped table-bordered table-responsive">
-                                <a class="btn btn-success mb-3" href="{{ route('businessOwner.create') }}">Add Business Owner</a>
+                                <a class="btn btn-success mb-3" href="{{ route('businessOwner.create') }}">Add Business
+                                    Owner</a>
                                 <table class="table text-center" id="table_id_events">
                                     <thead>
                                         <tr>
@@ -37,12 +38,18 @@
                                                 <td>{{ $owner->phone }}</td>
                                                 <td>{{ $owner->email }}</td>
                                                 <td>
+                                                    @if (file_exists(public_path($owner->image)))
                                                     <img src="{{ asset($owner->image) }}" alt="" height="50"
                                                         width="50" class="image">
+                                                @else
+                                                    <img src="{{ asset('public/admin/assets/images/users/owner.jpg') }}"
+                                                        alt="" height="50" width="50" class="image">
+                                                @endif
                                                 </td>
 
+
                                                 <td>
-                                                    <a href="{{route('owner-job.index',$owner->id)}}">View</a>
+                                                    <a href="{{ route('owner-job.index', $owner->id) }}">View</a>
                                                 </td>
 
                                                 {{-- <td>{{ $owner->designation }}</td> --}}
@@ -55,42 +62,42 @@
                                                 </td>
 
                                                 <td
-                                                style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
-                                                @if ($owner->is_active == 1)
-                                                    <a href="{{ route('owner.status', ['id' => $owner->id]) }}"
-                                                        class="btn btn-success"><svg xmlns="http://www.w3.org/2000/svg"
-                                                            width="24" height="24" viewBox="0 0 24 24"
-                                                            fill="none" stroke="currentColor"
-                                                            stroke-width="2"stroke-linecap="round"
-                                                            stroke-linejoin="round"class="feather feather-toggle-left">
-                                                            <rect x="1" y="5" width="22"
-                                                                height="14" rx="7" ry="7"></rect>
-                                                            <circle cx="16" cy="12" r="3">
-                                                            </circle>
-                                                        </svg></a>
-                                                @else
-                                                    <a href="{{ route('owner.status', ['id' => $owner->id]) }}"
-                                                        class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg"
-                                                            width="24" height="24" viewBox="0 0 24 24"
-                                                            fill="none" stroke="currentColor" stroke-width="2"
-                                                            stroke-linecap="round" stroke-linejoin="round"
-                                                            class="feather feather-toggle-right">
-                                                            <rect x="1" y="5" width="22"
-                                                                height="14" rx="7" ry="7"></rect>
-                                                            <circle cx="8" cy="12" r="3">
-                                                            </circle>
-                                                        </svg></a>
-                                                @endif
-                                                <a class="btn btn-info"
-                                                    href="{{ route('businessOwner.edit', $owner->id) }}">Edit</a>
-                                                <form method="post"
-                                                    action="{{ route('businessOwner.destroy', $owner->id) }}">
-                                                    @csrf
-                                                    <input name="_method" type="hidden" value="DELETE">
-                                                    <button type="submit" class="btn btn-danger btn-flat show_confirm"
-                                                        data-toggle="tooltip">Delete</button>
-                                                </form>
-                                            </td>
+                                                    style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
+                                                    @if ($owner->is_active == 1)
+                                                        <a href="{{ route('owner.status', ['id' => $owner->id]) }}"
+                                                            class="btn btn-success"><svg xmlns="http://www.w3.org/2000/svg"
+                                                                width="24" height="24" viewBox="0 0 24 24"
+                                                                fill="none" stroke="currentColor"
+                                                                stroke-width="2"stroke-linecap="round"
+                                                                stroke-linejoin="round"class="feather feather-toggle-left">
+                                                                <rect x="1" y="5" width="22" height="14"
+                                                                    rx="7" ry="7"></rect>
+                                                                <circle cx="16" cy="12" r="3">
+                                                                </circle>
+                                                            </svg></a>
+                                                    @else
+                                                        <a href="{{ route('owner.status', ['id' => $owner->id]) }}"
+                                                            class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg"
+                                                                width="24" height="24" viewBox="0 0 24 24"
+                                                                fill="none" stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                class="feather feather-toggle-right">
+                                                                <rect x="1" y="5" width="22" height="14"
+                                                                    rx="7" ry="7"></rect>
+                                                                <circle cx="8" cy="12" r="3">
+                                                                </circle>
+                                                            </svg></a>
+                                                    @endif
+                                                    <a class="btn btn-info"
+                                                        href="{{ route('businessOwner.edit', $owner->id) }}">Edit</a>
+                                                    <form method="post"
+                                                        action="{{ route('businessOwner.destroy', $owner->id) }}">
+                                                        @csrf
+                                                        <input name="_method" type="hidden" value="DELETE">
+                                                        <button type="submit" class="btn btn-danger btn-flat show_confirm"
+                                                            data-toggle="tooltip">Delete</button>
+                                                    </form>
+                                                </td>
                                             </tr>
                                         @endforeach
 
