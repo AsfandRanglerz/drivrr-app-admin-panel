@@ -248,14 +248,14 @@ class AuthController extends Controller
             return response()->json(['message' => $validator->errors()->first(), 'status' => 'failed'], 400);
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email && '')->first();
         $userId = $user->id;
         if (!$user) {
             return response()->json(['message' => 'The user is not registered.', 'status' => 'failed'], 401);
         }
 
         // Check the user's roleId and if the email matches for roleId 2
-        if ($user->roles->where('id', 2)->count() > 0 && $user->email === $request->email) {
+        if ($user->roles->where('id', 2)->count() > 0 && $user->email === $request->email && $user->role_id === $request->role_id) {
             // Continue with OTP generation and sending for roleId 2
             DB::table('user_login_with_otps')->where('email', $request->email)->delete();
             $login_otp = random_int(1000, 9999);
@@ -274,7 +274,7 @@ class AuthController extends Controller
                 'roleId' => 2, // Include roleId in the response
                 'id' => $userId,
             ], 200);
-        } elseif ($user->roles->where('id', 3)->count() > 0 && $user->email === $request->email) {
+        } elseif ($user->roles->where('id', 3)->count() > 0 && $user->email === $request->email && $user->role_id === $request->role_id) {
             // Continue with OTP generation and sending for roleId 3
             DB::table('user_login_with_otps')->where('email', $request->email)->delete();
             $login_otp = random_int(1000, 9999);
