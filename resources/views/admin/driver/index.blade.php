@@ -23,8 +23,6 @@
                                             <th>Phone</th>
                                             <th>Email</th>
                                             <th>Image</th>
-                                            <th>Company Name</th>
-                                            <th>Company Info</th>
                                             <th>Documents</th>
                                             <th>&nbsp;&nbsp;&nbsp;Vehicles&nbsp;&nbsp;&nbsp;</th>
                                             <th>Status</th>
@@ -43,8 +41,7 @@
                                                     <img src="{{ asset($driver->image) }}" alt="" height="50"
                                                         width="50" class="image">
                                                 </td>
-                                                <td>{{ $driver->company_name}}</td>
-                                                <td>{{ $driver->company_info}}</td>
+                                                
                                                 <td>
                                                     <a href="{{ route('document.index', $driver->id) }}">View</a>
                                                     {{-- @foreach ($counter as $count) --}}

@@ -24,6 +24,8 @@
                                             <th>Phone</th>
                                             <th>Email</th>
                                             <th>Image</th>
+                                            <th>Company Name</th>
+                                            <th>Company Info</th>
                                             <th>Jobs</th>
                                             <th>Status</th>
                                             <th scope="col">Actions</th>
@@ -46,8 +48,8 @@
                                                             alt="" height="50" width="50" class="image">
                                                     @endif
                                                 </td>
-
-
+                                                <td>{{ $owner->company_name}}</td>
+                                                <td>{{ $owner->company_info}}</td>
                                                 <td>
                                                     <a href="{{ route('owner-job.index', $owner->id) }}">View</a>
                                                 </td>

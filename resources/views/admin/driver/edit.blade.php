@@ -61,16 +61,7 @@
                                     </div>
 
                                     <div class="row mx-0 px-4">
-                                        <div class="col-sm-6 pl-sm-0 pr-sm-3">
-                                            <div class="form-group mb-2">
-                                                <label>Company Name</label>
-                                                <input type="text" placeholder="Phone" name="company_name"
-                                                    id="company_name" value="{{ $data->company_name }}" class="form-control">
-                                                @error('company_name')
-                                                    <div class="text-danger">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
+
                                         <div class="col-sm-6 pl-sm-0 pr-sm-3">
                                             <div class="form-group mb-2">
                                                 <label>Choose Image</label>
@@ -105,18 +96,7 @@
                                             @enderror
                                         </div>
                                     </div> --}}
-                                    <div class="row mx-0 px-4">
-                                        <div class="col-sm-6 pl-sm-0 pr-sm-3">
-                                            <div class="form-group mb-2">
-                                                <label>Company Info</label>
-                                                <textarea type="text" placeholder="Company Info" name="company_info"
-                                                    id="company_info" value="{{$data->company_info }}" class="form-control"></textarea>
-                                                @error('company_info')
-                                                    <div class="text-danger">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
+                                
 
 
 
