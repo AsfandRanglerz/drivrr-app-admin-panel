@@ -54,6 +54,9 @@ class BusinessOwnerController extends Controller
             'lname' => 'required',
             'phone' => 'required',
             'email' => 'required|unique:users,email|email',
+            'company_name' => 'required',
+            'company_info' => 'required',
+
             // 'password' => 'required|confirmed',
         ]);
 
@@ -75,6 +78,8 @@ class BusinessOwnerController extends Controller
             'lname' => $request->lname,
             'phone' => $request->phone,
             'email' => $request->email,
+            'company_name' => $request->company_name,
+            'company_info' => $request->company_info,
             'image' => $image,
             'role_id' => 2,
             // 'password' => Hash::make($password),
@@ -137,6 +142,9 @@ class BusinessOwnerController extends Controller
             'lname' => 'required',
             'phone' => 'required',
             'email' => 'required',
+            'company_name' => 'required',
+            'company_info' => 'required',
+
         ]);
 
         $owner = User::find($id);
@@ -160,6 +168,8 @@ class BusinessOwnerController extends Controller
             'lname' => $request->lname,
             'phone' => $request->phone,
             'email' => $request->email,
+            'company_name' => $request->company_name,
+            'company_info' => $request->company_info,
             // 'last_name' => $request->last_name,
             // 'designation' => $request->designation,
         ] + ['image' => $image]);
@@ -173,7 +183,7 @@ class BusinessOwnerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destro($id)
     {
         // if(Review::where('user_id', $id)->delete() ||  Review::where('user_id', $id) || Question::where('user_id', $id))
         // {
