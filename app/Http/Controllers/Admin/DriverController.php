@@ -96,7 +96,8 @@ class DriverController  extends Controller
 
         $message['email'] = $request->email;
         $message['password'] = $password;
-        Mail::to($request->email)->send(new SignupPasswordSend($password));
+        $status = 'Driver';
+        Mail::to($request->email)->send(new SignupPasswordSend($status));
 
         try {
             // Mail::to($request->email)->send(new UserLoginPassword($message));

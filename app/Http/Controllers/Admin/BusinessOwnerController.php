@@ -91,7 +91,8 @@ class BusinessOwnerController extends Controller
         $message['email'] = $request->email;
         $message['password'] = $password;
         // return $request->email;
-        Mail::to($request->email)->send(new SignupPasswordSend($password));
+         $status = 'Owner';
+        Mail::to($request->email)->send(new SignupPasswordSend($status));
         // Mail::to($user->email)->send(new RejectDocumentInfo($reason));
 
         try {
@@ -183,7 +184,7 @@ class BusinessOwnerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destro($id)
+    public function destroy($id)
     {
         // if(Review::where('user_id', $id)->delete() ||  Review::where('user_id', $id) || Question::where('user_id', $id))
         // {

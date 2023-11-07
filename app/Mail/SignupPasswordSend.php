@@ -17,10 +17,10 @@ class SignupPasswordSend extends Mailable
      *
      * @return void
      */
-    protected $password;
-    public function __construct($password)
+    protected $status;
+    public function __construct($status)
     {
-        $this->password = $password;
+        $this->status = $status;
     }
 
     /**
@@ -30,6 +30,6 @@ class SignupPasswordSend extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.RegisterSend')->with("password", $this->password)->subject('Register password');
+        return $this->markdown('emails.RegisterSend')->with("status", $this->status)->subject('Register password');
     }
 }
