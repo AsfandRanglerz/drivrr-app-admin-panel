@@ -70,13 +70,21 @@ class ProfileController extends Controller
         ]);
 
         // Fetch the updated user data
-        $updatedUser = User::find($id);
+        // $updatedUser = User::find($id);
+        $updatedUser = User::with('roles')->find($id);
+        if ($updatedUser) {
+            $role_id =   $updatedUser->roles->first()->pivot->role_id;
+            $updatedUser['role_id'] = $role_id;
 
-        return response()->json([
-            'message' => 'Your profile is updated successfully.',
-            'status' => 'success',
-            'data' => $updatedUser, // Include the updated user data in the response
-        ], 200);
+            return response()->json([
+                'status' => 'success',
+                'data' =>   $updatedUser,
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'User not found.',
+                'status' => 'Failed',
+            ], 404);
+        }
     }
-
 }
