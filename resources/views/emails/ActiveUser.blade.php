@@ -7,7 +7,7 @@
 <p>You are successfully registerded as a business owner.</p>
 @else
 <p>You are successfully registerded as a admin.</p>
-
+@endif
 Thanks,<br>
 {{ config('app.name') }}
 @endcomponent
