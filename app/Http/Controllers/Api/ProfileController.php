@@ -31,6 +31,7 @@ class ProfileController extends Controller
             ], 404);
         }
     }
+
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -50,27 +51,15 @@ class ProfileController extends Controller
             return $this->sendError('User not found', 404);
         }
 
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-            $file->move(public_path('admin/assets/images/users/'), $filename);
-            $image = 'public/admin/assets/images/users/' . $filename;
-        } else {
-            $image = 'public/admin/assets/images/users/owner.png';
-        }
-
         // Update user data
         $user->update([
             'fname' => $request->fname,
             'lname' => $request->lname,
             'phone' => $request->phone,
             'email' => $request->email,
-            'image' => $image,
         ]);
 
         // Fetch the updated user data
-        // $updatedUser = User::find($id);
         $updatedUser = User::with('roles')->find($id);
         if ($updatedUser) {
             $role_id =   $updatedUser->roles->first()->pivot->role_id;
@@ -86,5 +75,68 @@ class ProfileController extends Controller
                 'status' => 'Failed',
             ], 404);
         }
+    }
+    public function getImage($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found.',
+                'status' => 'Failed',
+            ], 404);
+        }
+
+        // Check if the user has an image
+        if (!$user->image) {
+            return response()->json([
+                'message' => 'User has no image.',
+                'status' => 'Failed',
+            ], 404);
+        }
+
+        // Construct the full URL to the user's image
+        $imageUrl = asset($user->image);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => ['image' => $imageUrl],
+        ], 200);
+    }
+
+    public function updateImage(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found.',
+                'status' => 'Failed',
+            ], 404);
+        }
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move(public_path('admin/assets/images/users/'), $filename);
+            $image = 'public/admin/assets/images/users/' . $filename;
+        } else {
+            // Handle the case where no image is provided
+            return response()->json([
+                'message' => 'No image provided.',
+                'status' => 'Failed',
+            ], 400);
+        }
+
+        // Update the user's image
+        $user->update([
+            'image' => $image,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Image updated successfully',
+        ], 200);
     }
 }

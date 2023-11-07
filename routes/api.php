@@ -35,8 +35,12 @@ Route::group(['namespace' => 'Api'], function () {
 
 Route::get('user-profile/{id}', 'Api\ProfileController@show');
 Route::post('edit-profile/{id}', 'Api\ProfileController@update');
+Route::get('users-imageget/{id}', 'Api\ProfileController@getImage');
+Route::post('users-imageupdate/{id}', 'Api\ProfileController@updateImage');
 
-Route::middleware(['auth:sanctum'])->group(function (){
+
+
+Route::middleware(['auth:sanctum'])->group(function () {
     //edit-user-profile
     //user-documents
     Route::get('document-index/{id}', 'Api\DocumentController@index');
@@ -54,8 +58,8 @@ Route::middleware(['auth:sanctum'])->group(function (){
 
 Route::post('owners-reviews', 'Api\ReviewController@ownerReview');
 Route::get('driver-reviews/{id}', 'Api\ReviewController@showFeedBackToDriver');
- //users-queries
-    Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
+//users-queries
+Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
 Route::post('logout', 'Api\AuthController@logout');
 
 
