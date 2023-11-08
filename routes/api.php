@@ -49,13 +49,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Route::get('driver-vehicle-index/{id}', 'Api\DriverVehicleController@index');
     // Route::get('driver-vehicle-create/{id}', 'Api\DriverVehicleController@create');
     // Route::post('driver-vehicle-add/{id}', 'Api\DriverVehicleController@store');
-    //owner-jobs
+    // //owner-jobs
     // Route::post('owners-jobs/{id}', 'Api\JobController@jobStore');
 
     //get owners jobs
     Route::get('owners-jobs-show/{id}', 'Api\OwnerJobsController@index');
 });
-
+    //user-documents
 Route::get('document-index/{id}', 'Api\DocumentController@index');
 Route::get('document-index/{id}', 'Api\DocumentController@index');
 //user-vehicles

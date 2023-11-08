@@ -56,7 +56,8 @@ class AuthController extends Controller
             if ($validator->fails()) {
                 return $this->sendError($validator->errors()->first());
             }
-            $image = public_path('admin/assets/images/users/owner.jpg');
+            $image = 'public/admin/assets/images/users/owner.jpg';
+
             $user = User::create([
                 'fname' => $request->fname,
                 'lname' => $request->lname,
@@ -69,8 +70,7 @@ class AuthController extends Controller
             ]);
             $user->roles()->sync(3);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
-        }
-         else {
+        } else {
             $validator = Validator::make(
                 $request->all(),
                 [
@@ -86,7 +86,7 @@ class AuthController extends Controller
             if ($validator->fails()) {
                 return $this->sendError($validator->errors()->first());
             }
-            $image = public_path('admin/assets/images/users/owner.jpg');
+            $image = 'public/admin/assets/images/users/owner.jpg';
             $user = User::create([
                 'fname' => $request->fname,
                 'lname' => $request->lname,

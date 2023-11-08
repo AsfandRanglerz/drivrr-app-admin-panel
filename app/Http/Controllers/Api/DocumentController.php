@@ -44,7 +44,7 @@ class DocumentController extends Controller
     public function store(Request $request ,$id)
     {
         $validator = Validator::make($request->all(),[
-            'name'=>'required',
+            'image'=>'required',
         ]);
         if(!$validator)
         {
@@ -61,14 +61,14 @@ class DocumentController extends Controller
         }
         $document = Document::create([
             'user_id'=>$id,
-            'name'=>$request->name,
             'image'=>$image,
         ]);
         $data = User::with('document')->find($id);
         return response()->json([
             "message"=>"Document added successfully.",
             "status"=>"Success",
-            "added"=>$data,
+            "data"=>$data,
+            'document'=> $document
         ],200);
 
     }
