@@ -2,11 +2,11 @@
     # Cancelation Status
 
     @if ($status == 1)
-        Your Request For Job Cancelltion has be Successfully Approved .
+        Your Request For Job Cancelltion has be Successfully Approved.
     @else
         Your Request Are Not Accepted For job Cancellation.
     @endif
 
-    Thanks, <br>
+    Thanks,
     {{ config('app.name') }}
 @endcomponent

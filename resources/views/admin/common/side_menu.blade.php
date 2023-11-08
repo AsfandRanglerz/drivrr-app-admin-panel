@@ -108,12 +108,12 @@
                     auth()->guard('web')->user()->can('Privacy policies'))
                 <li class="dropdown {{ request()->is('admin/Privacy-policy') ? 'active' : '' }}">
                     <a href="{{ url('/admin/Privacy-policy') }}" class="nav-link"> <i
-                            class="fa fa-lock"></i><span>Privacy policies</span></a>
+                            class="fa fa-lock"></i><span>Privacy Policy</span></a>
                 </li>
             @elseif (auth()->guard('admin')->check())
                 <li class="dropdown {{ request()->is('admin/Privacy-policy') ? 'active' : '' }}">
                     <a href="{{ url('/admin/Privacy-policy') }}" class="nav-link"> <i
-                            class="fa fa-lock"></i><span>Privacy policies</span></a>
+                            class="fa fa-lock"></i><span>Privacy Policy</span></a>
                 </li>
             @endif
             {{-- Term & Conditions --}}

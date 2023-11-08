@@ -30,6 +30,6 @@ class jobInactiveVerification extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.jobInactiveVerification')->with('status', $this->status)->subject('Verification Email From Drivrr.');
+        return $this->markdown('emails.jobInactiveVerification')->with('status', $this->status)->subject('Your job status.');
     }
 }

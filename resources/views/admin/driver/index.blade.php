@@ -41,7 +41,7 @@
                                                     <img src="{{ asset($driver->image) }}" alt="" height="50"
                                                         width="50" class="image">
                                                 </td>
-                                                
+
                                                 <td>
                                                     <a href="{{ route('document.index', $driver->id) }}">View</a>
                                                     {{-- @foreach ($counter as $count) --}}

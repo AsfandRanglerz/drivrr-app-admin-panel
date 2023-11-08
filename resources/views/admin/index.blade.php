@@ -19,7 +19,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                                         <div class="banner-img">
-                                           <img src="{{ asset('public/admin/assets/img/banner/1.png')}}" alt="">
+                                           <img src="{{ asset('public/admin/assets/img/banner/58967.jpg')}}" alt="">
                                         </div>
                                     </div>
                                 </div>
@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                                         <div class="banner-img">
-                                            <img src="{{ asset('public/admin/assets/img/banner/2.png')}}" alt="">
+                                            <img src="{{ asset('public/admin/assets/img/banner/owners.jpg')}}" alt="">
                                         </div>
                                     </div>
                                 </div>
@@ -64,7 +64,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                                         <div class="banner-img">
-                                            <img src="{{ asset('public/admin/assets/img/banner/3.png')}}" alt="">
+                                            <img src="{{ asset('public/admin/assets/img/banner/Drivrr-img.jpg')}}" alt="">
                                         </div>
                                     </div>
                                 </div>
@@ -79,14 +79,14 @@
                                 <div class="row ">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                                         <div class="card-content">
-                                            <h5 class="font-15">Revenue</h5>
-                                            <h2 class="mb-3 font-18">$48,697</h2>
+                                            <h5 class="font-15">Activce Jobs</h5>
+                                            <h2 class="mb-3 font-18">{{$data['jobs']}}</h2>
                                             <p class="mb-0"><span class="col-green">42%</span> Increase</p>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                                         <div class="banner-img">
-                                            <img src="{{ asset('public/admin/assets/img/banner/4.png')}}" alt="">
+                                            <img src="{{ asset('public/admin/assets/img/banner/41.jpg')}}" alt="">
                                         </div>
                                     </div>
                                 </div>
