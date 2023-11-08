@@ -77,9 +77,7 @@ class DriverController  extends Controller
         }
         else {
             $image = public_path('admin/assets/images/users/owner.jpg');
-            return $image;
         }
-
 
         /**generate random password */
         $password = Str::random(10);

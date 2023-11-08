@@ -8,6 +8,7 @@ use App\Models\admin;
 use App\Models\Document;
 use App\Models\RoleUser;
 use App\Models\User;
+use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,11 +20,13 @@ class AdminController extends Controller
     //
     public function getdashboard()
     {
-
         $data['users'] = User::all()->count();
         $data['subadmin']  = RoleUser::where('role_id', 1)->count();
         $data['owners']  = RoleUser::where('role_id', 2)->count();
         $data['drivers']  = RoleUser::where('role_id', 3)->count();
+        $data['jobs']  = Job::where('is_active', 0)->count();
+            // $jobs_count=Job::where('is_active', 1)->get();
+            // dd($jobs_count);
         // dd($data);
         // return [$users,$owners,$drivers,$admins];
         return view('admin.index', compact('data'));

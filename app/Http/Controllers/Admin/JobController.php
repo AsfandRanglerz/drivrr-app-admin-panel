@@ -160,7 +160,6 @@ class JobController extends Controller
         $owner = User::find($key);
         $data->update(['is_active' => $data->is_active == 0 ? '1' : '0']);
         $status = $data->is_active;
-
         if ($status == 1) {
             $owner_email = $owner->email;
             Mail::to($owner_email)->send(new jobInactiveVerification($status));
