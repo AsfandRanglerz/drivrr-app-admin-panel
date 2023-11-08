@@ -35,14 +35,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Document::class, 'user_id');
     }
-    public function getImageAttribute($path)
-    {
-        if ($path) {
-            return asset($path);
-        } else {
-            return null;
-        }
-    }
+    // public function getImageAttribute($path)
+    // {
+    //     if ($path) {
+    //         return asset($path);
+    //     } else {
+    //         return null;
+    //     }
+    // }
     public function driverVehicle()
     {
         return $this->hasMany(DriverVehicle::class, 'user_id');

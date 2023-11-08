@@ -44,7 +44,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //edit-user-profile
     //user-documents
     Route::get('document-index/{id}', 'Api\DocumentController@index');
-    Route::get('document-index/{id}', 'Api\DocumentController@index');
+    Route::get('document-store/{id}', 'Api\DocumentController@store');
     //user-vehicles
     Route::get('driver-vehicle-index/{id}', 'Api\DriverVehicleController@index');
     Route::get('driver-vehicle-create/{id}', 'Api\DriverVehicleController@create');
