@@ -68,7 +68,7 @@ class BusinessOwnerController extends Controller
             $image = 'public/admin/assets/images/users/' . $filename;
         }
         else {
-            $image = 'public/admin/assets/images/users/owner.jpg';
+            $image = public_path('admin/assets/images/users/owner.jpg');
         }
 
         /**generate random password */

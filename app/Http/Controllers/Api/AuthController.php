@@ -56,11 +56,13 @@ class AuthController extends Controller
             if ($validator->fails()) {
                 return $this->sendError($validator->errors()->first());
             }
+            $image = public_path('admin/assets/images/users/owner.jpg');
             $user = User::create([
                 'fname' => $request->fname,
                 'lname' => $request->lname,
                 'phone' => $request->phone,
                 'email' => $request->email,
+                'image' => $image,
                 'role_id' => 3,
 
                 // 'image' => $image,
@@ -84,11 +86,13 @@ class AuthController extends Controller
             if ($validator->fails()) {
                 return $this->sendError($validator->errors()->first());
             }
+            $image = public_path('admin/assets/images/users/owner.jpg');
             $user = User::create([
                 'fname' => $request->fname,
                 'lname' => $request->lname,
                 'phone' => $request->phone,
                 'email' => $request->email,
+                'image' => $image,
                 'company_name' => $request->company_name,
                 'company_info' => $request->company_info,
                 'role_id' => 2,
@@ -104,6 +108,7 @@ class AuthController extends Controller
             'message' => "Added successfully.",
             'status' => "success.",
             'token' => $token,
+            'data' =>  $user,
             // 'data' => $user,
         ], 200);
     }

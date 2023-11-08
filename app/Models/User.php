@@ -15,7 +15,8 @@ class User extends Authenticatable
     use HasApiTokens, Notifiable, HasRoles;
     // protected $guard = 'web';
 
-    protected $fillable = ['name', 'fname', 'maiden_name', 'lname', 'email', 'image', 'password', 'designation', 'is_active', 'address', 'role_id', 'phone', 'document'];
+    protected $fillable = ['name', 'fname', 'maiden_name', 'lname', 'email', 'image', 'password', 'designation', 'is_active', 'address', 'role_id', 'phone', 'document', 'company_name',
+    'company_info'];
 
     public function usercompany()
     {
