@@ -39,15 +39,12 @@
                                                 <td>{{ $owner->lname }}</td>
                                                 <td>{{ $owner->phone }}</td>
                                                 <td>{{ $owner->email }}</td>
-                                                <td>
-                                                    @if (file_exists(public_path($owner->image)))
+
+                                                    <td>
                                                         <img src="{{ asset($owner->image) }}" alt="" height="50"
                                                             width="50" class="image">
-                                                    @else
-                                                        <img src="{{ asset('public/admin/assets/images/users/owner.jpg') }}"
-                                                            alt="" height="50" width="50" class="image">
-                                                    @endif
-                                                </td>
+                                                    </td>
+
                                                 <td>{{ $owner->company_name}}</td>
                                                 <td>{{ $owner->company_info}}</td>
                                                 <td>

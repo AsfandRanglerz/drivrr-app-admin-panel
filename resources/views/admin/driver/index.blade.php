@@ -38,18 +38,13 @@
                                                 <td>{{ $driver->phone }}</td>
                                                 <td>{{ $driver->email }}</td>
                                                 <td>
-                                                    @if (file_exists(public_path($driver->image)))
-                                                        <img src="{{ asset($driver->image) }}" alt="" height="50"
-                                                            width="50" class="image">
-                                                    @else
-                                                        <img src="{{ asset('public/admin/assets/images/users/owner.jpg') }}"
-                                                            alt="" height="50" width="50" class="image">
-                                                    @endif
+                                                    <img src="{{ asset($driver->image) }}" alt="" height="50"
+                                                        width="50" class="image">
                                                 </td>
 
                                                 <td>
                                                     <a href="{{ route('document.index', $driver->id) }}">View</a>
-                                                     {{-- @foreach ($counter as $count) --}}
+                                                    {{-- @foreach ($counter as $count) --}}
                                                     @if ($driver->documentCount)
                                                         <span class="px-2 py-1 rounded text-white bg-info">{{ $driver->documentCount }}</span>
                                                     @else
