@@ -274,6 +274,8 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
         $userId = $user->id;
+        // return $userId;
+
         if (!$user) {
             return response()->json(['message' => 'The user is not registered.', 'status' => 'failed'], 401);
         }
