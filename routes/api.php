@@ -53,7 +53,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Route::post('owners-jobs/{id}', 'Api\JobController@jobStore');
 
     //get owners jobs
-    Route::get('owners-jobs-show/{id}', 'Api\OwnerJobsController@index');
+    // Route::get('owners-jobs-show/{id}', 'Api\OwnerJobsController@index');
 });
     //user-documents
 Route::get('document-index/{id}', 'Api\DocumentController@index');
