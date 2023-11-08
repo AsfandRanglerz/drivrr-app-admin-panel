@@ -22,20 +22,7 @@ class AuthController extends Controller
 {
     public function register(Request $request, $id)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'fname' => 'required',
-                'lname' => 'required',
-                'phone' => 'required',
-                'email' => 'required|email|unique:users',
-                // 'password' => 'required|confirmed',
-            ]
-        );
 
-        if ($validator->fails()) {
-            return $this->sendError($validator->errors()->first());
-        }
         // if ($request->hasFile('image')) {
         //     $file = $request->file('image');
         //     $extension = $file->getClientOriginalExtension();
@@ -55,6 +42,20 @@ class AuthController extends Controller
         // ]);
 
         if ($id == 3) {
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'fname' => 'required',
+                    'lname' => 'required',
+                    'phone' => 'required',
+                    'email' => 'required|email|unique:users',
+                    // 'password' => 'required|confirmed',
+                ]
+            );
+
+            if ($validator->fails()) {
+                return $this->sendError($validator->errors()->first());
+            }
             $user = User::create([
                 'fname' => $request->fname,
                 'lname' => $request->lname,
@@ -66,12 +67,30 @@ class AuthController extends Controller
             ]);
             $user->roles()->sync(3);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
-        } else {
+        }
+         else {
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'fname' => 'required',
+                    'lname' => 'required',
+                    'phone' => 'required',
+                    'email' => 'required|email|unique:users',
+                    'company_name' => 'required',
+                    'company_info' => 'required',
+                    // 'password' => 'required|confirmed',
+                ]
+            );
+            if ($validator->fails()) {
+                return $this->sendError($validator->errors()->first());
+            }
             $user = User::create([
                 'fname' => $request->fname,
                 'lname' => $request->lname,
                 'phone' => $request->phone,
                 'email' => $request->email,
+                'company_name' => $request->company_name,
+                'company_info' => $request->company_info,
                 'role_id' => 2,
                 // 'password' => Hash::make($request->password),
                 // 'image' => $image,

@@ -137,6 +137,7 @@ class ProfileController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Image updated successfully',
+            'image'=> $image,
         ], 200);
     }
 }
