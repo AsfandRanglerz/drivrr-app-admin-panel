@@ -73,10 +73,11 @@ class DriverController  extends Controller
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
             $file->move(public_path('admin/assets/images/users/'), $filename);
-            $image = 'public/admin/assets/images/users/' . $filename;
+            $image = '/admin/assets/images/users/' . $filename;
         }
         else {
             $image = public_path('admin/assets/images/users/owner.jpg');
+            return $image;
         }
 
 
