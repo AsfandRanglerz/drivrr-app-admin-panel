@@ -18,7 +18,24 @@ class DriverVehicleController extends Controller
      */
     public function index($id)
     {
-        $vehicles = User::with('driverVehicle')->find($id);
+        $vehicles = User::with('driverVehicle', 'roles')->find($id);
+        if ($vehicles) {
+            $role_id = $vehicles->roles->first()->pivot->role_id;
+            $vehicles['role_id'] = $role_id;
+            return response()->json([
+                'data' => $vehicles,
+                'status' => 'success',
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Vehicle with User Not Found',
+
+            ], 400);
+        }
+    }
+    public function getVehicles()
+    {
+        $vehicles = Vehicle::all();
         return response()->json([
             'Vehicles' => $vehicles,
             'status' => 'success',

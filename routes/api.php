@@ -59,6 +59,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::get('document-index/{id}', 'Api\DocumentController@index');
 Route::get('document-index/{id}', 'Api\DocumentController@index');
 //user-vehicles
+Route::get('vehicles', 'Api\DriverVehicleController@getVehicles');
 Route::get('driver-vehicle-index/{id}', 'Api\DriverVehicleController@index');
 Route::post('driver-vehicle-create/{id}', 'Api\DriverVehicleController@create');
 Route::post('driver-vehicle-add/{id}', 'Api\DriverVehicleController@store');
