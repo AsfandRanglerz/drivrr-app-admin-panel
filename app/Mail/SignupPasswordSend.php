@@ -30,6 +30,6 @@ class SignupPasswordSend extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.RegisterSend')->with("status", $this->status)->subject('Register password');
+        return $this->markdown('emails.RegisterSend')->with("status", $this->status)->subject('Registration Info');
     }
 }

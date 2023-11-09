@@ -86,7 +86,7 @@ class DriverController  extends Controller
             'phone' => $request->phone,
             'email' => $request->email,
             'image' => $image,
-            'role_id' => 2,
+            'role_id' => 3,
             // 'password' => Hash::make($password),
         ]);
 

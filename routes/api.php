@@ -9,6 +9,7 @@ use App\Controllers\DriverVehicleController;
 use App\Controllers\HelpAndSupportController;
 use App\Controllers\OwnerJobsController;
 use App\Controllers\ReviewController;
+use App\Controllers\BankAccountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +70,9 @@ Route::get('driver-reviews/{id}', 'Api\ReviewController@showFeedBackToDriver');
 //users-queries
 Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
 Route::post('logout', 'Api\AuthController@logout');
+//driver bank account
+Route::post('add-bank-account', 'Api\BankAccountController@store_account');
+
 
 
 

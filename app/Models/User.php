@@ -67,4 +67,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserLoginWithOtp::class,'user_id');
     }
+    public function bankAccounts()
+    {
+        return $this->hasMany(BankAccount::class,'user_id');
+    }
 }
