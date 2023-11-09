@@ -60,7 +60,7 @@ Route::get('document-index/{id}', 'Api\DocumentController@index');
 Route::get('document-index/{id}', 'Api\DocumentController@index');
 //user-vehicles
 Route::get('driver-vehicle-index/{id}', 'Api\DriverVehicleController@index');
-Route::get('driver-vehicle-create/{id}', 'Api\DriverVehicleController@create');
+Route::post('driver-vehicle-create/{id}', 'Api\DriverVehicleController@create');
 Route::post('driver-vehicle-add/{id}', 'Api\DriverVehicleController@store');
 //owner-jobs
 Route::post('owners-jobs/{id}', 'Api\JobController@jobStore');

@@ -18,11 +18,11 @@ class DriverVehicleController extends Controller
      */
     public function index($id)
     {
-         $vehicles = User::with('driverVehicle')->find($id);
-         return response()->json([
-            'Vehicles'=>$vehicles,
-            'status'=>'success',
-         ],200);
+        $vehicles = User::with('driverVehicle')->find($id);
+        return response()->json([
+            'Vehicles' => $vehicles,
+            'status' => 'success',
+        ], 200);
     }
 
     /**
@@ -32,13 +32,21 @@ class DriverVehicleController extends Controller
      */
     public function create($id)
     {
-        $data['user'] = User::find($id);
-        $data['vehicles'] = Vehicle::all();
-        return response()->json([
-            'user'=>$data['user'],
-            'vehicles'=>$data['vehicles'],
-            'status'=>'success',
-        ],200);
+        $user = User::with('roles')->find($id);
+        if ($user) {
+            $role_id = $user->roles->first()->pivot->role_id;
+            $user['role_id'] = $role_id;
+            $data['vehicles'] = Vehicle::all();
+            return response()->json([
+                'data' => $user,
+                'vehicles' => $data['vehicles'],
+                'status' => 'success',
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Vehicle and User Not Found',
+            ], 400);
+        }
     }
 
     /**
@@ -47,33 +55,43 @@ class DriverVehicleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request , $id)
+    public function store(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[
-                'vehicle_brand'=>'required',
-                'model'=>'required',
-                'year'=>'required',
-                'license_plate'=>'required',
-                'color'=>'required',
+        $validator = Validator::make($request->all(), [
+            'vehicle_brand' => 'required',
+            'model' => 'required',
+            'year' => 'required',
+            'license_plate' => 'required',
+            'color' => 'required',
         ]);
-        if(!$validator)
-        {
+        if (!$validator) {
             return $this->showError($validator->errors()->first());
         }
-        $vehicle = DriverVehicle::create([
-            'user_id'=>$id,
-            'vehicle_id'=>$request->vehicle_id,
-            'vehicle_brand'=>$request->vehicle_brand,
-            'model'=>$request->model,
-            'year'=>$request->year,
-            'license_plate'=>$request->license_plate,
-            'color'=>$request->color,
-        ]);
-        return response()->json([
-            'message'=>'Vehicle Added successfully.',
-            'status'=>'success.',
-            'vehicle which you add'=>$vehicle,
-        ],200);
+        $user = User::with('roles')->find($id);
+        if ($user) {
+            $role_id = $user->roles->first()->pivot->role_id;
+            $user['role_id'] = $role_id;
+            $vehicle = DriverVehicle::create([
+                'user_id' => $id,
+                'vehicle_id' => $request->vehicle_id,
+                'vehicle_brand' => $request->vehicle_brand,
+                'model' => $request->model,
+                'year' => $request->year,
+                'license_plate' => $request->license_plate,
+                'color' => $request->color,
+            ]);
+            return response()->json([
+                'message' => 'Vehicle Added successfully.',
+                'status' => 'success.',
+                'vehicle which you add' => $vehicle,
+                'data' => $user,
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Vehicle Not Addded',
+
+            ], 400);
+        }
     }
 
     /**
