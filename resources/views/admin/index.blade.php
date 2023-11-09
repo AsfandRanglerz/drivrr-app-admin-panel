@@ -14,6 +14,7 @@
                                         <div class="card-content">
                                             <h5 class="font-15">Total Users</h5>
                                             <h2 class="mb-3 font-18">{{$data['users']}}</h2>
+                                            <br>
                                             {{-- <p class="mb-0"><span class="col-green">10%</span> Increase</p> --}}
                                         </div>
                                     </div>
@@ -59,7 +60,8 @@
                                             <h5 class="font-15">Drivers</h5>
                                             <h2 class="mb-3 font-18">{{$data['drivers']}}</h2>
                                             {{-- <p class="mb-0"><span class="col-green">18%</span> --}}
-                                                Increase</p>
+                                                {{-- Increase</p> --}}
+                                                <br>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
