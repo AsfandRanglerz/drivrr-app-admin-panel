@@ -75,14 +75,18 @@ class DriverVehicleController extends Controller
     public function store(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
+            'vehicle_id' => 'required',
             'vehicle_brand' => 'required',
             'model' => 'required',
             'year' => 'required',
             'license_plate' => 'required',
             'color' => 'required',
         ]);
-        if (!$validator) {
-            return $this->showError($validator->errors()->first());
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 400);
         }
         $user = User::with('roles')->find($id);
         if ($user) {
@@ -100,14 +104,13 @@ class DriverVehicleController extends Controller
             return response()->json([
                 'message' => 'Vehicle Added successfully.',
                 'status' => 'success.',
-                'vehicle which you add' => $vehicle,
-                'data' => $user,
+                'driver_vehicles' => $vehicle,
+                'user' => $user,
             ], 200);
         } else {
             return response()->json([
-                'message' => 'Vehicle Not Addded',
-
-            ], 400);
+                'message' => 'User not found',
+            ], 404);
         }
     }
 
