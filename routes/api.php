@@ -72,7 +72,7 @@ Route::get('driver-reviews/{id}', 'Api\ReviewController@showFeedBackToDriver');
 Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
 Route::post('logout', 'Api\AuthController@logout');
 //driver bank account
-Route::post('add-bank-account', 'Api\BankAccountController@store_account');
+Route::post('add-bank-account/{id}', 'Api\BankAccountController@store_account');
 
 
 
