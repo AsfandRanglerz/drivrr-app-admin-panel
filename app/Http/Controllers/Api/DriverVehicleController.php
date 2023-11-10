@@ -49,21 +49,6 @@ class DriverVehicleController extends Controller
      */
     public function create($id)
     {
-        $user = User::with('roles')->find($id);
-        if ($user) {
-            $role_id = $user->roles->first()->pivot->role_id;
-            $user['role_id'] = $role_id;
-            $data['vehicles'] = Vehicle::all();
-            return response()->json([
-                'data' => $user,
-                'vehicles' => $data['vehicles'],
-                'status' => 'success',
-            ], 200);
-        } else {
-            return response()->json([
-                'message' => 'Vehicle and User Not Found',
-            ], 400);
-        }
     }
 
     /**
@@ -120,9 +105,28 @@ class DriverVehicleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function show($id)
     {
-        //
+        $user = User::with('driverVehicle', 'roles')->find($id);
+
+        if ($user) {
+            $role_id = $user->roles->first()->pivot->role_id;
+            $user['role_id'] = $role_id;
+            $data = [
+                'user' => $user,
+                'driverVehicle' => $user->driverVehicle,
+            ];
+
+            return response()->json([
+                'data' => $data,
+                'status' => 'success',
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'User Not Found',
+            ], 400);
+        }
     }
 
     /**
