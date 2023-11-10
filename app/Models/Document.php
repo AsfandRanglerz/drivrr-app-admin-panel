@@ -13,4 +13,12 @@ class Document extends Model
     {
         return $this->belongsTo(User::class);
     }
+    // public function getImageAttribute($path)
+    // {
+    //     if ($path){
+    //         return asset($path);
+    //     }else{
+    //         return null;
+    //     }
+    // }
 }

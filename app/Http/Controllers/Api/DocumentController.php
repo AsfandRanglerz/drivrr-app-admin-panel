@@ -55,6 +55,7 @@ class DocumentController extends Controller
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
+            $file->move(public_path('admin/assets/images/users'), $filename);
             $image = 'public/admin/assets/images/users/' . $filename;
         } else {
             $image = 'public/admin/assets/images/users/1675332882.jpg';
