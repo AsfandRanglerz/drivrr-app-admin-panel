@@ -66,6 +66,7 @@ class DriverVehicleController extends Controller
             'year' => 'required',
             'license_plate' => 'required',
             'color' => 'required',
+
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -85,6 +86,7 @@ class DriverVehicleController extends Controller
                 'year' => $request->year,
                 'license_plate' => $request->license_plate,
                 'color' => $request->color,
+
             ]);
             return response()->json([
                 'message' => 'Vehicle Added successfully.',
@@ -97,6 +99,19 @@ class DriverVehicleController extends Controller
                 'message' => 'User not found',
             ], 404);
         }
+    }
+    public function updateStatus($id)
+    {
+        $vehicle = DriverVehicle::findOrFail($id);
+
+        $vehicle->is_active = $vehicle->is_active == '0' ? '1' : '0';
+
+        $vehicle->save();
+
+        return response()->json([
+            'message' => 'Status updated successfully',
+            'data' => $vehicle,
+        ], 200);
     }
 
     /**

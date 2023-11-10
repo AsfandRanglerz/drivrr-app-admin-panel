@@ -64,6 +64,8 @@ Route::get('vehicles', 'Api\DriverVehicleController@getVehicles');
 Route::get('driver-vehicle-index/{id}', 'Api\DriverVehicleController@index');
 Route::get('driver-vehicle-show/{id}', 'Api\DriverVehicleController@show');
 Route::post('driver-vehicle-add/{id}', 'Api\DriverVehicleController@store');
+Route::put('/driver-vehicle/{id}/update-status', 'Api\DriverVehicleController@updateStatus');
+
 //owner-jobs
 Route::post('owners-jobs/{id}', 'Api\JobController@jobStore');
 Route::post('owners-reviews', 'Api\ReviewController@ownerReview');
