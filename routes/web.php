@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\BusinessOwnerController;
 use App\Http\Controllers\Admin\DriverVehicleController;
 use App\Http\Controllers\Admin\HelpAndSupportController;
 use App\Http\Controllers\Admin\UserPermssionController;
+use App\Http\Controllers\Admin\WalletController;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,4 +110,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     ######## Help And Sppurt Controler #####
     Route::get('help-and-support', [HelpAndSupportController::class, 'index'])->name('help-and-support.index');
     Route::get('send-response/{id}', [HelpAndSupportController::class, 'send'])->name('send-response.send');
+    //Wallet Controller
+    Route::get('show-wallets', [WalletController::class, 'index'])->name('show-wallets');
+
 });

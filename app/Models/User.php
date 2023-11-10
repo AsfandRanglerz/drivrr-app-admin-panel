@@ -71,4 +71,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(BankAccount::class,'user_id');
     }
+    public function driverWallet()
+    {
+        return $this->hasOne(DriverWallet::class,'driver_id');
+    }
 }

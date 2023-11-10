@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\DriverWallet;
 use App\Models\Job;
 use App\Models\Review;
 use App\Models\Question;
@@ -89,7 +90,10 @@ class DriverController  extends Controller
             'role_id' => 3,
             // 'password' => Hash::make($password),
         ]);
-
+        $wallet = DriverWallet::create([
+            'driver_id'=> $driver->id,
+            'total_earning'=> 0,
+        ]);
         /** assign the role  */
         $driver->roles()->sync(3);
 
@@ -97,7 +101,6 @@ class DriverController  extends Controller
         $message['password'] = $password;
         $status = 'Driver';
         Mail::to($request->email)->send(new SignupPasswordSend($status));
-
         try {
             // Mail::to($request->email)->send(new UserLoginPassword($message));
             return redirect()->route('driver.index')->with(['status' => true, 'message' => 'Driver   Created successfully.']);

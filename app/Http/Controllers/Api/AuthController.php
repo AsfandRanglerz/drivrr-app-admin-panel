@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\DriverWallet;
 use App\Models\RoleUser;
 use App\Models\UserLoginWithOtp;
 use Illuminate\Support\Str;
@@ -70,7 +71,24 @@ class AuthController extends Controller
             ]);
             $user->roles()->sync(3);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
-        } else {
+            $wallet = DriverWallet::create([
+                'driver_id'=> $user->id,
+                'total_earning'=> 0,
+            ]);
+            // return  $wallet;
+            // $otp = random_int(0000,9999);
+            $token = $user->createToken($request->email)->plainTextToken;
+            return response()->json([
+                'message' => "Added successfully.",
+                'status' => "success.",
+                'token' => $token,
+                'data' =>  $user,
+                'driver_wallet' =>  $wallet,
+
+                // 'data' => $user,
+            ], 200);
+        }
+        else {
             $validator = Validator::make(
                 $request->all(),
                 [
@@ -101,16 +119,17 @@ class AuthController extends Controller
             ]);
             $user->roles()->sync(2);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
+            // $otp = random_int(0000,9999);
+            $token = $user->createToken($request->email)->plainTextToken;
+            return response()->json([
+                'message' => "Added successfully.",
+                'status' => "success.",
+                'token' => $token,
+                'data' =>  $user,
+                // 'data' => $user,
+            ], 200);
         }
-        // $otp = random_int(0000,9999);
-        $token = $user->createToken($request->email)->plainTextToken;
-        return response()->json([
-            'message' => "Added successfully.",
-            'status' => "success.",
-            'token' => $token,
-            'data' =>  $user,
-            // 'data' => $user,
-        ], 200);
+
     }
     public function checkEmailExists(Request $request)
     {

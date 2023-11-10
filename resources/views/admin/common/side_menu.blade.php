@@ -149,6 +149,13 @@
                 </li>
             @endif
 
+            {{-- Wallet Management --}}
+            <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
+                <a href="{{ route('show-wallets') }}" class="nav-link">
+                    <i class="fa fa-info-circle"></i>
+                    <span>Wallet Management</span>
+                </a>
+            </li>
             {{--
             <li class="dropdown {{ request()->is('admin/helpAndSupport*') ? 'active' : '' }}">
                 <a href="{{ route('help-and-support.index') }}" class="nav-link"><i
