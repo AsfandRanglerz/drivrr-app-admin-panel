@@ -150,12 +150,29 @@
             @endif
 
             {{-- Wallet Management --}}
-            <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
-                <a href="{{ route('show-wallets') }}" class="nav-link">
-                    <i class="fa fa-info-circle"></i>
-                    <span>Wallet Management</span>
-                </a>
+            <li class="dropdown">
+                <a href="#" class="menu-toggle nav-link has-dropdown"><i class="fa fa-users"></i>
+                    <span>Wallet Management</span></a>
+                <ul class="dropdown-menu active">
+                    {{-- Driver Wallet --}}
+                        <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
+                            <a href="{{ route('show-wallets') }}" class="nav-link"><i
+                                    data-feather="users"></i><span>Driver Wallets</span></a>
+                        </li>
+                    {{-- Widthdrawal Requests --}}
+                        <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
+                            <a href="#" class="nav-link"><i
+                                    data-feather="users"></i><span>Widthdrawal Requests</span></a>
+                        </li>
+
+                    {{-- Owner Recipits --}}
+                        <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
+                            <a href="#" class="nav-link"><i
+                                    data-feather="users"></i><span>Owner Recipits</span></a>
+                        </li>
+                </ul>
             </li>
+
             {{--
             <li class="dropdown {{ request()->is('admin/helpAndSupport*') ? 'active' : '' }}">
                 <a href="{{ route('help-and-support.index') }}" class="nav-link"><i

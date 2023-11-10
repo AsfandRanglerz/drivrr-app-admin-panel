@@ -12,142 +12,55 @@
                                     <h4>Driver</h4>
                                 </div>
                             </div>
-                            {{-- <div class="card-body table-striped table-bordered table-responsive">
-                                <a class="btn btn-success mb-3" href="{{ route('driver.create') }}">Add Driver</a>
-                                <table class="table text-center" id="table_id_events">
-                                    <thead>
-                                        <tr>
-                                            <th>Sr.</th>
-                                            <th>First Name</th>
-                                            <th>Last Name</th>
-                                            <th>Phone</th>
-                                            <th>Email</th>
-                                            <th>Image</th>
-                                            <th>Documents</th>
-                                            <th>&nbsp;&nbsp;&nbsp;Vehicles&nbsp;&nbsp;&nbsp;</th>
-                                            <th>Status</th>
-                                            <th scope="col">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{-- @foreach ($data as $driver)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $driver->fname }}</td>
-                                                <td>{{ $driver->lname }}</td>
-                                                <td>{{ $driver->phone }}</td>
-                                                <td>{{ $driver->email }}</td>
-                                                <td>
-                                                    <img src="{{ asset($driver->image) }}" alt="" height="50"
-                                                        width="50" class="image">
-                                                </td>
-
-                                                <td>
-                                                    <a href="{{ route('document.index', $driver->id) }}">View</a>
-                                                    {{-- @foreach ($counter as $count) --}}
-                                                    {{-- @if ($driver->documentCount)
-                                                        <span class="px-2 py-1 rounded text-white bg-info">{{ $driver->documentCount }}</span>
-                                                    @else
-                                                        <span class="px-2 py-1 rounded text-white bg-info">0</span>
-                                                    @endif --}}
-                                                    {{-- @endforeach --}}
-                                                {{-- </td>
-                                                <td>
-                                                    <a  href="{{ route('driver-vehicle.index', $driver->id) }}">View</a>
-                                                    @if ($driver->vehicleCount)
-                                                        <span class="px-2 py-1 rounded text-white bg-info">{{ $driver->vehicleCount }}</span>
-                                                    @else
-                                                        <span class="px-2 py-1 rounded text-white bg-info">0</span>
-                                                    @endif
-                                                </td>
-
-                                                <td>
-                                                    @if ($driver->is_active == 1)
-                                                        <div class="badge badge-success badge-shadow">Accepted</div>
-                                                    @else
-                                                        <div class="badge badge-danger badge-shadow">Rejected</div>
-                                                    @endif
-                                                </td>
-
-                                                <td
-                                                    style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
-                                                    @if ($driver->is_active == 1)
-                                                        <a href="{{ route('driver.status', ['id' => $driver->id]) }}"
-                                                            class="btn btn-success"><svg xmlns="http://www.w3.org/2000/svg"
-                                                                width="24" height="24" viewBox="0 0 24 24"
-                                                                fill="none" stroke="currentColor"
-                                                                stroke-width="2"stroke-linecap="round" --}}
-                                                                {{-- stroke-linejoin="round"class="feather feather-toggle-left">
-                                                                <rect x="1" y="5" width="22" height="14" --}} --}}
-                                                                    {{-- rx="7" ry="7"></rect>
-                                                                <circle cx="16" cy="12" r="3">
-                                                                </circle>
-                                                            </svg></a>
-                                                    @else
-                                                        <a href="{{ route('driver.status', ['id' => $driver->id]) }}"
-                                                            class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg"
-                                                                width="24" height="24" viewBox="0 0 24 24"
-                                                                fill="none" stroke="currentColor" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round" --}}
-                                                                {{-- class="feather feather-toggle-right">
-                                                                <rect x="1" y="5" width="22" height="14"
-                                                                    rx="7" ry="7"></rect>
-                                                                <circle cx="8" cy="12" r="3">
-                                                                </circle>
-                                                            </svg></a>
-                                                    @endif
-                                                    <a class="btn btn-info"
-                                                        href="{{ route('driver.edit', $driver->id) }}">Edit</a>
-                                                    <form method="post"
-                                                        action="{{ route('driver.destroy', $driver->id) }}">
-                                                        @csrf
-                                                        <input name="_method" type="hidden" value="DELETE">
-                                                        <button type="submit" class="btn btn-danger btn-flat show_confirm"
-                                                            data-toggle="tooltip">Delete</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-
-                                    </tbody>
-                                </table> --}}
-                            {{-- </div> --}}
-                        @foreach ($data as $driver)
-                            @foreach ($driver->driverWallet as $wallet )
-                             <div class="card mt-4">
-                                <div class="card-header">
-                                  <h4>Wallet Details</h4>
-                                </div>
-                                <div class="card-body">
-                                  <ul class="list-unstyled user-details list-unstyled-border list-unstyled-noborder">
-                                    <li class="media">
-                                      <img alt="image" class="mr-3 rounded-circle" width="50" src="{{$driver->image}}">
-                                      <div class="media-body">
-                                        <div class="media-title">{{$driver->fname}}</div>
-                                        <div class="text-job text-muted">{{$driver->lname}}</div>
-                                      </div>
-                                      <div class="media-items">
-                                        <div class="media-item">
-                                          <div class="media-value">{{$wallet->total_earning}}</div>
-                                          <div class="media-label">Earning</div>
-                                        </div>
-                                        <div class="media-item">
-                                          <div class="media-value">10K</div>
-                                          <div class="media-label">Followers</div>
-                                        </div>
-                                        <div class="media-item">
-                                          <div class="media-value">2,312</div>
-                                          <div class="media-label">Following</div>
-                                        </div>
-                                      </div>
-                                  </ul>
-                                </div>
-                              </div>
-                            @endforeach
-                         @endforeach
-
+                            {{--driver--}}
+                    {{-- <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"> --}}
+                        <div class="card-body table-striped table-bordered table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Sr.</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Earnings</th>
+                                        <th scope="col" class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        @foreach ($data as $drivers)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td> <!-- Parent loop index for owner -->
+                                        <td>{{ $drivers->fname . ' ' . $drivers->lname }}</td>
+                                        <td>{{ $drivers->email }}
+                                        {{-- <td>{{ $drivers->driverWallet->total_earning }}</td> --}}
+                                        <td>
+                                            @if ($drivers->driverWallet)
+                                                {{ $drivers->driverWallet->total_earning }}
+                                            @else
+                                               0
+                                            @endif
+                                        </td>
+                                        {{-- <td>{{ $question->details }}</td> --}}
+                                        <td class="text-center">
+                                            {{-- @dd($drivers->id) --}}
+                                            {{-- <button id={{ $drivers->id }} type="button" class="btn btn-primary"
+                                                data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                                                <span class=" fa fa-pen"></span>
+                                            </button> --}}
+                                            <button type="button" class="btn btn-primary">
+                                                <span class="fa fa-pen"></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+
+                        </div>
+                    {{-- </div> --}}
                 </div>
             </div>
         </section>
