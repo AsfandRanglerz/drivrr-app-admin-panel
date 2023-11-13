@@ -11,6 +11,32 @@ use App\Models\BankAccount;
 
 class BankAccountController extends Controller
 {
+    public function fetch($id)
+    {
+        try {
+
+            $bankAccount = BankAccount::where('user_id', $id)->first();
+
+            if (!$bankAccount) {
+                return response()->json([
+                    'message' => 'Bank account not found for the specified user ID.',
+                    'status' => 'Error',
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Bank account details fetched successfully.',
+                'status' => 'Success',
+                'bank_account' => $bankAccount,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error fetching bank account details.',
+                'status' => 'Error',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
     public function store_account(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
