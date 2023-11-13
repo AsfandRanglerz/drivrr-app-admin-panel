@@ -14,12 +14,11 @@ class BankAccountController extends Controller
     public function fetch($id)
     {
         try {
+            $bankAccounts = BankAccount::where('user_id', $id)->get();
 
-            $bankAccount = BankAccount::where('user_id', $id)->first();
-
-            if (!$bankAccount) {
+            if ($bankAccounts->isEmpty()) {
                 return response()->json([
-                    'message' => 'Bank account not found for the specified user ID.',
+                    'message' => 'No bank accounts found for the specified user ID.',
                     'status' => 'Error',
                 ], 404);
             }
@@ -27,7 +26,7 @@ class BankAccountController extends Controller
             return response()->json([
                 'message' => 'Bank account details fetched successfully.',
                 'status' => 'Success',
-                'bank_account' => $bankAccount,
+                'bank_accounts' => $bankAccounts,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -37,6 +36,7 @@ class BankAccountController extends Controller
             ], 500);
         }
     }
+
     public function store_account(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
