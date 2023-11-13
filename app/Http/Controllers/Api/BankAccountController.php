@@ -35,7 +35,7 @@ class BankAccountController extends Controller
                 ->where('id', '!=', $account->id)
                 ->update(['status' => '0']);
         }
-
+$all=BankAccount::all();
         return response()->json([
             'message' => 'Account information added successfully.',
             'status' => 'Success.',
