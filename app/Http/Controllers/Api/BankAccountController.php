@@ -31,14 +31,13 @@ class BankAccountController extends Controller
             'account_number' => $request->account_number,
             'status' => $request->status,
         ]);
-        $all = BankAccount::all();
         if ($request->status === '1') {
             // Deactivate all other accounts for the same user
             BankAccount::where('user_id', $id)
                 ->where('id', '!=', $account->id)
                 ->update(['status' => '0']);
         }
-
+        $all = BankAccount::all();
         return response()->json([
             'message'=>'Account information added successfully.',
             'status'=>'Success.',
