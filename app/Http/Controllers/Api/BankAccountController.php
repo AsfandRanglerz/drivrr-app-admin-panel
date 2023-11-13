@@ -30,12 +30,12 @@ class BankAccountController extends Controller
             'account_number' => $request->account_number,
             'status' => $request->status,
         ]);
-        $all = BankAccount::all();
         if ($request->status === '1') {
             BankAccount::where('user_id', $id)
                 ->where('id', '!=', $account->id)
                 ->update(['status' => '0']);
         }
+
         return response()->json([
             'message' => 'Account information added successfully.',
             'status' => 'Success.',
