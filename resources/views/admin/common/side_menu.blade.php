@@ -75,6 +75,30 @@
                     </ul>
                 </li>
             @endif
+              {{-- Wallet Management --}}
+              <li class="dropdown">
+                <a href="#" class="menu-toggle nav-link has-dropdown"><i class="
+                    fas fa-coins"></i>
+                    <span>Wallet Management</span></a>
+                <ul class="dropdown-menu active">
+                    {{-- Driver Wallet --}}
+                        <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
+                            <a href="{{ route('show-wallets') }}" class="nav-link"><i
+                                    class="fas fa-wallet"></i><span>Driver Wallets</span></a>
+                        </li>
+                    {{-- Widthdrawal Requests --}}
+                        <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
+                            <a href="#" class="nav-link"><i
+                                    class="fab fa-twitch"></i><span>Widthdrawal Requests</span></a>
+                        </li>
+
+                    {{-- Owner Recipits --}}
+                        <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
+                            <a href="#" class="nav-link"><i
+                                    class="fas fa-receipt"></i><span>Owner Recipits</span></a>
+                        </li>
+                </ul>
+            </li>
             {{-- Vehicles --}}
             @if (auth()->guard('web')->check() &&
                     auth()->guard('web')->user()->can('Vehicles'))
@@ -149,29 +173,7 @@
                 </li>
             @endif
 
-            {{-- Wallet Management --}}
-            <li class="dropdown">
-                <a href="#" class="menu-toggle nav-link has-dropdown"><i class="fa fa-users"></i>
-                    <span>Wallet Management</span></a>
-                <ul class="dropdown-menu active">
-                    {{-- Driver Wallet --}}
-                        <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
-                            <a href="{{ route('show-wallets') }}" class="nav-link"><i
-                                    data-feather="users"></i><span>Driver Wallets</span></a>
-                        </li>
-                    {{-- Widthdrawal Requests --}}
-                        <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
-                            <a href="#" class="nav-link"><i
-                                    data-feather="users"></i><span>Widthdrawal Requests</span></a>
-                        </li>
 
-                    {{-- Owner Recipits --}}
-                        <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
-                            <a href="#" class="nav-link"><i
-                                    data-feather="users"></i><span>Owner Recipits</span></a>
-                        </li>
-                </ul>
-            </li>
 
             {{--
             <li class="dropdown {{ request()->is('admin/helpAndSupport*') ? 'active' : '' }}">

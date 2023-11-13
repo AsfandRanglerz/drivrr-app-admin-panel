@@ -26,7 +26,10 @@ class BusinessOwnerController extends Controller
     {
         $data = User::whereHas('roles', function ($q) {
             $q->where('name', 'Owner');
-        })->orderBy('id', 'DESC')->get();
+        })->orderBy('id', 'DESC')->get()
+            ->each(function ($owner) {
+            $owner->jobsCount = $owner->job->count();
+        });;
         // return $data;
         return view('admin.owner.index', compact('data'));
     }

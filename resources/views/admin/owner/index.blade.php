@@ -26,7 +26,7 @@
                                             <th>Image</th>
                                             <th>Company Name</th>
                                             <th>Company Info</th>
-                                            <th>Jobs</th>
+                                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jobs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                             <th>Status</th>
                                             <th scope="col">Actions</th>
                                         </tr>
@@ -47,8 +47,14 @@
 
                                                 <td>{{ $owner->company_name}}</td>
                                                 <td>{{ $owner->company_info}}</td>
+
                                                 <td>
                                                     <a href="{{ route('owner-job.index', $owner->id) }}">View</a>
+                                                    @if ($owner->jobsCount)
+                                                        <span class="px-2 py-1 rounded text-white bg-info">{{ $owner->jobsCount }}</span>
+                                                    @else
+                                                        <span class="px-2 py-1 rounded text-white bg-info">0</span>
+                                                    @endif
                                                 </td>
 
                                                 {{-- <td>{{ $owner->designation }}</td> --}}
