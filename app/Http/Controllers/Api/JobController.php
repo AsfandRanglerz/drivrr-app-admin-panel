@@ -17,12 +17,10 @@ class JobController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'pickup' => 'required',
-                'destination' => 'required',
+                'location' => 'required',
                 'date' => 'required',
                 'time' => 'required',
                 'duration' => 'required',
-                'service_type' => 'required',
                 'price' => 'required',
                 'description' => 'required',
             ]
@@ -33,12 +31,10 @@ class JobController extends Controller
         $job = Job::create([
             'user_id' => $id,
             'vehicle_id' => $request->vehicle_id,
-            'pickup' => $request->pickup,
-            'destination' => $request->destination,
+            'location' => $request->location,
             'date' => $request->date,
             'time' => $request->time,
             'duration' => $request->duration,
-            'service_type' => $request->service_type,
             'price' => $request->price,
             'description' => $request->description,
         ]);
