@@ -35,7 +35,7 @@ class BankAccountController extends Controller
                 ->where('id', '!=', $account->id)
                 ->update(['status' => '0']);
         }
-$all=BankAccount::all();
+        $all = BankAccount::all();
         return response()->json([
             'message' => 'Account information added successfully.',
             'status' => 'Success.',
@@ -47,28 +47,37 @@ $all=BankAccount::all();
 
     public function update_account(Request $request, $id)
     {
+
         $validator = Validator::make($request->all(), [
             'bank_name' => 'required',
             'holder_name' => 'required',
             'account_number' => 'required',
             'status' => 'required',
         ]);
-        if (!$validator) {
+
+        if ($validator->fails()) {
             return $this->sendError($validator->errors()->first());
         }
+
         $account = BankAccount::find($id);
+
+        if (!$account) {
+            return $this->sendError('Account not found.');
+        }
+
         $account->update([
             'bank_name' => $request->bank_name,
             'holder_name' => $request->holder_name,
             'account_number' => $request->account_number,
             'status' => $request->status,
         ]);
+
         if ($request->status === '1') {
-            // Deactivate all other accounts for the same user
-            BankAccount::where('user_id', $id)
+            BankAccount::where('user_id', $account->user_id)
                 ->where('id', '!=', $account->id)
                 ->update(['status' => '0']);
         }
+
         return response()->json([
             'message' => 'Account information updated successfully.',
             'status' => 'Success.',
