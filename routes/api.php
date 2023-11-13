@@ -75,6 +75,7 @@ Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
 Route::post('logout', 'Api\AuthController@logout');
 //driver bank account
 Route::post('add-bank-account/{id}', 'Api\BankAccountController@store_account');
+Route::post('update-bank-account/{id}', 'Api\BankAccountController@update_account');
 
 
 
