@@ -16,18 +16,20 @@ class BankAccountController extends Controller
         try {
             $bankAccounts = BankAccount::where('user_id', $id)->get();
 
-            if ($bankAccounts->isEmpty()) {
+
+            if ($bankAccounts) {
                 return response()->json([
-                    'message' => 'No bank accounts found for the specified user ID.',
-                    'status' => 'Error',
+                    'message' => 'Bank account details fetched successfully.',
+                    'status' => 'Success',
+                    'bank_accounts' => $bankAccounts,
+                ], 200);
+            }else{
+                return response()->json([
+                    'message' => 'Bank account details fetched Unsuccessfully.',
+                    'status' => 'Failed',
+
                 ], 404);
             }
-
-            return response()->json([
-                'message' => 'Bank account details fetched successfully.',
-                'status' => 'Success',
-                'bank_accounts' => $bankAccounts,
-            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error fetching bank account details.',
