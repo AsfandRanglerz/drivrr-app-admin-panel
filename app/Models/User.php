@@ -75,4 +75,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(DriverWallet::class,'driver_id');
     }
+    public function withdrawalRequest()
+    {
+        return $this->belongsToMany(WithdrawalRequest::class,'driver_id');
+    }
 }

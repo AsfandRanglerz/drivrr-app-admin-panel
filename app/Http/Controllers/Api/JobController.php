@@ -20,7 +20,8 @@ class JobController extends Controller
                 'location' => 'required',
                 'date' => 'required',
                 'time' => 'required',
-                'duration' => 'required',
+                'hours' => 'required',
+                'days' => 'required',
                 'price' => 'required',
                 'description' => 'required',
             ]
@@ -34,7 +35,8 @@ class JobController extends Controller
             'location' => $request->location,
             'date' => $request->date,
             'time' => $request->time,
-            'duration' => $request->duration,
+            'hours' => $request->hours,
+            'days' => $request->days,
             'price' => $request->price,
             'description' => $request->description,
         ]);

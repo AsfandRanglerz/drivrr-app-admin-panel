@@ -112,5 +112,6 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('send-response/{id}', [HelpAndSupportController::class, 'send'])->name('send-response.send');
     //Wallet Controller
     Route::get('show-wallets', [WalletController::class, 'index'])->name('show-wallets');
+    Route::get('show-withdrawal-requests', [WalletController::class, 'show_withdrawal_requests'])->name('show-withdrawal-requests');
 
 });

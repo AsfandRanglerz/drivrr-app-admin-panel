@@ -10,6 +10,7 @@ use App\Controllers\HelpAndSupportController;
 use App\Controllers\OwnerJobsController;
 use App\Controllers\ReviewController;
 use App\Controllers\BankAccountController;
+use App\Controllers\DriverWalletController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +77,8 @@ Route::post('logout', 'Api\AuthController@logout');
 //driver bank account
 Route::post('add-bank-account/{id}', 'Api\BankAccountController@store_account');
 Route::post('update-bank-account/{id}', 'Api\BankAccountController@update_account');
+//driver request for withdrawal
+Route::post('add-withdrawal-request/{id}', 'Api\DriverWalletController@add_withdrawal_request');
 
 
 

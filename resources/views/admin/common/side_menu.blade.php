@@ -87,8 +87,8 @@
                                     class="fas fa-wallet"></i><span>Driver Wallets</span></a>
                         </li>
                     {{-- Widthdrawal Requests --}}
-                        <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
-                            <a href="#" class="nav-link"><i
+                        <li class="dropdown {{ request()->is('admin/withdrawal_requests*') ? 'active' : '' }}">
+                            <a href="{{route('show-withdrawal-requests')}}" class="nav-link"><i
                                     class="fab fa-twitch"></i><span>Widthdrawal Requests</span></a>
                         </li>
 
