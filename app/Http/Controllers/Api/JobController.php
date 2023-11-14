@@ -34,19 +34,13 @@ class JobController extends Controller
                     'error' => $validator->errors(),
                 ], 422);
             }
-
-            // Convert date to the desired format (Y-m-d)
-            $formattedDate = Carbon::createFromFormat('d-m-Y', $request->date)->format('Y-m-d');
-
-            // Convert time to the desired format (H:i:s)
-            $formattedTime = Carbon::createFromFormat('g:i A', $request->time)->format('H:i:s');
-
+            $formattedDate = Carbon::createFromFormat('d-m-Y', $request->date)->format('d-m-Y');
             $job = Job::create([
                 'user_id' => $id,
                 'vehicle_id' => $request->vehicle_id,
                 'location' => $request->location,
                 'date' => $formattedDate,
-                'time' => $formattedTime,
+                'time' =>   $request->time,
                 'hours' => $request->hours,
                 'days' => $request->days,
                 'price' => $request->price,
