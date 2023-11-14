@@ -4,46 +4,66 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Vehicle;
 use App\Models\Job;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class JobController extends Controller
 {
     public function jobStore(Request $request, $id)
     {
-        // return $request;
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'location' => 'required',
-                'date' => 'required',
-                'time' => 'required',
-                'hours' => 'required',
-                'days' => 'required',
-                'price' => 'required',
-                'description' => 'required',
-            ]
-        );
-        if (!$validator) {
-            return $this->sendError($validator->errors()->first());
+        try {
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'location' => 'required',
+                    'date' => 'required|date_format:d-m-Y',
+                    'time' => 'required|date_format:g:i A',
+                    'hours' => 'required',
+                    'days' => 'required',
+                    'price' => 'required',
+                    'description' => 'required',
+                    'vehicle_id' => 'required',
+                ]
+            );
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation failed.',
+                    'status' => 'Failed',
+                    'error' => $validator->errors(),
+                ], 422);
+            }
+
+            // Convert date to the desired format (Y-m-d)
+            $formattedDate = Carbon::createFromFormat('d-m-Y', $request->date)->format('Y-m-d');
+
+            // Convert time to the desired format (H:i:s)
+            $formattedTime = Carbon::createFromFormat('g:i A', $request->time)->format('H:i:s');
+
+            $job = Job::create([
+                'user_id' => $id,
+                'vehicle_id' => $request->vehicle_id,
+                'location' => $request->location,
+                'date' => $formattedDate,
+                'time' => $formattedTime,
+                'hours' => $request->hours,
+                'days' => $request->days,
+                'price' => $request->price,
+                'description' => $request->description,
+            ]);
+
+            return response()->json([
+                'message' => 'Job created successfully.',
+                'status' => 'Success',
+                'job' => $job,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error creating job.',
+                'status' => 'Error',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-        $job = Job::create([
-            'user_id' => $id,
-            'vehicle_id' => $request->vehicle_id,
-            'location' => $request->location,
-            'date' => $request->date,
-            'time' => $request->time,
-            'hours' => $request->hours,
-            'days' => $request->days,
-            'price' => $request->price,
-            'description' => $request->description,
-        ]);
-        return response()->json([
-            'message' => 'Job created successfully.',
-            'status' => 'Success.',
-            'this is a job you created' => $job,
-        ], 200);
     }
 }
