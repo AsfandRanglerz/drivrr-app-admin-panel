@@ -10,6 +10,26 @@ use Carbon\Carbon;
 
 class JobController extends Controller
 {
+    public function getJobsByUserId($user_id)
+    {
+        try {
+            $jobs = Job::where('user_id', $user_id)->get();
+
+            return response()->json([
+                'message' => 'Jobs fetched successfully.',
+                'status' => 'Success',
+                'jobs' => $jobs,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error fetching jobs.',
+                'status' => 'Error',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
     public function jobStore(Request $request, $id)
     {
         try {
@@ -24,6 +44,7 @@ class JobController extends Controller
                     'price' => 'required',
                     'description' => 'required',
                     'vehicle_id' => 'required',
+                    'on_vehicle'=>'required'
                 ]
             );
 
@@ -45,6 +66,7 @@ class JobController extends Controller
                 'days' => $request->days,
                 'price' => $request->price,
                 'description' => $request->description,
+                'on_vehicle'=>$request->on_vehicle
             ]);
 
             return response()->json([
@@ -55,6 +77,72 @@ class JobController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error creating job.',
+                'status' => 'Error',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function jobUpdate(Request $request, $userId, $jobId)
+    {
+        try {
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'location' => 'required',
+                    'date' => 'required|date_format:d-m-Y',
+                    'time' => 'required|date_format:g:i A',
+                    'hours' => 'required',
+                    'days' => 'required',
+                    'price' => 'required',
+                    'description' => 'required',
+                    'vehicle_id' => 'required',
+                    'on_vehicle'=>'required'
+
+                ]
+            );
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation failed.',
+                    'status' => 'Failed',
+                    'error' => $validator->errors(),
+                ], 422);
+            }
+
+            $formattedDate = Carbon::createFromFormat('d-m-Y', $request->date)->format('d-m-Y');
+
+            // Find the existing job by ID
+            $job = Job::where('id', $jobId)
+                ->where('user_id', $userId)
+                ->first();
+
+            if (!$job) {
+                return response()->json([
+                    'message' => 'Job not found.',
+                    'status' => 'Failed',
+                ], 404);
+            }
+
+            $job->update([
+                'vehicle_id' => $request->vehicle_id,
+                'location' => $request->location,
+                'date' => $formattedDate,
+                'time' => $request->time,
+                'hours' => $request->hours,
+                'days' => $request->days,
+                'price' => $request->price,
+                'description' => $request->description,
+                'on_vehicle'=>$request->on_vehicle
+            ]);
+
+            return response()->json([
+                'message' => 'Job updated successfully.',
+                'status' => 'Success',
+                'job' => $job,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error updating job.',
                 'status' => 'Error',
                 'error' => $e->getMessage(),
             ], 500);
