@@ -11,6 +11,10 @@ class WithdrawalRequest extends Model
     protected $guarded = [];
     public function user()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(User::class,'driver_id');
+    }
+    public function bankAccount()
+    {
+        return $this->belongsTo(BankAccount::class,'account_id');
     }
 }
