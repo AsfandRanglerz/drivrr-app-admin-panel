@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\DriverWallet;
 use App\Models\WithdrawalRequest;
+use App\Models\BankAccount;
 
 
 class WalletController extends Controller
@@ -26,7 +27,7 @@ class WalletController extends Controller
     }
     public function show_withdrawal_requests()
     {
-        $withdraw_requests = WithdrawalRequest::all();
+        $withdraw_requests = WithdrawalRequest::with('bankAccount','user')->get();
         return view('admin.withdrawal_requests.index',compact('withdraw_requests'));
     }
 }

@@ -13,4 +13,8 @@ class BankAccount extends Model
     {
         return $this->belongsTo(User::class);
     }
+    // public function withdrawalRequest()
+    // {
+    //     return $this->hasOne(WithdrawalRequest::class,'account_id');
+    // }
 }

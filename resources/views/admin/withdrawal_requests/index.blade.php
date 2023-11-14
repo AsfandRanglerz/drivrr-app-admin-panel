@@ -28,7 +28,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
+                                    @foreach ($withdraw_requests as $data)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $data->user->fname . ' ' . $data->user->lname }}</td>
+                                        <td>{{ $data->bankAccount->bank_name }}</td>
+                                        <td>{{ $data->bankAccount->account_number }}</td>
+                                        <td>{{ $data->bankAccount->holder_name}}</td>
+                                        <td>{{ $data->withdrawal_amount }}</td>
+                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
