@@ -57,7 +57,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //get owners jobs
     // Route::get('owners-jobs-show/{id}', 'Api\OwnerJobsController@index');
 });
-    //user-documents
+//user-documents
 Route::get('document-index/{id}', 'Api\DocumentController@index');
 Route::post('document-store/{id}', 'Api\DocumentController@store');
 //user-vehicles
@@ -78,6 +78,8 @@ Route::post('logout', 'Api\AuthController@logout');
 Route::get('bank-account/{id}', 'Api\BankAccountController@fetch');
 Route::post('add-bank-account/{id}', 'Api\BankAccountController@store_account');
 Route::post('update-bank-account/{id}', 'Api\BankAccountController@update_account');
+Route::get('delete-bank-account/{accountId}', 'Api\BankAccountController@delete');
+
 //driver request for withdrawal
 Route::post('add-withdrawal-request/{id}', 'Api\DriverWalletController@add_withdrawal_request');
 

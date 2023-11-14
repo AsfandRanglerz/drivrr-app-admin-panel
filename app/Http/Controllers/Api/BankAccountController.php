@@ -23,7 +23,7 @@ class BankAccountController extends Controller
                     'status' => 'Success',
                     'bank_accounts' => $bankAccounts,
                 ], 200);
-            }else{
+            } else {
                 return response()->json([
                     'message' => 'Bank account details fetched Unsuccessfully.',
                     'status' => 'Failed',
@@ -38,6 +38,31 @@ class BankAccountController extends Controller
             ], 500);
         }
     }
+    public function delete($accountId)
+    {
+        try {
+            $deletedRows = BankAccount::where('id', $accountId)->delete();
+
+            if ($deletedRows > 0) {
+                return response()->json([
+                    'message' => 'Bank account deleted successfully.',
+                    'status' => 'Success',
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'Bank account not found or already deleted.',
+                    'status' => 'Failed',
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error deleting bank account.',
+                'status' => 'Error',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 
     public function store_account(Request $request, $id)
     {
