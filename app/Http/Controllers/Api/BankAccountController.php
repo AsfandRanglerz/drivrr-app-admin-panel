@@ -38,6 +38,32 @@ class BankAccountController extends Controller
             ], 500);
         }
     }
+    public function getData($id)
+    {
+        try {
+            $bankAccount = BankAccount::find($id);
+
+            if ($bankAccount) {
+                return response()->json([
+                    'message' => 'Bank account details fetched successfully.',
+                    'status' => 'Success',
+                    'bank_account' => $bankAccount,
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'Bank account details not found.',
+                    'status' => 'Failed',
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error fetching bank account details.',
+                'status' => 'Error',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function delete($accountId)
     {
         try {
