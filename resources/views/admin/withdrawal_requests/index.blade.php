@@ -36,6 +36,11 @@
                                         <td>{{ $data->bankAccount->account_number }}</td>
                                         <td>{{ $data->bankAccount->holder_name}}</td>
                                         <td>{{ $data->withdrawal_amount }}</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicModal-{{ $data->id }}">
+                                                <span class="fa fa-pen"></span>
+                                            </button>
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -48,6 +53,33 @@
                 </div>
             </div>
         </section>
+         <!-- basic modal -->
+         @foreach ($withdraw_requests as $data)
+         <div class="modal fade" id="basicModal-{{ $data->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+         <div class="modal-dialog" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h5 class="modal-title" id="exampleModalLabel">Send Money{{ $data->id}}</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+               </button>
+             </div>
+             <form action="{{ route('action-on-request', $data->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    {{-- <input type="file" name="attachment" placeholder="attachment"> --}}
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="submit" class="btn btn-primary">Send</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+
+           </div>
+         </div>
+       </div>
+       @endforeach
     </div>
 
 @endsection
