@@ -109,10 +109,10 @@ class BankAccountController extends Controller
             'account_number' => $request->account_number,
             'status' => $request->status,
         ]);
-        if ($request->status === '1') {
+        if ($request->status === 'Active') {
             BankAccount::where('user_id', $id)
                 ->where('id', '!=', $account->id)
-                ->update(['status' => '0']);
+                ->update(['status' => 'InActive']);
         }
         $all = BankAccount::all();
         return response()->json([
@@ -151,10 +151,10 @@ class BankAccountController extends Controller
             'status' => $request->status,
         ]);
 
-        if ($request->status === '1') {
+        if ($request->status === 'Active') {
             BankAccount::where('user_id', $account->user_id)
                 ->where('id', '!=', $account->id)
-                ->update(['status' => '0']);
+                ->update(['status' => 'InActive']);
         }
 
         return response()->json([
