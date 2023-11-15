@@ -32,10 +32,6 @@ class WalletController extends Controller
     }
     public function send_money(Request $request , $id)
     {
-        $withdraw = WithdrawalRequest::find($id);
-        $drivrr_id = $withdraw->driver_id;
-        $driver_wallet = DriverWallet::find($drivrr_id);
-        return $driver_wallet;
         $request->validate([
              'image'=>'required',
         ]);
@@ -43,15 +39,32 @@ class WalletController extends Controller
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
-            $file->move(public_path('admin/assets/images/approve/'), $filename);
-            $image = 'public/admin/assets/images/approve/' . $filename;
+            $file->move(public_path('admin/assets/images/users/'), $filename);
+            $image = 'public/admin/assets/images/users/' . $filename;
         }
         else {
-            $image = 'public/admin/assets/images/approve/owner.jpg';
+            $image = 'public/admin/assets/images/users/owner.jpg';
         }
-        // $user = DriverWallet::
-        // $approve = DriverWallet::create([
+        $approved_request = WithdrawalRequest::find($id);
+        $approved_request->update([
+            'image'=>$image,
+            'status'=>1,
+        ]);
+        return  [$approved_request,$image];
+        return redirect()->back()->with(['status'=>'success','message'=>'Action is successfully taken.']);
 
-        // ]);
+    }
+    public function delete_request($id)
+    {
+        $approved_request = WithdrawalRequest::find($id);
+        WithdrawalRequest::destroy($id);
+        return redirect()->back()->with(['status'=>'success','message'=>'Request deleted successfully.']);
+    }
+
+    public function show_receipts($id)
+    {
+        $driver = WithdrawalRequest::where('driver_id',$id)->where('status',1)->get();
+        return view('admin.wallet.withdrawals.index',compact('driver'));
+        return $driver;
     }
 }
