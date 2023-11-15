@@ -11,6 +11,7 @@ use App\Controllers\OwnerJobsController;
 use App\Controllers\ReviewController;
 use App\Controllers\BankAccountController;
 use App\Controllers\DriverWalletController;
+use App\Http\Controllers\Api\DriverShowJobsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +84,8 @@ Route::get('bank-account-data/{id}', 'Api\BankAccountController@getData');
 Route::post('add-bank-account/{id}', 'Api\BankAccountController@store_account');
 Route::post('update-bank-account/{id}', 'Api\BankAccountController@update_account');
 Route::get('delete-bank-account/{accountId}', 'Api\BankAccountController@delete');
+//############SHOW DRIVER JOBs########################
+Route::get('driverjobs', [DriverShowJobsController::class, 'get']);
 
 //driver request for withdrawal
 Route::post('add-withdrawal-request/{id}', 'Api\DriverWalletController@add_withdrawal_request');
