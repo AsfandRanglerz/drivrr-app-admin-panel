@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use App\Models\WithdrawalRequest;
 
 class AdminController extends Controller
 {
@@ -25,6 +26,7 @@ class AdminController extends Controller
         $data['owners']  = RoleUser::where('role_id', 2)->count();
         $data['drivers']  = RoleUser::where('role_id', 3)->count();
         $data['jobs']  = Job::where('is_active', 0)->count();
+        $data['requests'] = WithdrawalRequest::where('status', 0)->count();
             // $jobs_count=Job::where('is_active', 1)->get();
             // dd($jobs_count);
         // dd($data);
