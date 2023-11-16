@@ -18,7 +18,7 @@ class WalletController extends Controller
         // $data = User::whereHas('roles', function ($q) {
         //     $q->where('name', 'driver');
         // })->has('driverWallet')->with('driverWallet')->orderBy('id', 'DESC')->get();
-        $data = User::with('driverWallet')->where('role_id',3)->get();
+        $data = User::with('driverWallet')->where('role_id',3)->orderBy('id', 'DESC')->get();
         // return $data;
         // return   $data;
         // $driver_id = $data->id;
@@ -27,7 +27,7 @@ class WalletController extends Controller
     }
     public function show_withdrawal_requests()
     {
-        $withdraw_requests = WithdrawalRequest::with('bankAccount','user')->get();
+        $withdraw_requests = WithdrawalRequest::with('bankAccount','user')->orderBy('id', 'DESC')->get();
         return view('admin.withdrawal_requests.index',compact('withdraw_requests'));
     }
     public function send_money(Request $request , $id ,$amount)
@@ -52,7 +52,7 @@ class WalletController extends Controller
         // return  [$wallet_amount-$amount];
         $updated_amount = $wallet_amount - $amount;
         // return  $updated_amount;
-        
+
         DriverWallet::where('driver_id', $driver_id)->update([
             'total_earning'=>$updated_amount,
         ]);

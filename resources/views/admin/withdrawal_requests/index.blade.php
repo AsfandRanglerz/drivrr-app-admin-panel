@@ -40,8 +40,10 @@
                                                 <td>{{ $data->withdrawal_amount }}</td>
                                                 <td>
                                                     @if($data->image)
-                                                        <img src="{{ asset($data->image) }}" alt="" height="50"
-                                                            width="50" class="image">
+                                                    <a href="{{ asset($data->image) }}" target="_blank">
+                                                        <img src="{{ asset($data->image) }}" alt=""
+                                                            height="50" width="50" class="image">
+                                                    </a>
                                                     @else
                                                         Null
                                                     @endif
