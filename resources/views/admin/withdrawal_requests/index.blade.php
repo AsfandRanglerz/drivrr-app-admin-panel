@@ -90,14 +90,16 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Send Money{{ $data->id }}</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Send Money</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="{{ route('action-on-request', $data->id) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('action-on-request', ['id' => $data->id, 'amount' => $data->withdrawal_amount]) }}" method="POST" enctype="multipart/form-data">
+
                             @csrf
                             <div class="modal-body">
+
                                 <input type="file" name="image">
                             </div>
                             <div class="modal-footer bg-whitesmoke br">

@@ -30,7 +30,7 @@ class WalletController extends Controller
         $withdraw_requests = WithdrawalRequest::with('bankAccount','user')->get();
         return view('admin.withdrawal_requests.index',compact('withdraw_requests'));
     }
-    public function send_money(Request $request , $id)
+    public function send_money(Request $request , $id ,$amount)
     {
         $request->validate([
              'image'=>'required',
@@ -45,12 +45,23 @@ class WalletController extends Controller
         else {
             $image = 'public/admin/assets/images/users/owner.jpg';
         }
+
+        $driver_id = WithdrawalRequest::where('id', $id)->value('driver_id');
+        // return $driver_id;
+        $wallet_amount = DriverWallet::where('driver_id', $driver_id)->value('total_earning');
+        // return  [$wallet_amount-$amount];
+        $updated_amount = $wallet_amount - $amount;
+        // return  $updated_amount;
+        
+        DriverWallet::where('driver_id', $driver_id)->update([
+            'total_earning'=>$updated_amount,
+        ]);
         $approved_request = WithdrawalRequest::find($id);
         $approved_request->update([
             'image'=>$image,
             'status'=>1,
         ]);
-        return  [$approved_request,$image];
+        // return  [$approved_request,$image];
         return redirect()->back()->with(['status'=>'success','message'=>'Action is successfully taken.']);
 
     }

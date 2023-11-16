@@ -22,8 +22,8 @@ class DriverWalletController extends Controller
             return $this->sendError($validator->errors()->first());
         }
         $active_account = BankAccount::where('user_id',$id)->where('status','Active')->first();
-        $current_amount = DriverWallet::where('driver_id',$id)->get('total_earning');
-        // return [$current_amount,$request->withdrawal_amount];
+        $current_amount = DriverWallet::where('driver_id',$id)->value('total_earning');
+        // return [$current_amount >= $request->withdrawal_amount];
         if($current_amount >= $request->withdrawal_amount)
         {
             $add_withdrawal_request = WithdrawalRequest::create([

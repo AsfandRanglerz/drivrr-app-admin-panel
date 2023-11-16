@@ -114,7 +114,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('show-wallets', [WalletController::class, 'index'])->name('show-wallets');
     // Route::get('request-counter', [WalletController::class, 'request_counter'])->name('request-counter');
     Route::get('show-withdrawal-requests', [WalletController::class, 'show_withdrawal_requests'])->name('show-withdrawal-requests');
-    Route::post('action-on-request/{id}', [WalletController::class, 'send_money'])->name('action-on-request');
+    Route::post('action-on-request/{id}/{amount}', [WalletController::class, 'send_money'])->name('action-on-request');
     Route::delete('delete-approve-request/{id}', [WalletController::class, 'delete_request'])->name('delete-approve-request');
     Route::get('show-withdrawals-receipts/{id}', [WalletController::class, 'show_receipts'])->name('show-withdrawals-receipts');
 
