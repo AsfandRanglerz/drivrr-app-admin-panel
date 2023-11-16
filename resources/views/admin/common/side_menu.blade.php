@@ -79,7 +79,8 @@
               <li class="dropdown">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i class="
                     fas fa-coins"></i>
-                    <span>Wallet Management</span></a>
+                    <span>Wallet Management{{$data['requests']}}</span>
+                </a>
                 <ul class="dropdown-menu active">
                     {{-- Driver Wallet --}}
                         <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
@@ -88,8 +89,10 @@
                         </li>
                     {{-- Widthdrawal Requests --}}
                         <li class="dropdown {{ request()->is('admin/withdrawal_requests*') ? 'active' : '' }}">
-                            <a href="{{route('show-withdrawal-requests')}}" class="nav-link"><i
-                                    class="fab fa-twitch"></i><span>Widthdrawal Requests</span></a>
+                            <a href="{{route('show-withdrawal-requests')}}" class="nav-link">
+                                        <i class="fab fa-twitch"></i>
+                                        <span>Widthdrawal Requests{{$data['requests']}}</span>
+                                </a>
                         </li>
 
                     {{-- Owner Recipits --}}

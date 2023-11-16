@@ -67,4 +67,5 @@ class WalletController extends Controller
         return view('admin.wallet.withdrawals.index',compact('driver'));
         return $driver;
     }
+
 }
