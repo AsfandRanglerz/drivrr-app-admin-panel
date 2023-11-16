@@ -16,7 +16,7 @@ class Job extends Model
     }
     public function vehicle()
     {
-        return $this->belongsTo(Vehicle::class, 'vehicle_id', 'id');
+        return $this->belongsTo(Vehicle::class, 'vehicle_id');
     }
     public function DriverVehicle()
     {
