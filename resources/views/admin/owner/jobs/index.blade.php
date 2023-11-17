@@ -22,11 +22,11 @@ integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="ano
                                         <tr>
                                             <th>Sr.</th>
                                             <th>Vehicle</th>
-                                            <th>Pickup</th>
-                                            <th>Destination</th>
+                                            <th>Location</th>
                                             <th>Date</th>
                                             <th>Time</th>
-                                            <th>Duration</th>
+                                            <th>Hours</th>
+                                            <th>Days</th>
                                             <th>Price</th>
                                             <th>Description</th>
                                             <th>Own Vehicle</th>
@@ -41,13 +41,22 @@ integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="ano
                                                 @if ($item)
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $item->vehicle->name }}</td>
-                                                    <td> {!! strlen($item->pickup) > 10 ? substr($item->pickup, 0, 10) . '...' : $item->pickup !!}</td>
-                                                    <td> {!! strlen($item->destination) > 10 ? substr($item->destination, 0, 10) . '...' : $item->destination !!}</td>
+                                                    <td> {!! strlen($item->location) > 10 ? substr($item->location, 0, 10) . '...' : $item->location !!}</td>
                                                     <td>{{ $item->date }}</td>
                                                     <td>{{ $item->time }}</td>
-                                                    <td>{{ $item->duration }}</td>
+                                                    <td>{{ $item->hours }}</td>
+                                                    <td>{{ $item->days }}</td>
                                                     <td>{{ $item->price }}</td>
                                                     <td> {!! strlen($item->description) > 10 ? substr($item->description, 0, 10) . '...' : $item->description !!}</td>
+                                                         @if ($item->on_vehicle==1)
+                                                         <td>
+                                                            <span>Needed</span>
+                                                        </td>
+                                                         @else
+                                                         <td>
+                                                            <span>No Need</span>
+                                                        </td>
+                                                        @endif
 
 
                                                     <td>
