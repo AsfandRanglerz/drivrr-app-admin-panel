@@ -57,8 +57,6 @@ class DocumentController extends Controller
             $filename = time() . '.' . $extension;
             $file->move(public_path('admin/assets/images/users'), $filename);
             $image = 'public/admin/assets/images/users/' . $filename;
-        } else {
-            $image = 'public/admin/assets/images/users/1675332882.jpg';
         }
         $document = Document::create([
             'user_id'=>$id,
