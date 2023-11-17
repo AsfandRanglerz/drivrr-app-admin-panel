@@ -29,9 +29,12 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td> <!-- Parent loop index for owner -->
                                         <td>
-                                            <img src="{{ asset($withdraw->image) }}" alt="" height="50"
-                                                width="50" class="image">
+                                            <a href="{{ asset($withdraw->image) }}" target="_blank">
+                                                <img src="{{ asset($withdraw->image) }}" alt=""
+                                                    height="50" width="50" class="image">
+                                            </a>
                                         </td>
+
                                         {{-- <td>{{ $question->details }}</td> --}}
                                         <td class="text-center">
                                             <button type="button" class="btn btn-primary">

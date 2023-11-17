@@ -41,8 +41,8 @@
                                              <span>0</span>
                                             @endif
                                         </td>
-                                        <td>
-                                            {{$drivers->id}}
+                                        <td style="justify-content: center">
+                                            {{-- {{$drivers->id}} --}}
                                             <a href="{{route('show-withdrawals-receipts',$drivers->id)}}">View</a>
                                         </td>
                                         {{-- <td>{{ $question->details }}</td> --}}
