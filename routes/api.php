@@ -12,6 +12,7 @@ use App\Controllers\ReviewController;
 use App\Controllers\BankAccountController;
 use App\Controllers\DriverWalletController;
 use App\Http\Controllers\Api\DriverShowJobsController;
+use App\Http\Controllers\Api\DriverJobRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +90,9 @@ Route::get('driverjobs/{userid}', [DriverShowJobsController::class, 'get']);
 
 //driver request for withdrawal
 Route::post('add-withdrawal-request/{id}', 'Api\DriverWalletController@add_withdrawal_request');
+//driver request for job
+Route::post('add-job-request-without-counter/{owner_id}/{driver_id}/{job_id}', 'Api\DriverJobRequestController@add_job_request_without_counter');
+Route::post('add-job-request-with-counter/{owner_id}/{driver_id}/{job_id}', 'Api\DriverJobRequestController@add_job_request_counter');
 
 
 

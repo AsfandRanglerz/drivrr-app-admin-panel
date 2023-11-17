@@ -27,9 +27,9 @@ integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="ano
                                             <th>Date</th>
                                             <th>Time</th>
                                             <th>Duration</th>
-                                            <th>Service_type</th>
                                             <th>Price</th>
                                             <th>Description</th>
+                                            <th>Own Vehicle</th>
                                             <th>Order</th>
                                             <th scope="col">Actions</th>
                                         </tr>
@@ -46,7 +46,6 @@ integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="ano
                                                     <td>{{ $item->date }}</td>
                                                     <td>{{ $item->time }}</td>
                                                     <td>{{ $item->duration }}</td>
-                                                    <td>{{ $item->service_type }}</td>
                                                     <td>{{ $item->price }}</td>
                                                     <td> {!! strlen($item->description) > 10 ? substr($item->description, 0, 10) . '...' : $item->description !!}</td>
 
