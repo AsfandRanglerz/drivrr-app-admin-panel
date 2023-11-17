@@ -82,5 +82,35 @@ class DriverShowJobsController extends Controller
             'user' => $driver
         ], 200);
     }
+    public function getLocation($userId)
+    {
+        $validator = Validator::make(['driver_id' => $userId], [
+            'driver_id' => 'required|exists:users,id',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed.',
+                'errors' => $validator->errors(),
+                'status' => 'Failed',
+            ], 422);
+        }
+        $user = User::find($userId);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found.',
+                'status' => 'Failed',
+            ], 404);
+        }
+
+        $location = $user->location;
+
+        return response()->json([
+            'message' => 'Location retrieved successfully.',
+            'status' => 'Success',
+            'user_id' => $userId,
+            'location' => $location,
+        ], 200);
+    }
 }
