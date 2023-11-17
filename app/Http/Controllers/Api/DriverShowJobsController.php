@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Job;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\DriverVehicle;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Validator;
 
 class DriverShowJobsController extends Controller
 {
@@ -48,4 +50,37 @@ class DriverShowJobsController extends Controller
             ], 400);
         }
     }
+    public function location(Request $request, $userId)
+    {
+        $driver = User::find($userId);
+
+        if (!$driver) {
+            return response()->json([
+                'message' => 'Driver not found.',
+                'status' => 'Failed',
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'location' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed.',
+                'errors' => $validator->errors(),
+                'status' => 'Failed',
+            ], 422);
+        }
+
+        $driver->location = $request->location;
+        $driver->update();
+
+        return response()->json([
+            'message' => 'Location Added',
+            'status' => 'Success',
+            'user' => $driver
+        ], 200);
+    }
+
 }

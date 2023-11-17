@@ -15,7 +15,7 @@ class User extends Authenticatable
     use HasApiTokens, Notifiable, HasRoles;
     // protected $guard = 'web';
 
-    protected $fillable = ['name', 'fname', 'maiden_name', 'lname', 'email', 'image', 'password', 'designation', 'is_active', 'address', 'role_id', 'phone', 'document', 'company_name',
+    protected $fillable = ['name', 'fname', 'maiden_name', 'lname', 'email', 'image', 'password', 'designation', 'is_active', 'address', 'role_id', 'phone', 'document', 'company_name','location',
     'company_info'];
 
     public function usercompany()
@@ -75,5 +75,5 @@ class User extends Authenticatable
     {
         return $this->hasOne(DriverWallet::class,'driver_id');
     }
- 
+
 }
