@@ -27,14 +27,15 @@ class DriverShowJobsController extends Controller
                 ->join('vehicles', 'jobs.vehicle_id', '=', 'vehicles.id')
                 ->where('driver_vehicles.is_active', '=', '1')
                 ->where('jobs.on_vehicle', '=', '0')
-                ->select('jobs.*', 'users.fname', 'users.lname', 'users.email')
+                ->select('jobs.*', 'users.fname', 'users.lname', 'users.email','vehicles.name')
+
                 ->get();
         } else {
             $getJobData = Job::select('jobs.*', 'users.*', 'vehicles.*')
                 ->join('users', 'jobs.user_id', '=', 'users.id')
                 ->join('vehicles', 'jobs.vehicle_id', '=', 'vehicles.id')
                 ->where('jobs.on_vehicle', '=', '1')
-                ->select('jobs.*', 'users.fname', 'users.lname', 'users.email')
+                ->select('jobs.*', 'users.fname', 'users.lname', 'users.email','vehicles.*')
                 ->get();
         }
 
