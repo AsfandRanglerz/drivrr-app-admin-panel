@@ -13,7 +13,9 @@ class JobController extends Controller
     public function getJobsByUserId($user_id)
     {
         try {
-            $jobs = Job::where('user_id', $user_id)->get();
+            $jobs = Job::with('vehicle')
+            ->where('user_id', $user_id)
+            ->get();
 
             return response()->json([
                 'message' => 'Jobs fetched successfully.',
@@ -110,8 +112,6 @@ class JobController extends Controller
             }
 
             $formattedDate = Carbon::createFromFormat('d-m-Y', $request->date)->format('d-m-Y');
-
-            // Find the existing job by ID
             $job = Job::where('id', $jobId)
                 ->where('user_id', $userId)
                 ->first();
