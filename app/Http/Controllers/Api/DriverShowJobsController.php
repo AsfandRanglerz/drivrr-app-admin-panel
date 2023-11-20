@@ -27,12 +27,15 @@ class DriverShowJobsController extends Controller
                 ->join('vehicles', 'jobs.vehicle_id', '=', 'vehicles.id')
                 ->where('driver_vehicles.is_active', '=', '1')
                 ->where('jobs.on_vehicle', '=', '0')
+                ->select('jobs.*', 'users.fname', 'users.lname', 'users.email','vehicles.name')
+
                 ->get();
         } else {
             $getJobData = Job::select('jobs.*', 'users.*', 'vehicles.*')
                 ->join('users', 'jobs.user_id', '=', 'users.id')
                 ->join('vehicles', 'jobs.vehicle_id', '=', 'vehicles.id')
                 ->where('jobs.on_vehicle', '=', '1')
+                ->select('jobs.*', 'users.fname', 'users.lname', 'users.email','vehicles.*')
                 ->get();
         }
 
@@ -82,5 +85,35 @@ class DriverShowJobsController extends Controller
             'user' => $driver
         ], 200);
     }
+    public function getLocation($userId)
+    {
+        $validator = Validator::make(['driver_id' => $userId], [
+            'driver_id' => 'required|exists:users,id',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed.',
+                'errors' => $validator->errors(),
+                'status' => 'Failed',
+            ], 422);
+        }
+        $user = User::find($userId);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found.',
+                'status' => 'Failed',
+            ], 404);
+        }
+
+        $location = $user->location;
+
+        return response()->json([
+            'message' => 'Location retrieved successfully.',
+            'status' => 'Success',
+            'user_id' => $userId,
+            'location' => $location,
+        ], 200);
+    }
 }
