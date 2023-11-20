@@ -111,7 +111,6 @@ class DriverJobRequestController extends Controller
     {
         try {
             $owner = User::find($owner_id);
-
             if (!$owner) {
                 return response()->json([
                     'message' => 'Owner not found.',
@@ -120,6 +119,7 @@ class DriverJobRequestController extends Controller
             }
 
             $jobRequests = PaymentRequest::where('owner_id', $owner_id)
+                ->with('driver', 'job')
                 ->get();
 
             return response()->json([

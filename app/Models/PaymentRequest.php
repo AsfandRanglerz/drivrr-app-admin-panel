@@ -17,5 +17,8 @@ class PaymentRequest extends Model
     {
         return $this->belongsTo(Job::class,'job_id');
     }
-
+    public function driver()
+    {
+        return $this->belongsTo(User::class,'driver_id');
+    }
 }
