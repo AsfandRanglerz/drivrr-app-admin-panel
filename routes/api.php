@@ -97,6 +97,7 @@ Route::post('add-job-request-without-counter/{owner_id}/{driver_id}/{job_id}', '
 Route::post('add-job-request-with-counter/{owner_id}/{driver_id}/{job_id}', 'Api\DriverJobRequestController@add_job_request_counter');
 //Owner get job requests
 Route::get('owner-get-job-requests/{owner_id}', 'Api\OwnerGetJobREquests@show_job_requests');
+Route::post('owner-accept-job-request/{id}', 'Api\OwnerGetJobREquests@owner_accept_job_request');
 
 
 
