@@ -88,14 +88,16 @@ Route::post('update-bank-account/{id}', 'Api\BankAccountController@update_accoun
 Route::get('delete-bank-account/{accountId}', 'Api\BankAccountController@delete');
 //############SHOW DRIVER JOBs########################
 Route::get('driverjobs/{userid}', [DriverShowJobsController::class, 'get']);
-Route::post('driverlocation/{userId}',[DriverShowJobsController::class,'location']);
-Route::get('getdriverlocation/{userId}',[DriverShowJobsController::class,'getlocation']);
+Route::post('driverlocation/{userId}', [DriverShowJobsController::class, 'location']);
+Route::get('getdriverlocation/{userId}', [DriverShowJobsController::class, 'getlocation']);
 
 //driver request for withdrawal
 Route::post('add-withdrawal-request/{id}', 'Api\DriverWalletController@add_withdrawal_request');
 //driver request for job
 Route::post('add-job-request-without-counter/{owner_id}/{driver_id}/{job_id}', 'Api\DriverJobRequestController@add_job_request_without_counter');
 Route::post('add-job-request-with-counter/{owner_id}/{driver_id}/{job_id}', 'Api\DriverJobRequestController@add_job_request_counter');
+Route::get('/job-requests/{owner_id}',[DriverJobRequestController::class,'getJobRequestsByOwner']);
+
 //Owner get job requests
 Route::get('owner-get-job-requests/{owner_id}', 'Api\OwnerGetJobREquests@show_job_requests');
 
