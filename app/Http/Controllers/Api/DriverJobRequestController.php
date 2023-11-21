@@ -107,25 +107,26 @@ class DriverJobRequestController extends Controller
         }
     }
 
-    public function getJobRequestsByOwner($owner_id)
+    public function getJobRequestsByJob($job_id)
     {
         try {
-            $owner = User::find($owner_id);
-            if (!$owner) {
+            $job = Job::find($job_id);
+
+            if (!$job) {
                 return response()->json([
-                    'message' => 'Owner not found.',
+                    'message' => 'Job not found.',
                     'status' => 'failed',
                 ], 404);
             }
 
-            $jobRequests = PaymentRequest::where('owner_id', $owner_id)
-                ->with('driver', 'job')
+            $jobRequests = PaymentRequest::where('job_id', $job_id)
+                ->with('driver')
                 ->get();
 
             return response()->json([
                 'message' => 'Job requests without counter fetched successfully.',
                 'status' => 'success',
-                'owner' => $owner,
+                'job' => $job,
                 'jobRequests' => $jobRequests,
             ], 200);
         } catch (\Exception $e) {

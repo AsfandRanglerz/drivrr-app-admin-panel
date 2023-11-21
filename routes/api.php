@@ -96,7 +96,7 @@ Route::post('add-withdrawal-request/{id}', 'Api\DriverWalletController@add_withd
 //driver request for job
 Route::post('add-job-request-without-counter/{owner_id}/{driver_id}/{job_id}', 'Api\DriverJobRequestController@add_job_request_without_counter');
 Route::post('add-job-request-with-counter/{owner_id}/{driver_id}/{job_id}', 'Api\DriverJobRequestController@add_job_request_counter');
-Route::get('/job-requests/{owner_id}',[DriverJobRequestController::class,'getJobRequestsByOwner']);
+Route::get('/job-requests/{job_id}',[DriverJobRequestController::class,'getJobRequestsByJob']);
 
 //Owner get job requests
 Route::get('owner-get-job-requests/{owner_id}', 'Api\OwnerGetJobREquests@show_job_requests');
