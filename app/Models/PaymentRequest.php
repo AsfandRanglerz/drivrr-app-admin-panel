@@ -21,4 +21,12 @@ class PaymentRequest extends Model
     {
         return $this->belongsTo(User::class,'driver_id');
     }
+    public function owner()
+    {
+        return $this->belongsTo(User::class,'owner_id');
+    }
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class,);
+    }
 }

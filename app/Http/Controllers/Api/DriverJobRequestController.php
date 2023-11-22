@@ -30,7 +30,6 @@ class DriverJobRequestController extends Controller
                     'counter_offer' => 0,
                     'location' => $location,
                 ]);
-                $job->update(['is_active' => '1']);
                 return response()->json([
                     'message' => 'Your request is sent successfully.',
                     'status' => 'success',
@@ -83,8 +82,6 @@ class DriverJobRequestController extends Controller
                     'location' => $location,
                 ]);
 
-                $job->update(['is_active' => '1']);
-
                 return response()->json([
                     'message' => 'Your request is sent successfully.',
                     'status' => 'success',
@@ -107,26 +104,25 @@ class DriverJobRequestController extends Controller
         }
     }
 
-    public function getJobRequestsByJob($job_id)
+    public function getJobRequestsByJob($driver_id)
     {
         try {
-            $job = Job::find($job_id);
+            // Use where instead of find, and specify the column and value
+            $fetchjob = PaymentRequest::where('driver_id', $driver_id)->first();
 
-            if (!$job) {
+            if (!$fetchjob) {
                 return response()->json([
-                    'message' => 'Job not found.',
+                    'message' => 'Driver not found.',
                     'status' => 'failed',
                 ], 404);
             }
-
-            $jobRequests = PaymentRequest::where('job_id', $job_id)
-                ->with('driver')
+            $jobRequests = PaymentRequest::where('driver_id', $driver_id)
+                ->with('job','owner','vehicle')
                 ->get();
 
             return response()->json([
                 'message' => 'Job requests without counter fetched successfully.',
                 'status' => 'success',
-                'job' => $job,
                 'jobRequests' => $jobRequests,
             ], 200);
         } catch (\Exception $e) {
@@ -137,4 +133,5 @@ class DriverJobRequestController extends Controller
             ], 500);
         }
     }
+
 }
