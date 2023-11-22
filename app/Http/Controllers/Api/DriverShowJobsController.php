@@ -35,7 +35,7 @@ class DriverShowJobsController extends Controller
                 ->join('users', 'jobs.user_id', '=', 'users.id')
                 ->join('vehicles', 'jobs.vehicle_id', '=', 'vehicles.id')
                 ->where('jobs.on_vehicle', '=', '1')
-                ->select('jobs.*', 'users.fname', 'users.lname', 'users.email', 'vehicles.*')
+                ->select('jobs.*', 'users.fname', 'users.lname', 'users.email','users.image', 'vehicles.name')
                 ->get();
         }
 
