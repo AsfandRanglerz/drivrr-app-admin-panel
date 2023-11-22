@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\WithdrawalRequest;
 use App\Models\BankAccount;
 use App\Models\DriverWallet;
+
 class DriverWalletController extends Controller
 {
-    public function add_withdrawal_request(Request $request , $id)
+    public function add_withdrawal_request(Request $request, $id)
     {
         $validator = Validator::make(
             $request->all(),
@@ -21,11 +22,10 @@ class DriverWalletController extends Controller
         if (!$validator) {
             return $this->sendError($validator->errors()->first());
         }
-        $active_account = BankAccount::where('user_id',$id)->where('status','Active')->first();
-        $current_amount = DriverWallet::where('driver_id',$id)->value('total_earning');
+        $active_account = BankAccount::where('user_id', $id)->where('status', 'Active')->first();
+        $current_amount = DriverWallet::where('driver_id', $id)->value('total_earning');
         // return [$current_amount >= $request->withdrawal_amount];
-        if($current_amount >= $request->withdrawal_amount)
-        {
+        if ($current_amount >= $request->withdrawal_amount) {
             $add_withdrawal_request = WithdrawalRequest::create([
                 'driver_id' => $id,
                 'withdrawal_amount' => $request->withdrawal_amount,
@@ -36,13 +36,30 @@ class DriverWalletController extends Controller
                 'status' => 'Success.',
                 'your request' => $add_withdrawal_request,
             ], 200);
-        }
-        else
-        {
+        } else {
             return response()->json([
                 'message' => 'This amount is not present in your wallet.',
                 'status' => 'Failed.',
             ], 200);
+        }
+    }
+    public function getWalletDetails($walletId)
+    {
+        $driverWallet = DriverWallet::with('driver')
+            ->where('driver_id', $walletId)
+            ->first();
+        if ($driverWallet) {
+            return response()->json([
+                'message' => 'Wallet Show successfully.',
+                'status' => 'Success',
+                'wallets' =>   $driverWallet,
+
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'No Wallet found.',
+                'status' => 'Failed',
+            ], 404);
         }
     }
 }
