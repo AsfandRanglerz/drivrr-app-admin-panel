@@ -90,7 +90,7 @@ Route::get('delete-bank-account/{accountId}', 'Api\BankAccountController@delete'
 Route::get('driverjobs/{userid}', [DriverShowJobsController::class, 'get']);
 Route::post('driverlocation/{userId}', [DriverShowJobsController::class, 'location']);
 Route::get('getdriverlocation/{userId}', [DriverShowJobsController::class, 'getlocation']);
-
+Route::get('getOwnerDetails/{jobId}',[DriverShowJobsController::class,'getOwnerDetails']);
 //driver request for withdrawal
 Route::post('add-withdrawal-request/{id}', 'Api\DriverWalletController@add_withdrawal_request');
 //driver request for job

@@ -27,7 +27,7 @@ class DriverShowJobsController extends Controller
                 ->join('vehicles', 'jobs.vehicle_id', '=', 'vehicles.id')
                 ->where('driver_vehicles.is_active', '=', '1')
                 ->where('jobs.on_vehicle', '=', '0')
-                ->select('jobs.*', 'users.fname', 'users.lname', 'users.email','users.image','vehicles.name')
+                ->select('jobs.*', 'users.fname', 'users.lname', 'users.email', 'users.image', 'vehicles.name')
 
                 ->get();
         } else {
@@ -35,7 +35,7 @@ class DriverShowJobsController extends Controller
                 ->join('users', 'jobs.user_id', '=', 'users.id')
                 ->join('vehicles', 'jobs.vehicle_id', '=', 'vehicles.id')
                 ->where('jobs.on_vehicle', '=', '1')
-                ->select('jobs.*', 'users.fname', 'users.lname', 'users.email','vehicles.*')
+                ->select('jobs.*', 'users.fname', 'users.lname', 'users.email', 'vehicles.*')
                 ->get();
         }
 
@@ -115,5 +115,28 @@ class DriverShowJobsController extends Controller
             'user_id' => $userId,
             'location' => $location,
         ], 200);
+    }
+    public function getOwnerDetails($jobId)
+    {
+        try {
+            $jobs = Job::with('owner', 'vehicle')
+                ->where('id', $jobId)
+                ->first();
+            if ($jobs) {
+                return response()->json([
+                    'message' => 'Location retrieved successfully.',
+                    'status' => 'Success',
+                    'ownerDetails' => $jobs,
+
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'Job not found.',
+                    'status' => 'Failed',
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred.'], 500);
+        }
     }
 }

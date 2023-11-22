@@ -22,4 +22,8 @@ class Job extends Model
     {
         return $this->belongsTo(DriverVehicle::class, 'vehicles_id', 'vehicles_id');
     }
+    public function owner()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
 }
