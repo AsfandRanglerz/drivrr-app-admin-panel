@@ -13,9 +13,9 @@ class JobController extends Controller
     public function getJobsByUserId($user_id)
     {
         try {
-            $jobs = Job::with('vehicle')
-            ->where('user_id', $user_id)
-            ->get();
+            $jobs = Job::where('user_id', $user_id)
+                ->with('vehicle')
+                ->get();
 
             return response()->json([
                 'message' => 'Jobs fetched successfully.',
@@ -46,7 +46,7 @@ class JobController extends Controller
                     'price' => 'required',
                     'description' => 'required',
                     'vehicle_id' => 'required',
-                    'on_vehicle'=>'required'
+                    'on_vehicle' => 'required'
                 ]
             );
 
@@ -68,7 +68,7 @@ class JobController extends Controller
                 'days' => $request->days,
                 'price' => $request->price,
                 'description' => $request->description,
-                'on_vehicle'=>$request->on_vehicle
+                'on_vehicle' => $request->on_vehicle
             ]);
 
             return response()->json([
@@ -98,7 +98,7 @@ class JobController extends Controller
                     'price' => 'required',
                     'description' => 'required',
                     'vehicle_id' => 'required',
-                    'on_vehicle'=>'required'
+                    'on_vehicle' => 'required'
 
                 ]
             );
@@ -132,7 +132,7 @@ class JobController extends Controller
                 'days' => $request->days,
                 'price' => $request->price,
                 'description' => $request->description,
-                'on_vehicle'=>$request->on_vehicle
+                'on_vehicle' => $request->on_vehicle
             ]);
 
             return response()->json([
