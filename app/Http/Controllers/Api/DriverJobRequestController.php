@@ -116,7 +116,7 @@ class DriverJobRequestController extends Controller
                 ], 404);
             }
             $jobRequests = PaymentRequest::where('driver_id', $driver_id)
-                ->with('job', 'owner', 'vehicle')
+                ->with('job.vehicle', 'owner')
                 ->get();
 
             return response()->json([
