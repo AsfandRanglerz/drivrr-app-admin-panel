@@ -107,7 +107,6 @@ class DriverJobRequestController extends Controller
     public function getJobRequestsByJob($driver_id)
     {
         try {
-            // Use where instead of find, and specify the column and value
             $fetchjob = PaymentRequest::where('driver_id', $driver_id)->first();
 
             if (!$fetchjob) {
@@ -117,7 +116,7 @@ class DriverJobRequestController extends Controller
                 ], 404);
             }
             $jobRequests = PaymentRequest::where('driver_id', $driver_id)
-                ->with('job','owner','vehicle')
+                ->with('job', 'owner', 'vehicle')
                 ->get();
 
             return response()->json([
@@ -133,5 +132,32 @@ class DriverJobRequestController extends Controller
             ], 500);
         }
     }
+    public function getJobRequestsByOwner($job_id)
+    {
+        try {
+            $fetchjob = PaymentRequest::where('job_id', $job_id)->first();
 
+            if (!$fetchjob) {
+                return response()->json([
+                    'message' => 'Job not found.',
+                    'status' => 'failed',
+                ], 404);
+            }
+            $jobRequests = PaymentRequest::where('job_id', $job_id)
+                ->with('job', 'driver')
+                ->get();
+
+            return response()->json([
+                'message' => 'Job requests Successfully',
+                'status' => 'success',
+                'jobRequests' => $jobRequests,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error fetching job requests.',
+                'status' => 'Error',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

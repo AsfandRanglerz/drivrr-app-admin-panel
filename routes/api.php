@@ -98,7 +98,9 @@ Route::get('getDriverWalletData/{driverId}','Api\DriverWalletController@getWalle
 //driver request for job
 Route::post('add-job-request-without-counter/{owner_id}/{driver_id}/{job_id}', 'Api\DriverJobRequestController@add_job_request_without_counter');
 Route::post('add-job-request-with-counter/{owner_id}/{driver_id}/{job_id}', 'Api\DriverJobRequestController@add_job_request_counter');
-Route::get('/job-requests/{job_id}',[DriverJobRequestController::class,'getJobRequestsByJob']);
+Route::get('/job-requests/{job_id}','Api\DriverJobRequestController@getJobRequestsByJob');
+Route::get('/job-requestsbyOwner/{job_id}','Api\DriverJobRequestController@getJobRequestsByOwner');
+
 
 //Owner get job requests
 Route::get('owner-get-job-requests/{owner_id}', 'Api\OwnerGetJobREquests@show_job_requests');
