@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\DriverVehicleController;
 use App\Http\Controllers\Admin\HelpAndSupportController;
 use App\Http\Controllers\Admin\UserPermssionController;
 use App\Http\Controllers\Admin\WalletController;
+use App\Http\Controllers\Admin\HandelBusinessOwnerPayments;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,9 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('term-condition-edit', [SecurityController::class, 'TermConditionEdit']);
     Route::post('term-condition-update', [SecurityController::class, 'TermConditionUpdate']);
     Route::get('logout', [AdminController::class, 'logout']);
+
+    // Owner Payments
+    Route::get('business-owner-payments',[HandelBusinessOwnerPayments::class,'show_owner_payments'])->name('business-owner-payments');
 
     /**driver */
     Route::get('driver/status/{id}', [DriverController::class, 'status'])->name('driver.status');

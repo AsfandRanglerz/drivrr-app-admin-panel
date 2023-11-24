@@ -27,6 +27,12 @@ class WalletController extends Controller
     }
     public function show_withdrawal_requests()
     {
+        $requestCount = WithdrawalRequest::where('status','0')->where('seen','0')->get();
+        if($requestCount->isNotEmpty())
+        {
+            WithdrawalRequest::where('status','0')->where('seen','0')->update([
+            'seen'=>1,]);
+        }
         $withdraw_requests = WithdrawalRequest::with('bankAccount','user')->orderBy('id', 'DESC')->get();
         return view('admin.withdrawal_requests.index',compact('withdraw_requests'));
     }

@@ -89,19 +89,37 @@
                         </li>
                     {{-- Widthdrawal Requests --}}
                         <li class="dropdown {{ request()->is('admin/withdrawal_requests*') ? 'active' : '' }}">
+                            @php
+                            $requestCount = App\Models\WithdrawalRequest::where('status','0')->where('seen','0')->count();
+                           @endphp
                             <a href="{{route('show-withdrawal-requests')}}" class="nav-link">
                                         <i class="fab fa-twitch"></i>
-                                        <span>Widthdrawal Requests</span>
-                                </a>
-                        </li>
+                                        @if ($requestCount > 0)
+                                        <span class="danger">
+                                            Withdrawal Req. @if ($requestCount > 0)
+                                            <span class="px-1 py-0.5 rounded-circle text-white bg-danger" style="border-radius: 50%; font-size:11px">
+                                                {{$requestCount}}
+                                            </span>
 
-                    {{-- Owner Recipits --}}
-                        <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
-                            <a href="#" class="nav-link"><i
-                                    class="fas fa-receipt"></i><span>Owner Recipits</span></a>
+                                            @endif
+                                        </span>
+
+                                        @else
+                                        <span>
+                                            Withdrawal Req.
+                                        </span>
+                                        @endif
+                                </a>
+                                @php
+                               @endphp
                         </li>
-                </ul>
-            </li>
+                    </ul>
+              </li>
+              {{-- Owner Recipits --}}
+              <li class="dropdown {{ request()->is('admin/payments*') ? 'active' : '' }}">
+                <a href="{{route('business-owner-payments')}}" class="nav-link"><i
+                        class="fas fa-receipt"></i><span>Payments</span></a>
+              </li>
             {{-- Vehicles --}}
             @if (auth()->guard('web')->check() &&
                     auth()->guard('web')->user()->can('Vehicles'))

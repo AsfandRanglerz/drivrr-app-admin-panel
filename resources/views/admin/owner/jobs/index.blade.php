@@ -168,30 +168,26 @@ integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="ano
                                             <h2>Job Details</h2>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="pickup">Pickup</label>
-                                            <input type="text" id="pickup" placeholder="Pickup" class="form-control mb-2 pickup" readonly>
+                                            <label for="pickup">Location</label>
+                                            <input type="text" id="location" placeholder="location" class="form-control mb-2 location" readonly>
 
-                                            <label for="destination">Destination</label>
-                                            <input type="text" id="destination" placeholder="Destination" class="form-control mb-2 destination" readonly>
+                                            <label for="destination">Date</label>
+                                            <input type="text" id="date" placeholder="Destination" class="form-control mb-2 date" readonly>
 
-                                            <label for="date">Date</label>
-                                            <input type="text" id="date" placeholder="Date" class="form-control mb-2 date" readonly>
+                                            <label for="date">Time</label>
+                                            <input type="text" id="time" placeholder="Date" class="form-control mb-2 time" readonly>
 
-                                            <label for="time">Time</label>
-                                            <input type="text" id="time" placeholder="Time" class="form-control mb-2 time" readonly>
+                                            <label for="time">Hours</label>
+                                            <input type="text" id="hours" placeholder="Time" class="form-control mb-2 hours" readonly>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="duration">Duration</label>
-                                            <input type="text" id="duration" placeholder="Duration" class="form-control mb-2 duration" readonly>
+                                            <label for="duration">Days</label>
+                                            <input type="text" id="days" placeholder="Duration" class="form-control mb-2 days" readonly>
 
-                                            <label for="service_type">Service Type</label>
-                                            <input type="text" id="service_type" placeholder="Service Type" class="form-control mb-2 service_type" readonly>
+                                            <label for="service_type">Price</label>
+                                            <input type="text" id="price" placeholder="Service Type" class="form-control mb-2 price" readonly>
 
-                                            <label for="price">Price</label>
-                                            <input type="text" id="price" placeholder="Price" class="form-control mb-2 price" readonly>
-{{--
-                                            <label for="description">Description</label>
-                                            <textarea id="description" placeholder="Description" class="form-control mb-4 description" rows="3" readonly></textarea> --}}
+
                                         </div>
 
                                         <div class="col-md-12">
@@ -290,14 +286,14 @@ integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="ano
                     // console.log(response);
                     // Assuming response contains a 'status' key
                     if (response.status == 200) {
-                        $('.pickup').val(response.jobs.pickup);
-                        $('.destination').val(response.jobs.destination);
+                        $('.location').val(response.jobs.location);
                         $('.date').val(response.jobs.date);
                         $('.time').val(response.jobs.time);
-                        $('.duration').val(response.jobs.duration);
-                        $('.service_type').val(response.jobs.service_type);
+                        $('.hours').val(response.jobs.hours);
+                        $('.days').val(response.jobs.days);
                         $('.price').val(response.jobs.price);
                         $('.description').val(response.jobs.description);
+                        // $('.description').val(response.jobs.description);
                     }
                 },
                 error: function(xhr, status, error) {
