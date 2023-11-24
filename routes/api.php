@@ -100,6 +100,7 @@ Route::post('add-job-request-without-counter/{owner_id}/{driver_id}/{job_id}', '
 Route::post('add-job-request-with-counter/{owner_id}/{driver_id}/{job_id}', 'Api\DriverJobRequestController@add_job_request_counter');
 Route::get('/job-requests/{job_id}','Api\DriverJobRequestController@getJobRequestsByJob');
 Route::get('/job-requestsbyOwner/{job_id}','Api\DriverJobRequestController@getJobRequestsByOwner');
+Route::delete('/cancel-job/{id}','Api\DriverJobRequestController@cancelJob');
 
 
 //Owner get job requests

@@ -160,4 +160,27 @@ class DriverJobRequestController extends Controller
             ], 500);
         }
     }
+    public function cancelJob($id)
+    { {
+            try {
+                $cancelRequest = PaymentRequest::where('id', $id)->delete();
+                if (!$cancelRequest) {
+                    return response()->json([
+                        'message' => 'Job not found ',
+                        'status' => 'failed',
+                    ], 404);
+                }
+                return response()->json([
+                    'message' => 'Job requests successfully deleted',
+                    'status' => 'success',
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'Error deleting job requests.',
+                    'status' => 'error',
+                    'error' => $e->getMessage(),
+                ], 500);
+            }
+        }
+    }
 }
