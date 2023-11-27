@@ -46,7 +46,7 @@ class DriverShowJobsController extends Controller
             ], 200);
         } else {
             return response()->json([
-                'message' => 'Driver JOBS Not Fetched',
+                'message' => 'JOBS Not Found',
                 'status' => 'failed',
                 'job_fetched' => null,
             ], 400);
