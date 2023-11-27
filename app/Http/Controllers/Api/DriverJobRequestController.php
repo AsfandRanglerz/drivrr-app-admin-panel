@@ -187,4 +187,17 @@ class DriverJobRequestController extends Controller
             }
         }
     }
+    public function updateStatus($id)
+    {
+        $paymentRequest = PaymentRequest::findOrFail($id);
+
+        $paymentRequest->update([
+            'request_status' => '1',
+
+        ]);
+
+        return response()->json(['message' =>
+         'Status Updated Successfully',
+         'data' => $paymentRequest]);
+    }
 }

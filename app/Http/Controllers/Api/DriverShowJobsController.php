@@ -24,7 +24,7 @@ class DriverShowJobsController extends Controller
         if ($userInDriverVehicles) {
             $getJobData = Job::join('driver_vehicles', 'jobs.vehicle_id', '=', 'driver_vehicles.vehicle_id')
             ->join('users', 'jobs.user_id', '=', 'users.id')
-            ->join('vehicles', 'jobs.vehicle_id', '=', 'vehicles.id') // Add this join
+            ->join('vehicles', 'jobs.vehicle_id', '=', 'vehicles.id')
             ->where('driver_vehicles.is_active', '=', '1')
             ->where('jobs.on_vehicle', '=', '0')
             ->select('jobs.*', 'users.fname', 'users.lname', 'users.email', 'users.image', 'vehicles.name')
