@@ -28,9 +28,10 @@ class DriverJobRequestController extends Controller
                     'job_id' => $job_id,
                     'counter_offer' => 0,
                     'location' => $location,
+                    'request_status' => 1,
                 ]);
 
-                // Eager load the related models
+
                 $driver_job_request->load('owner', 'driver', 'job');
 
                 return response()->json([
@@ -52,6 +53,7 @@ class DriverJobRequestController extends Controller
             ], 500);
         }
     }
+
 
 
     public function add_job_request_counter(Request $request, $owner_id, $driver_id, $job_id)
@@ -82,9 +84,10 @@ class DriverJobRequestController extends Controller
                     'job_id' => $job_id,
                     'counter_offer' => $request->counter_offer,
                     'location' => $location,
+                    'request_status' => 1,
                 ]);
 
-                // Eager load the related models
+
                 $driver_job_request->load('owner', 'driver', 'job');
 
                 return response()->json([
@@ -187,17 +190,5 @@ class DriverJobRequestController extends Controller
             }
         }
     }
-    public function updateStatus($id)
-    {
-        $paymentRequest = PaymentRequest::findOrFail($id);
 
-        $paymentRequest->update([
-            'request_status' => '1',
-
-        ]);
-
-        return response()->json(['message' =>
-         'Status Updated Successfully',
-         'data' => $paymentRequest]);
-    }
 }
