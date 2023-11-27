@@ -106,7 +106,7 @@
 
                                         @else
                                         <span>
-                                            Withdrawal Req.
+                                            Withdrawal Requests
                                         </span>
                                         @endif
                                 </a>

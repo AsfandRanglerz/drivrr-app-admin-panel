@@ -49,6 +49,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('term-condition-edit', [SecurityController::class, 'TermConditionEdit']);
     Route::post('term-condition-update', [SecurityController::class, 'TermConditionUpdate']);
     Route::get('logout', [AdminController::class, 'logout']);
+    // Route::get('notify', [AdminController::class, 'notify'])->name('notify');
 
     // Owner Payments
     Route::get('business-owner-payments',[HandelBusinessOwnerPayments::class,'show_owner_payments'])->name('business-owner-payments');

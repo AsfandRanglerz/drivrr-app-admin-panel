@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Models\WithdrawalRequest;
-
+use App\Notifications\NewUser;
 class AdminController extends Controller
 {
     //
@@ -33,6 +33,12 @@ class AdminController extends Controller
         // return [$users,$owners,$drivers,$admins];
         return view('admin.index', compact('data'));
     }
+
+    // public function notify()
+    // {
+    //     $user = User::find(); // Replace 1 with the actual user ID you want to notify
+    //     auth()->guard('admin')->user()->notify(new NewUser($user));
+    // }
     public function getProfile()
     {
         $data = Admin::find(Auth::guard('admin')->id());

@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Job;
+use App\Models\PaymentRequest;
 
 class HandelBusinessOwnerPayments extends Controller
 {
      public function show_owner_payments()
      {
-        return view('admin.payments.index');
+        $paymentRequests = PaymentRequest::with('owner','driver','job.vehicle')->get();
+        // return $paymentRequests;
+        return view('admin.payments.index',compact('paymentRequests'));
      }
 }

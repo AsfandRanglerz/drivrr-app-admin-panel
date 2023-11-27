@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Job;
 use App\Models\Document;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\OwnerCancelJobRequest;
+use Mail;
 
 class DriverJobRequestController extends Controller
 {
@@ -187,4 +189,6 @@ class DriverJobRequestController extends Controller
             }
         }
     }
+
+   
 }

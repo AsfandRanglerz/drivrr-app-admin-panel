@@ -47,32 +47,70 @@
                 </div>
             </div>
         </li> --}}
-        <li class="dropdown dropdown-list-toggle">
-            {{-- <a href="#" data-toggle="dropdown"
-                                                     class="nav-link notification-toggle nav-link-lg"><i data-feather="bell" class="bell"></i>
-            </a> --}}
-            <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
-                <div class="dropdown-header">
-                    Notifications
-                    <div class="float-right">
-                        <a href="#">Mark All As Read</a>
-                    </div>
-                </div>
-                <div class="dropdown-list-content dropdown-list-icons">
-                    <a href="#" class="dropdown-item dropdown-item-unread"> <span
-                            class="dropdown-item-icon bg-primary text-white"> <i class="fas
-												fa-code"></i>
-                        </span> <span class="dropdown-item-desc"> Template update is
-                            available now! <span class="time">2 Min
-                                Ago</span>
-                        </span>
-                    </a>
-                </div>
-                <div class="dropdown-footer text-center">
-                    <a href="#">View All <i class="fas fa-chevron-right"></i></a>
-                </div>
+
+{{-- <li class="dropdown dropdown-list-toggle">
+    <a href="{{ route('notify') }}" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg">
+        <i data-feather="bell" class="bell"></i>
+    </a>
+    <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
+        <div class="dropdown-header">
+            Notifications
+            <div class="float-right">
+                <a href="#">Mark All As Read</a>
             </div>
-        </li>
+        </div>
+        <div class="dropdown-list-content dropdown-list-icons">
+            <a href="#" class="dropdown-item dropdown-item-unread">
+                <span class="dropdown-item-icon bg-primary text-white">
+                    <i class="fas fa-code"></i>
+                </span>
+                <span class="dropdown-item-desc">
+                    Template update is available now!
+                    <span class="time">2 Min Ago</span>
+                </span>
+            </a>
+            @foreach (auth()->guard('admin')->user()->notifications as $notification)
+                <div>{{ $notification->data['user_id'] }}</div>
+            @endforeach
+        </div>
+        <div class="dropdown-footer text-center">
+            <a href="#">View All <i class="fas fa-chevron-right"></i></a>
+        </div>
+    </div>
+</li> --}}
+
+<li class="dropdown dropdown-list-toggle">
+    <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg">
+        <i data-feather="bell" class="bell"></i>
+    </a>
+    <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
+        <div class="dropdown-header">
+            Notifications
+            <div class="float-right">
+                <a href="#">Mark All As Read</a>
+            </div>
+        </div>
+        <div class="dropdown-list-content dropdown-list-icons">
+            <a href="#" class="dropdown-item dropdown-item-unread">
+                <span class="dropdown-item-icon bg-primary text-white">
+                    <i class="fas fa-code"></i>
+                </span>
+                <span class="dropdown-item-desc">
+                    Template update is available now!
+                    <span class="time">2 Min Ago</span>
+                </span>
+            </a>
+            {{-- @foreach (auth()->guard('admin')->user()->notifications as $notification)
+                <div>{{ $notification->data['user_id'] }}</div>
+                <div>{{ $notification->data['fname'] }}</div>
+                <div>{{ $notification->data['lname'] }}</div>
+            @endforeach --}}
+        </div>
+        <div class="dropdown-footer text-center">
+            <a href="#">View All <i class="fas fa-chevron-right"></i></a>
+        </div>
+    </div>
+</li>
         <li class="dropdown"><a href="#" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image"
                     src="{{ asset('public/admin/assets/img/user.png') }}" class="user-img-radious-style"> <span

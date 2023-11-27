@@ -3,8 +3,6 @@
 @section('content')
 <!DOCTYPE html>
 <html lang="en">
-
-
 <!-- datatables.html  21 Nov 2019 03:55:21 GMT -->
 <head>
     <meta charset="UTF-8">
@@ -14,12 +12,9 @@
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
   </head>
-
-
   <div class="loader"></div>
   <div id="app">
     <div class="main-wrapper main-wrapper-1">
-
       <!-- Main Content -->
       <div class="main-content">
         <section class="section">
@@ -28,33 +23,49 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4>Basic DataTables</h4>
+                    <h4>Payments</h4>
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
                         <table id="example" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
+                                    <th>#</th>
+                                    <th>Business Owner</th>
+                                    <th>Payment Amount</th>
+                                    <th>card Number</th>
+                                    <th>Expiry Date</th>
+                                    <th>Card Holder</th>
+                                    <th>CVC</th>
+                                    <th>Driver</th>
+                                    <th>Vehicle</th>
+                                    <th>Counter Offer</th>
+                                    <th>Job Status</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($paymentRequests as $payments)
                                 <tr>
-                                    <td>Tiger Nixon</td>
-                                    <td>System Architect</td>
-                                    <td>Edinburgh</td>
-                                    <td>61</td>
-                                    <td>2011-04-25</td>
-                                    <td>$320,800</td>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$payments->owner->fname.' '.$payments->owner->lname}}</td>
+                                    <td>{{$payments->payment_amount}}</td>
+                                    <td>{{$payments->card_number}}</td>
+                                    <td>{{$payments->expiry_date}}</td>
+                                    <td>{{$payments->card_holder}}</td>
+                                    <td>{{$payments->cvc}}</td>
+                                    <td>{{$payments->driver->fname.' '.$payments->driver->lname}}</td>
+                                    <td>{{$payments->job->vehicle->name}}</td>
+                                    <td>{{$payments->counter_offer}}</td>
+                                    <td>
+                                         @if ($payments->status == 'pending')
+                                        <div class="badge p-2 badge-shadow btn-warning text-black">Pending</div>
+                                        @else
+                                            <div class="badge badge-success badge-shadow">Accepted</div>
+                                        @endif
+                                    </td>
                                 </tr>
-
+                                @endforeach
                             </tbody>
-
                         </table>
                     </div>
                   </div>
@@ -63,19 +74,9 @@
             </div>
           </div>
         </section>
-
       </div>
-
     </div>
   </div>
-
-
-
-
-
-
-
-
 <!-- datatables.html  21 Nov 2019 03:55:25 GMT -->
 </html>
 

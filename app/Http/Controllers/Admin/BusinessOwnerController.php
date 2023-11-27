@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Mail\VerifyUserEmail;
 use App\Mail\SignupPasswordSend;
 use Illuminate\Support\Facades\Mail;
+use Notification;
+use App\Notifications\NewUser;
+use App\Models\Admin;
 
 class BusinessOwnerController extends Controller
 {
@@ -93,13 +96,13 @@ class BusinessOwnerController extends Controller
         $owner->roles()->sync(2);
         $message['email'] = $request->email;
         $message['password'] = $password;
-        // return $request->email;
          $status = 'Owner';
         Mail::to($request->email)->send(new SignupPasswordSend($status));
-        // Mail::to($user->email)->send(new RejectDocumentInfo($reason));
+
+        $admin = Admin::where('email', 'admin@gmail.com')->first();
+        $admin->notify(new NewUser($owner));
 
         try {
-            // Mail::to($request->email)->send(new UserLoginPassword($message));
             return redirect()->route('businessOwner.index')->with(['status' => true, 'message' => 'Business Owner Created successfully.']);
         } catch (\Throwable $th) {
             dd($th->getMessage());

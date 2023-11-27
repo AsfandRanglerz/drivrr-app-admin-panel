@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Job;
 use App\Models\Document;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\OwnerCancelJobRequest;
+use Mail;
 
 
 class OwnerGetJobREquests extends Controller
@@ -58,5 +60,30 @@ class OwnerGetJobREquests extends Controller
                 'status'=>'failed.',
             ],400);
         }
+    }
+    public function owner_cancle_request($id)
+    {
+       $job_request = PaymentRequest::find($id);
+       $driver_email = User::where('id',$job_request->driver_id)->value('email');
+       $owner = User::find($job_request->owner_id);
+       $job_request->delete();
+            // return $owner_name->fname,$owner_name->lname;
+       Mail::to($driver_email)->send(new OwnerCancelJobRequest($owner));
+    if($job_request)
+    {
+        return response()->json([
+            'message'=>'this request has been canceled.',
+            'status'=>'success',
+        ],200);
+    }
+    else
+    {
+        return response()->json([
+            'message'=>'Request is not found.',
+            'status'=>'failed',
+        ],400);
+    }
+
+
     }
 }
