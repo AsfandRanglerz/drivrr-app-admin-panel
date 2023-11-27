@@ -124,7 +124,7 @@ class DriverShowJobsController extends Controller
                 ->first();
             if ($jobs) {
                 return response()->json([
-                    'message' => 'Location retrieved successfully.',
+                    'message' => 'Get Data successfully.',
                     'status' => 'Success',
                     'ownerDetails' => $jobs,
 

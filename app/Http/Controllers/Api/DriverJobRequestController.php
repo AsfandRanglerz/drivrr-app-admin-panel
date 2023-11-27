@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Models\Job;
 use App\Models\Document;
 use Illuminate\Support\Facades\Validator;
- 
+
 
 class DriverJobRequestController extends Controller
 {
@@ -112,14 +112,7 @@ class DriverJobRequestController extends Controller
     public function getJobRequestsByJob($driver_id)
     {
         try {
-            $fetchjob = PaymentRequest::where('driver_id', $driver_id)->first();
 
-            if (!$fetchjob) {
-                return response()->json([
-                    'message' => 'Driver not found.',
-                    'status' => 'failed',
-                ], 404);
-            }
             $jobRequests = PaymentRequest::where('driver_id', $driver_id)
                 ->with('job.vehicle', 'owner')
                 ->get();
