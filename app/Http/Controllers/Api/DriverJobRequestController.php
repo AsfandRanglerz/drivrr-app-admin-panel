@@ -15,7 +15,6 @@ class DriverJobRequestController extends Controller
     public function add_job_request_without_counter(Request $request, $owner_id, $driver_id, $job_id)
     {
         try {
-
             $owner = User::find($owner_id);
             $driver = User::find($driver_id);
             $job = Job::find($job_id);
@@ -30,12 +29,14 @@ class DriverJobRequestController extends Controller
                     'counter_offer' => 0,
                     'location' => $location,
                 ]);
+
+                // Eager load the related models
+                $driver_job_request->load('owner', 'driver', 'job');
+
                 return response()->json([
                     'message' => 'Your request is sent successfully.',
                     'status' => 'success',
-                    'owner' => $owner,
-                    'job' => $job,
-                    'driver' => $driver,
+                    'data' => $driver_job_request,
                 ], 200);
             } else {
                 return response()->json([
@@ -51,6 +52,7 @@ class DriverJobRequestController extends Controller
             ], 500);
         }
     }
+
 
     public function add_job_request_counter(Request $request, $owner_id, $driver_id, $job_id)
     {
@@ -82,12 +84,13 @@ class DriverJobRequestController extends Controller
                     'location' => $location,
                 ]);
 
+                // Eager load the related models
+                $driver_job_request->load('owner', 'driver', 'job');
+
                 return response()->json([
                     'message' => 'Your request is sent successfully.',
                     'status' => 'success',
-                    'owner' => $owner,
-                    'job' => $job,
-                    'driver' => $driver,
+                    'data' => $driver_job_request,
                 ], 200);
             } else {
                 return response()->json([
@@ -103,6 +106,7 @@ class DriverJobRequestController extends Controller
             ], 500);
         }
     }
+
 
     public function getJobRequestsByJob($driver_id)
     {

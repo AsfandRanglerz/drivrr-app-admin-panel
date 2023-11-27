@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\DriverVehicle;
+use Faker\Provider\ar_EG\Payment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -24,6 +25,6 @@ class Job extends Model
     }
     public function owner()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
