@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\DriverVehicle;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\PaymentRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,13 +25,12 @@ class DriverShowJobsController extends Controller
 
         if ($userInDriverVehicles) {
             $getJobData = Job::join('driver_vehicles', 'jobs.vehicle_id', '=', 'driver_vehicles.vehicle_id')
-            ->join('users', 'jobs.user_id', '=', 'users.id')
-            ->join('vehicles', 'jobs.vehicle_id', '=', 'vehicles.id')
-            ->where('driver_vehicles.is_active', '=', '1')
-            ->where('jobs.on_vehicle', '=', '0')
-            ->select('jobs.*', 'users.fname', 'users.lname', 'users.email', 'users.image', 'vehicles.name')
-            ->get();
-
+                ->join('users', 'jobs.user_id', '=', 'users.id')
+                ->join('vehicles', 'jobs.vehicle_id', '=', 'vehicles.id')
+                ->where('driver_vehicles.is_active', '=', '1')
+                ->where('jobs.on_vehicle', '=', '0')
+                ->select('jobs.*', 'users.fname', 'users.lname', 'users.email', 'users.image', 'vehicles.name')
+                ->get();
         } else {
             $getJobData = Job::select('jobs.*', 'users.*', 'vehicles.*')
                 ->join('users', 'jobs.user_id', '=', 'users.id')
@@ -39,7 +40,22 @@ class DriverShowJobsController extends Controller
                 ->get();
         }
 
+
+        $alljobdata = [];
+
         if ($getJobData) {
+
+            foreach ($getJobData as $job) {
+                $pid = PaymentRequest::where('driver_id', $userId)->where('job_id', $job->id)->first();
+                if ($pid) {
+                    $job->status = 'yes';
+                    $alljobdata[] = $job;
+                } else {
+                    $job->status = 'no';
+                    $alljobdata[] = $job;
+                }
+            }
+
             return response()->json([
                 'message' => 'Driver JOBS',
                 'status' => 'Success',

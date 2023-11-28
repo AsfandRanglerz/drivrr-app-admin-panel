@@ -29,15 +29,18 @@ class DriverJobRequestController extends Controller
                     'job_id' => $job_id,
                     'counter_offer' => 0,
                     'location' => $location,
+                    'request_status'=>'1'
+
                 ]);
 
                 // Eager load the related models
                 $driver_job_request->load('owner', 'driver', 'job');
-
+                $all_requests = PaymentRequest::all();
                 return response()->json([
                     'message' => 'Your request is sent successfully.',
                     'status' => 'success',
                     'data' => $driver_job_request,
+                    'all_requests'=>$all_requests
                 ], 200);
             } else {
                 return response()->json([
@@ -83,6 +86,7 @@ class DriverJobRequestController extends Controller
                     'job_id' => $job_id,
                     'counter_offer' => $request->counter_offer,
                     'location' => $location,
+                    'request_status'=>'1'
                 ]);
 
                 // Eager load the related models
