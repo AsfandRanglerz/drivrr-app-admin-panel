@@ -5,12 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Models\Job;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\DriverVehicle;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\PaymentRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 
 class DriverShowJobsController extends Controller
