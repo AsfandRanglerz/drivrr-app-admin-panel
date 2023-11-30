@@ -146,8 +146,14 @@ class DriverJobRequestController extends Controller
                 ], 404);
             }
             $jobRequests = PaymentRequest::where('job_id', $job_id)
-                ->with('job', 'driver')
+                ->with([
+                    'job',
+                    'driver.bankAccounts' => function ($query) {
+                        $query->where('status', 'Active');
+                    }
+                ])
                 ->get();
+
 
             return response()->json([
                 'message' => 'Job requests Successfully',
