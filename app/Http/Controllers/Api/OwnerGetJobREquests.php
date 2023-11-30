@@ -20,7 +20,7 @@ class OwnerGetJobREquests extends Controller
     public function owner_accept_job_request(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'payment_amount' => 'required',
+
             'card_number' => 'required',
             'expiry_date' => 'required',
             'card_holder' => 'required',
@@ -32,7 +32,7 @@ class OwnerGetJobREquests extends Controller
         $owner_accept = PaymentRequest::find($id);
         if ($owner_accept) {
             $owner_accept->update([
-                'payment_amount' => $request->payment_amount,
+
                 'card_number' => $request->card_number,
                 'expiry_date' => $request->expiry_date,
                 'card_holder' => $request->card_holder,
@@ -41,7 +41,7 @@ class OwnerGetJobREquests extends Controller
             ]);
             return response()->json([
                 'message' => 'Request Accepted Successfully.',
-                'status' => 'success.',
+                'status' => 'success',
                 'data' => $owner_accept,
             ], 200);
         } else {
