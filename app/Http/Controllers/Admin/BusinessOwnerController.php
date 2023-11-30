@@ -14,9 +14,11 @@ use Illuminate\Support\Facades\Hash;
 use App\Mail\VerifyUserEmail;
 use App\Mail\SignupPasswordSend;
 use Illuminate\Support\Facades\Mail;
+
 use Notification;
-use App\Notifications\NewUser;
+use App\Notifications\TestingNotification;
 use App\Models\Admin;
+
 
 class BusinessOwnerController extends Controller
 {
@@ -96,11 +98,17 @@ class BusinessOwnerController extends Controller
         $owner->roles()->sync(2);
         $message['email'] = $request->email;
         $message['password'] = $password;
-         $status = 'Owner';
+        $status = 'Owner';
         Mail::to($request->email)->send(new SignupPasswordSend($status));
 
-        $admin = Admin::where('email', 'admin@gmail.com')->first();
-        $admin->notify(new NewUser($owner));
+
+         $admin = Admin::where('email', 'admin@gmail.com')->first();
+        //  $testNotification = User::first();
+         $admin->notify(new TestingNotification($owner));
+        //  dd($admin->notifications);
+
+
+        // $admin->notify(new NewUser($owner));
 
         try {
             return redirect()->route('businessOwner.index')->with(['status' => true, 'message' => 'Business Owner Created successfully.']);

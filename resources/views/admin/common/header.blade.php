@@ -48,7 +48,7 @@
             </div>
         </li> --}}
 
-{{-- <li class="dropdown dropdown-list-toggle">
+        {{-- <li class="dropdown dropdown-list-toggle">
     <a href="{{ route('notify') }}" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg">
         <i data-feather="bell" class="bell"></i>
     </a>
@@ -79,38 +79,58 @@
     </div>
 </li> --}}
 
-<li class="dropdown dropdown-list-toggle">
-    <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg">
-        <i data-feather="bell" class="bell"></i>
-    </a>
-    <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
-        <div class="dropdown-header">
-            Notifications
-            <div class="float-right">
-                <a href="#">Mark All As Read</a>
-            </div>
-        </div>
-        <div class="dropdown-list-content dropdown-list-icons">
-            <a href="#" class="dropdown-item dropdown-item-unread">
-                <span class="dropdown-item-icon bg-primary text-white">
-                    <i class="fas fa-code"></i>
-                </span>
-                <span class="dropdown-item-desc">
-                    Template update is available now!
-                    <span class="time">2 Min Ago</span>
-                </span>
+        <li class="dropdown dropdown-list-toggle">
+            @php
+                $notifications = App\Models\Notification::orderBy('created_at', 'DESC')->where('read_at',NULL)->get();
+                $counter = App\Models\Notification::where('read_at',NULL)->count();
+            @endphp
+            {{-- <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg">
+                <i data-feather="bell" class="bell"></i><span class="text-danger">{{$counter}}</span>
+            </a> --}}
+
+            <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg">
+                <span class="badge badge-danger" id="notificationCounter">{{$counter}}</span>
+                <i data-feather="bell" class="bell"></i>
             </a>
-            {{-- @foreach (auth()->guard('admin')->user()->notifications as $notification)
-                <div>{{ $notification->data['user_id'] }}</div>
-                <div>{{ $notification->data['fname'] }}</div>
-                <div>{{ $notification->data['lname'] }}</div>
-            @endforeach --}}
-        </div>
-        <div class="dropdown-footer text-center">
-            <a href="#">View All <i class="fas fa-chevron-right"></i></a>
-        </div>
-    </div>
-</li>
+
+            <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
+                <div class="dropdown-header">
+                    Notifications
+                    <div class="float-right">
+                        <a href="{{route('notifications-seen')}}">Mark All As Read</a>
+                    </div>
+                </div>
+                <div class="dropdown-list-content dropdown-list-icons">
+                    @forelse ($notifications as $notification)
+                        @php
+                            $userDataArray = json_decode($notification->data, true);
+                            $message = $userDataArray['message'];
+                        @endphp
+                                    <a href="#" class="dropdown-item dropdown-item-unread">
+                                        <span class="dropdown-item-icon bg-primary text-white">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                        <span class="dropdown-item-desc">
+                                            {{ $message }}
+                                        </span>
+                                    </a>
+                     @empty
+                     <a href="#" class="dropdown-item dropdown-item-unread">
+                        <span class="dropdown-item-icon bg-primary text-white">
+                            <i class="fas fa-question"></i>
+                        </span>
+                        <span class="dropdown-item-desc">
+                            Oops no any notifications yet.!
+                        </span>
+                    </a>
+
+                    @endforelse
+                </div>
+                <div class="dropdown-footer text-center">
+                    <a href="#">View All <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </li>
         <li class="dropdown"><a href="#" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image"
                     src="{{ asset('public/admin/assets/img/user.png') }}" class="user-img-radious-style"> <span

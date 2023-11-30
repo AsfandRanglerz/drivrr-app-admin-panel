@@ -53,21 +53,38 @@ class OwnerGetJobREquests extends Controller
     }
     public function owner_cancle_request($id)
     {
-        $job_request = PaymentRequest::find($id);
-        $driver_email = User::where('id', $job_request->driver_id)->value('email');
-        $owner = User::find($job_request->owner_id);
-        $job_request->delete();
-        Mail::to($driver_email)->send(new OwnerCancelJobRequest($owner));
-        if ($job_request) {
-            return response()->json([
-                'message' => 'this request has been canceled.',
-                'status' => 'success',
-            ], 200);
-        } else {
-            return response()->json([
-                'message' => 'Request is not found.',
-                'status' => 'failed',
-            ], 400);
-        }
+       $check = PaymentRequest::where('id',$id)->first();
+       if($check)
+       {
+       $job_request = PaymentRequest::find($id);
+       $driver_email = User::where('id',$job_request->driver_id)->value('email');
+       $owner = User::find($job_request->owner_id);
+       $job_request->delete();
+            // return $owner_name->fname,$owner_name->lname;
+       Mail::to($driver_email)->send(new OwnerCancelJobRequest($owner));
+    if($job_request)
+    {
+        return response()->json([
+            'message'=>'this request has been canceled.',
+            'status'=>'success',
+        ],200);
+    }
+    else
+    {
+        return response()->json([
+            'message'=>'Request is not found.',
+            'status'=>'failed',
+        ],400);
+    }
+}
+else
+{
+    return response()->json([
+        'message'=>'Request is not exist.',
+        'status'=>'failed',
+    ],400);
+}
+
+
     }
 }

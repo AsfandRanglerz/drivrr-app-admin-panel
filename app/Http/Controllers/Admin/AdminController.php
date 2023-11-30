@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Models\WithdrawalRequest;
 use App\Notifications\NewUser;
+use App\Models\Notification;
+use Carbon\Carbon;
+
+use App\Notifications\TestingNotification;
+
 class AdminController extends Controller
 {
     //
@@ -122,5 +127,18 @@ class AdminController extends Controller
     {
         Auth::guard('admin')->logout();
         return redirect('admin');
+    }
+
+    public function seen_notification()
+    {
+        // return Carbon::now('Asia/Karachi');
+            $notifications = Notification::where('read_at',NULL)->get();
+            foreach($notifications as $notification)
+            {
+                $notification->update([
+                    'read_at'=>Carbon::now(),
+                ]);
+            }
+            return redirect()->back();
     }
 }

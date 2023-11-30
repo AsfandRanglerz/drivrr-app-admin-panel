@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-
+use Notification;
+use App\Notifications\TestingNotification;
+use App\Models\Admin;
 
 class AuthController extends Controller
 {
@@ -71,6 +73,8 @@ class AuthController extends Controller
             ]);
             $user->roles()->sync(3);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
+            $admin = Admin::where('email', 'admin@gmail.com')->first();
+            $admin->notify(new TestingNotification($user));
             $wallet = DriverWallet::create([
                 'driver_id'=> $user->id,
                 'total_earning'=> 0,
@@ -120,6 +124,8 @@ class AuthController extends Controller
             $user->roles()->sync(2);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
             // $otp = random_int(0000,9999);
+            $admin = Admin::where('email', 'admin@gmail.com')->first();
+            $admin->notify(new TestingNotification($user));
             $token = $user->createToken($request->email)->plainTextToken;
             return response()->json([
                 'message' => "Added successfully.",
