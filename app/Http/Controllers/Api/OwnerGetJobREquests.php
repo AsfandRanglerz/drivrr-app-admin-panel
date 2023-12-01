@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\PaymentRequest;
 use App\Mail\OwnerCancelJobRequest;
 use App\Http\Controllers\Controller;
+use App\Mail\OwnerAcceptJobRequest;
 use App\Models\BankAccount;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -17,28 +18,43 @@ use Illuminate\Support\Facades\Validator;
 class OwnerGetJobREquests extends Controller
 {
 
+
     public function owner_accept_job_request(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-
             'card_number' => 'required',
             'expiry_date' => 'required',
             'card_holder' => 'required',
             'cvc' => 'required',
         ]);
-        if (!$validator) {
+
+        if ($validator->fails()) {
             return $this->sendError($validator->errors()->first());
         }
         $owner_accept = PaymentRequest::find($id);
-        if ($owner_accept) {
+        if (!$owner_accept) {
+            return response()->json([
+                'message' => 'Request Rejected.',
+                'status' => 'failed',
+            ], 400);
+        }
+        $job = $owner_accept->job;
+        $owner = $owner_accept->owner;
+        if ($job) {
             $owner_accept->update([
-
                 'card_number' => $request->card_number,
                 'expiry_date' => $request->expiry_date,
                 'card_holder' => $request->card_holder,
                 'cvc' => $request->cvc,
                 'status' => 'Accepted',
             ]);
+            $job->update([
+                'active_job' => '1',
+            ]);
+            $driver = $owner_accept->driver;
+            if ($driver && $driver->email) {
+                Mail::to($driver->email)->send(new OwnerAcceptJobRequest($owner));
+            }
             return response()->json([
                 'message' => 'Request Accepted Successfully.',
                 'status' => 'success',
@@ -46,11 +62,12 @@ class OwnerGetJobREquests extends Controller
             ], 200);
         } else {
             return response()->json([
-                'message' => 'Request Rejected.',
-                'status' => 'failed.',
+                'message' => 'Job not found for the given PaymentRequest.',
+                'status' => 'failed',
             ], 400);
         }
     }
+
     public function owner_cancle_request($id)
     {
         $check = PaymentRequest::where('id', $id)->first();
@@ -59,7 +76,6 @@ class OwnerGetJobREquests extends Controller
             $driver_email = User::where('id', $job_request->driver_id)->value('email');
             $owner = User::find($job_request->owner_id);
             $job_request->delete();
-            // return $owner_name->fname,$owner_name->lname;
             Mail::to($driver_email)->send(new OwnerCancelJobRequest($owner));
             if ($job_request) {
                 return response()->json([
