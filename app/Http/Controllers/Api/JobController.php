@@ -35,28 +35,6 @@ class JobController extends Controller
     public function jobStore(Request $request, $id)
     {
         try {
-            $validator = Validator::make(
-                $request->all(),
-                [
-                    'location' => 'required',
-                    'date' => 'required|date_format:d-m-Y',
-                    'time' => 'required|date_format:g:i A',
-                    'hours' => 'required',
-                    'days' => 'required',
-                    'price' => 'required',
-                    'description' => 'required',
-                    'vehicle_id' => 'required',
-                    'on_vehicle' => 'required'
-                ]
-            );
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'message' => 'Validation failed.',
-                    'status' => 'Failed',
-                    'error' => $validator->errors(),
-                ], 422);
-            }
             $formattedDate = Carbon::createFromFormat('d-m-Y', $request->date)->format('d-m-Y');
             $job = Job::create([
                 'user_id' => $id,
