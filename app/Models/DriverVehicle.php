@@ -21,4 +21,5 @@ class DriverVehicle extends Model
     {
         return $this->belongsTo(Job::class, 'vehicle_id', 'vehicle_id');
     }
+
 }
