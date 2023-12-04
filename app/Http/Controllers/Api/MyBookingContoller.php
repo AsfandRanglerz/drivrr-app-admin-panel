@@ -23,7 +23,6 @@ class MyBookingContoller extends Controller
                 $driver = $paymentRequest->driver;
                 $job = $paymentRequest->job;
                 $jobVehicleId = $job->vehicle->id;
-
                 // Filtering driverVehicles based on vehicles_id
                 $filteredDriverVehicles = $driver->driverVehicle->filter(function ($driverVehicle) use ($jobVehicleId) {
                     return $driverVehicle->vehicle_id == $jobVehicleId;
@@ -34,7 +33,6 @@ class MyBookingContoller extends Controller
                     'filtered_driver_vehicles' => $filteredDriverVehicles,
                 ];
             }
-
             if ($result) {
                 return response()->json([
                     'message' => 'My Booking Data Get Successfully',
