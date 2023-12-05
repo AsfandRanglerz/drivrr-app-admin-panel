@@ -31,9 +31,10 @@ class HelpAndSupportController extends Controller
             'queryData' => $query,
         ], 200);
     }
-    public function get($driverId){
-        $driverQuery=Question::where('user_id',$driverId)->get();
-        if( $driverQuery){
+    public function get($driverId)
+    {
+        $driverQuery = Question::where('user_id', $driverId)->get();
+        if ($driverQuery) {
             return response()->json([
                 'message' => 'Your query has been Get.',
                 'status' => 'Success.',
