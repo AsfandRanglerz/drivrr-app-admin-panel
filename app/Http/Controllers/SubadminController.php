@@ -41,19 +41,6 @@ class SubadminController extends Controller
             'email' => 'required|unique:users,email|email',
             'password' => 'required',
         ]);
-
-        // if ($request->hasFile('image')) {
-        //     $file = $request->file('image');
-        //     $extension = $file->getClientOriginalExtension();
-        //     $filename = time() . '.' . $extension;
-        //     $file->move(public_path('admin/assets/images/users/'), $filename);
-        //     $image = 'public/admin/assets/images/users/' . $filename;
-        // } else {
-        //     $image = 'public/admin/assets/images/users/owner.png';
-        // }
-
-        /**generate random password */
-        // $password = random_int(10000000, 99999999);
         $password = $request->password;
         $owner = User::create([
             'fname' => $request->fname,
@@ -62,9 +49,7 @@ class SubadminController extends Controller
             'email' => $request->email,
             'password' => Hash::make($password),
         ]);
-        // 'email' => $request->email,
-        // 'role_id'=> 1,
-        // ] + ['image' => $image]);
+
 
         /** assign the role  */
         $owner->roles()->sync(1);
@@ -88,7 +73,7 @@ class SubadminController extends Controller
     }
     public function update(Request $request, $id)
     {
-        // return $request;
+
         $request->validate([
             'fname' => 'required',
             'lname' => 'required',
@@ -96,30 +81,12 @@ class SubadminController extends Controller
             'email' => 'required',
         ]);
         $owner = User::find($id);
-        // if ($request->hasfile('image')) {
-        //     $destination = 'public/admin/assets/images/users' . $owner->image;
-        //     if (File::exists($destination) || File::exists($owner->image)) {
-        //         File::delete($destination);
-        //         File::delete($owner->image);
-        //     }
-        //     $file = $request->file('image');
-        //     $extension = $file->getClientOriginalExtension();
-        //     $filename = time() . '.' . $extension;
-        //     $file->move('public/admin/assets/images/users', $filename);
-        //     $image = 'public/admin/assets/images/users/' . $filename;
-        // } else {
-        //     $image = $owner->image;
-        // }
-
         $owner->update([
             'fname' => $request->fname,
             'lname' => $request->lname,
             'phone' => $request->phone,
             'email' => $request->email,
         ]);
-        // 'last_name' => $request->last_name,
-        // 'designation' => $request->designation,
-        //  + ['image' => $image]);
 
         return redirect()->route('subadmin.index')->with(['status' => true, 'message' => 'Subadmin Updated successfully.']);
     }
@@ -160,7 +127,7 @@ class SubadminController extends Controller
 
                 if (!$insertResult) {
                     $success = false;
-                    break; // Exit the loop if an error occurs
+                    break;
                 }
             }
 

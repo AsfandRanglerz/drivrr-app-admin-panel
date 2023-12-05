@@ -18,20 +18,6 @@ use Illuminate\Support\Facades\Validator;
 
 class OwnerGetJobREquests extends Controller
 {
-    // public function ownerPayDriver($id)
-    // {
-    //     $ownerPay = PaymentRequest::find($id);
-    //     if ($ownerPay) {
-    //         return response()->json([
-    //             'message' => 'Find Successfully',
-    //             'status' => 'success',
-    //         ], 200);
-    //     }
-    //     if ($ownerPay->counter_offer === '0') {
-    //         $ownerJob = $ownerPay->job->price;
-    //         $ownerPay->update(['payment_amount' => $ownerJob]);
-    //     }
-    // }
     public function ownerPayDriver($id)
     {
         try {
@@ -39,11 +25,9 @@ class OwnerGetJobREquests extends Controller
             if ($ownerPay->counter_offer === '0') {
                 $ownerJob = $ownerPay->job->price;
                 $ownerPay->update(['payment_amount' =>  $ownerJob]);
-
                 $driverId = $ownerPay->driver_id;
                 $driverWallet = DriverWallet::where('driver_id', $driverId)->firstOrFail();
                 $driverWallet->update(['total_earning' => $driverWallet->total_earning + $ownerJob]);
-
                 return response()->json([
                     'message' => 'Payment amount updated successfully',
                     'status' => 'success',
@@ -52,7 +36,6 @@ class OwnerGetJobREquests extends Controller
             } else if ($ownerPay->counter_offer > 0) {
                 $ownerCounterpay = $ownerPay->counter_offer;
                 $ownerPay->update(['payment_amount' =>  $ownerCounterpay]);
-
                 $driverId = $ownerPay->driver_id;
                 $driverWallet = DriverWallet::where('driver_id', $driverId)->firstOrFail();
                 $driverWallet->update(['total_earning' => $driverWallet->total_earning + $ownerCounterpay]);
@@ -71,7 +54,6 @@ class OwnerGetJobREquests extends Controller
         }
     }
 
-
     public function owner_accept_job_request(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -80,7 +62,6 @@ class OwnerGetJobREquests extends Controller
             'card_holder' => 'required',
             'cvc' => 'required',
         ]);
-
         if ($validator->fails()) {
             return $this->sendError($validator->errors()->first());
         }
