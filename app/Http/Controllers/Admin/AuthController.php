@@ -11,7 +11,8 @@ class AuthController extends Controller
     {
         return view('admin.auth.login');
     }
-    public function Login(Request $request){
+    public function Login(Request $request)
+    {
         $request->validate([
             'email' => 'required',
             'password' => 'required',
@@ -26,8 +27,7 @@ class AuthController extends Controller
         }
 
         return back()->with('err_message', 'Invalid email or password');
-
-}
+    }
 }
 
 
