@@ -15,24 +15,25 @@ class MyBookingContoller extends Controller
         try {
             $ownerBooking = PaymentRequest::where('owner_id', $ownerId)
                 ->where('status', 'Accepted')
-                ->with('driver.driverVehicle', 'job.vehicle')
+                ->with('driver.driverVehicle', 'job')
                 ->get();
+
             $result = [];
 
-            foreach ($ownerBooking as $paymentRequest) {
-                $driver = $paymentRequest->driver;
-                $job = $paymentRequest->job;
-                $jobVehicleId = $job->vehicle->id;
-                // Filtering driverVehicles based on vehicles_id
-                $filteredDriverVehicles = $driver->driverVehicle->filter(function ($driverVehicle) use ($jobVehicleId) {
-                    return $driverVehicle->vehicle_id == $jobVehicleId;
-                });
-                // Create an array with the relevant information for the result
+            foreach ($ownerBooking as $data) {
+                $driver = $data->driver;
+                $job = $data->job;
+                $jobVehicleId = $job->vehicle_id;
+                $filteredDriverVehicles = $driver->driverVehicle
+                    ->where('vehicle_id', $jobVehicleId)
+                    ->values()
+                    ->all();
                 $result[] = [
-                    'payment_request' => $paymentRequest,
+                    'payment_request' => $data,
                     'filtered_driver_vehicles' => $filteredDriverVehicles,
                 ];
             }
+
             if ($result) {
                 return response()->json([
                     'message' => 'My Booking Data Get Successfully',
