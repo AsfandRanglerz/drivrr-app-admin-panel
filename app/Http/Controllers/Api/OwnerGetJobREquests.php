@@ -5,18 +5,71 @@ namespace App\Http\Controllers\Api;
 use App\Models\Job;
 use App\Models\User;
 use App\Models\Document;
+use App\Models\BankAccount;
+use App\Models\DriverWallet;
 use Illuminate\Http\Request;
 use App\Models\PaymentRequest;
+use App\Mail\OwnerAcceptJobRequest;
 use App\Mail\OwnerCancelJobRequest;
 use App\Http\Controllers\Controller;
-use App\Mail\OwnerAcceptJobRequest;
-use App\Models\BankAccount;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 
 class OwnerGetJobREquests extends Controller
 {
+    // public function ownerPayDriver($id)
+    // {
+    //     $ownerPay = PaymentRequest::find($id);
+    //     if ($ownerPay) {
+    //         return response()->json([
+    //             'message' => 'Find Successfully',
+    //             'status' => 'success',
+    //         ], 200);
+    //     }
+    //     if ($ownerPay->counter_offer === '0') {
+    //         $ownerJob = $ownerPay->job->price;
+    //         $ownerPay->update(['payment_amount' => $ownerJob]);
+    //     }
+    // }
+    public function ownerPayDriver($id)
+    {
+        try {
+            $ownerPay = PaymentRequest::findOrFail($id);
+            if ($ownerPay->counter_offer === '0') {
+                $ownerJob = $ownerPay->job->price;
+                $ownerPay->update(['payment_amount' =>  $ownerJob]);
+
+                $driverId = $ownerPay->driver_id;
+                $driverWallet = DriverWallet::where('driver_id', $driverId)->firstOrFail();
+                $driverWallet->update(['total_earning' => $driverWallet->total_earning + $ownerJob]);
+
+                return response()->json([
+                    'message' => 'Payment amount updated successfully',
+                    'status' => 'success',
+                    'totalAmount' =>  $driverWallet,
+                ], 200);
+            } else if ($ownerPay->counter_offer > 0) {
+                $ownerCounterpay = $ownerPay->counter_offer;
+                $ownerPay->update(['payment_amount' =>  $ownerCounterpay]);
+
+                $driverId = $ownerPay->driver_id;
+                $driverWallet = DriverWallet::where('driver_id', $driverId)->firstOrFail();
+                $driverWallet->update(['total_earning' => $driverWallet->total_earning + $ownerCounterpay]);
+
+                return response()->json([
+                    'message' => 'Payment amount with CounterOffer updated successfully',
+                    'status' => 'success',
+                    'totalAmount' =>  $driverWallet,
+                ], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error: ' . $e->getMessage(),
+                'status' => 'error',
+            ], 500);
+        }
+    }
 
 
     public function owner_accept_job_request(Request $request, $id)
