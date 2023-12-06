@@ -42,7 +42,9 @@ class HelpAndSupportController extends Controller
             'status' => 'Success.',
             'your data' => $query,
         ], 200);
-    public function get($driverId)
+    }
+
+        public function get($driverId)
     {
         $driverQuery = Question::where('user_id', $driverId)->get();
         if ($driverQuery) {
