@@ -52,7 +52,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('notifications-seen', [AdminController::class, 'seen_notification'])->name('notifications-seen');
 
     // Owner Payments
-    Route::get('business-owner-payments',[HandelBusinessOwnerPayments::class,'show_owner_payments'])->name('business-owner-payments');
+    Route::get('business-owner-payments', [HandelBusinessOwnerPayments::class, 'show_owner_payments'])->name('business-owner-payments');
 
     /**driver */
     Route::get('driver/status/{id}', [DriverController::class, 'status'])->name('driver.status');
@@ -122,6 +122,4 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('action-on-request/{id}/{amount}', [WalletController::class, 'send_money'])->name('action-on-request');
     Route::delete('delete-approve-request/{id}', [WalletController::class, 'delete_request'])->name('delete-approve-request');
     Route::get('show-withdrawals-receipts/{id}', [WalletController::class, 'show_receipts'])->name('show-withdrawals-receipts');
-
-
 });

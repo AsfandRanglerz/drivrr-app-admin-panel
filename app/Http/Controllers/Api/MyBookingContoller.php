@@ -28,10 +28,12 @@ class MyBookingContoller extends Controller
                     ->where('vehicle_id', $jobVehicleId)
                     ->values()
                     ->all();
-                $result[] = [
-                    'payment_request' => $data,
-                    'filtered_driver_vehicles' => $filteredDriverVehicles,
-                ];
+                if ($data->status !== 'CancelRide') {
+                    $result[] = [
+                        'payment_request' => $data,
+                        'filtered_driver_vehicles' => $filteredDriverVehicles,
+                    ];
+                }
             }
 
             if ($result) {
@@ -43,8 +45,7 @@ class MyBookingContoller extends Controller
             } else {
                 return response()->json([
                     'message' => 'No Booking Data Found',
-                    'status' => 'success',
-                    'bookingData' => []
+                    'status' => 'failed',
                 ], 400);
             }
         } catch (\Exception $e) {

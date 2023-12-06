@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use App\Models\Question;
 use Illuminate\Http\Request;
+use App\Mail\SendResponseToUser;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class HelpAndSupportController extends Controller
@@ -38,8 +41,43 @@ class HelpAndSupportController extends Controller
             return response()->json([
                 'message' => 'Your query has been Get.',
                 'status' => 'Success.',
-                'your data' =>  $driverQuery,
+                'yourdata' =>  $driverQuery,
             ], 200);
+        }
+    }
+    public function send(Request $request, $id)
+    {
+        try {
+            $user = User::find($id);
+
+            if (!$user) {
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => 'User not found.',
+                ], 404);
+            }
+
+            $user_email = $user->email;
+            $message = $request->message;
+
+            if ($message == "") {
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => 'Your message is empty.',
+                ], 400);
+            } else {
+                Mail::to($user_email)->send(new SendResponseToUser($message));
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => $message,
+                ], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
         }
     }
 }

@@ -82,6 +82,7 @@ Route::get('driver-reviews/{id}', 'Api\ReviewController@showFeedBackToDriver');
 //users-queries
 Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
 Route::get('getuserquery/{id}', 'Api\HelpAndSupportController@get');
+Route::get('adminAnswer/{id}', 'Api\HelpAndSupportController@send');
 
 Route::post('logout', 'Api\AuthController@logout');
 //driver bank account
@@ -110,7 +111,7 @@ Route::put('/updateRequestStatus/{id}', 'Api\DriverJobRequestController@updateSt
 Route::get('owner-get-job-requests/{driver_id}', 'Api\OwnerGetJobREquests@show_driverActiveAccountDetails');
 Route::post('/owner-pay-driver/{id}', 'Api\OwnerGetJobREquests@ownerPayDriver');
 Route::post('owner-accept-job-request/{id}', 'Api\OwnerGetJobREquests@owner_accept_job_request');
-Route::delete('/owner-cancle-request/{id}', 'Api\OwnerGetJobREquests@owner_cancle_request');
+Route::post('/owner-cancle-request/{id}', 'Api\OwnerGetJobREquests@owner_cancle_request');
 // ##################MY Booking###################
 Route::get('myBooking/{ownerId}', [MyBookingContoller::class, 'get']);
 
