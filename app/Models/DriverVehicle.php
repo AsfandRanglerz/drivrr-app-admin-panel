@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DriverVehicle extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id','vehicle_id','vehicle_brand','model','year','license_plate','color','is_active'];
+    protected $fillable = ['user_id', 'vehicle_id', 'vehicle_brand', 'model', 'year', 'license_plate', 'color', 'is_active'];
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -17,4 +17,9 @@ class DriverVehicle extends Model
     {
         return $this->belongsTo(vehicle::class);
     }
+    public function job()
+    {
+        return $this->belongsTo(Job::class, 'vehicle_id', 'vehicle_id');
+    }
+
 }

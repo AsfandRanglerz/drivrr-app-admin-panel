@@ -14,6 +14,7 @@ use App\Controllers\DriverWalletController;
 use App\Http\Controllers\Admin\WalletController;
 use App\Http\Controllers\Api\DriverShowJobsController;
 use App\Http\Controllers\Api\DriverJobRequestController;
+use App\Http\Controllers\Api\MyBookingContoller;
 use App\Http\Controllers\Api\OwnerGetJobREquests;
 
 /*
@@ -80,6 +81,9 @@ Route::post('owners-reviews', 'Api\ReviewController@ownerReview');
 Route::get('driver-reviews/{id}', 'Api\ReviewController@showFeedBackToDriver');
 //users-queries
 Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
+Route::get('getuserquery/{id}', 'Api\HelpAndSupportController@get');
+Route::get('adminAnswer/{id}', 'Api\HelpAndSupportController@send');
+
 Route::post('logout', 'Api\AuthController@logout');
 //driver bank account
 Route::get('bank-account/{id}', 'Api\BankAccountController@fetch');
@@ -91,25 +95,25 @@ Route::get('delete-bank-account/{accountId}', 'Api\BankAccountController@delete'
 Route::get('driverjobs/{userid}', [DriverShowJobsController::class, 'get']);
 Route::post('driverlocation/{userId}', [DriverShowJobsController::class, 'location']);
 Route::get('getdriverlocation/{userId}', [DriverShowJobsController::class, 'getlocation']);
-Route::get('getOwnerDetails/{jobId}',[DriverShowJobsController::class,'getOwnerDetails']);
+Route::get('getOwnerDetails/{jobId}', [DriverShowJobsController::class, 'getOwnerDetails']);
 //driver request for withdrawal
 Route::post('add-withdrawal-request/{id}', 'Api\DriverWalletController@add_withdrawal_request');
-Route::get('getDriverWalletData/{driverId}','Api\DriverWalletController@getWalletDetails');
+Route::get('getDriverWalletData/{driverId}', 'Api\DriverWalletController@getWalletDetails');
 //driver request for job
 Route::post('add-job-request-without-counter/{owner_id}/{driver_id}/{job_id}', 'Api\DriverJobRequestController@add_job_request_without_counter');
 Route::post('add-job-request-with-counter/{owner_id}/{driver_id}/{job_id}', 'Api\DriverJobRequestController@add_job_request_counter');
-Route::get('/job-requests/{job_id}','Api\DriverJobRequestController@getJobRequestsByJob');
-Route::get('/job-requestsbyOwner/{job_id}','Api\DriverJobRequestController@getJobRequestsByOwner');
-Route::delete('/cancel-job/{id}','Api\DriverJobRequestController@cancelJob');
-Route::put('/updateRequestStatus/{id}','Api\DriverJobRequestController@updateStatus');
+Route::get('/job-requests/{job_id}', 'Api\DriverJobRequestController@getJobRequestsByJob');
+Route::get('/job-requestsbyOwner/{job_id}', 'Api\DriverJobRequestController@getJobRequestsByOwner');
+Route::delete('/cancel-job/{id}', 'Api\DriverJobRequestController@cancelJob');
+Route::put('/updateRequestStatus/{id}', 'Api\DriverJobRequestController@updateStatus');
 
 //Owner get job requests
 Route::get('owner-get-job-requests/{driver_id}', 'Api\OwnerGetJobREquests@show_driverActiveAccountDetails');
+Route::post('/owner-pay-driver/{id}', 'Api\OwnerGetJobREquests@ownerPayDriver');
 Route::post('owner-accept-job-request/{id}', 'Api\OwnerGetJobREquests@owner_accept_job_request');
-Route::delete('/owner-cancle-request/{id}','Api\OwnerGetJobREquests@owner_cancle_request');
-
-
-
+Route::post('/owner-cancle-request/{id}', 'Api\OwnerGetJobREquests@owner_cancle_request');
+// ##################MY Booking###################
+Route::get('myBooking/{ownerId}', [MyBookingContoller::class, 'get']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
