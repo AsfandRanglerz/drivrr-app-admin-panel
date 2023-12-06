@@ -110,14 +110,24 @@ class OwnerGetJobREquests extends Controller
             $job_request = PaymentRequest::find($id);
             $driver_email = User::where('id', $job_request->driver_id)->value('email');
             $owner = User::find($job_request->owner_id);
-            $job_request->update(['status' => 'CancelRide']);
+            if ($job_request->status !== 'CancelRide') {
+                $job_request->update(['status' => 'CancelRide']);
+                if ($job_request->job->is_active === '0') {
+                    $job_request->job->update(['is_active' => 1]);
+                }
 
-            Mail::to($driver_email)->send(new OwnerCancelJobRequest($owner));
+                Mail::to($driver_email)->send(new OwnerCancelJobRequest($owner));
 
-            return response()->json([
-                'message' => 'This request has been canceled, and the job is now active.',
-                'status' => 'success',
-            ], 200);
+                return response()->json([
+                    'message' => 'This request has been canceled, and the job is now active.',
+                    'status' => 'success',
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'This request has already been canceled.',
+                    'status' => 'failed',
+                ], 400);
+            }
         } else {
             return response()->json([
                 'message' => 'Request is not found.',
@@ -125,5 +135,4 @@ class OwnerGetJobREquests extends Controller
             ], 400);
         }
     }
-
 }

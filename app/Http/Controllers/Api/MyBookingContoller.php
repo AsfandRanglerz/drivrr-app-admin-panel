@@ -28,8 +28,6 @@ class MyBookingContoller extends Controller
                     ->where('vehicle_id', $jobVehicleId)
                     ->values()
                     ->all();
-
-                // Include all bookings, regardless of status
                 $result[] = [
                     'payment_request' => $data,
                     'filtered_driver_vehicles' => $filteredDriverVehicles,
