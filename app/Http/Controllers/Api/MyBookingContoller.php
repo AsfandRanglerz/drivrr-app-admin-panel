@@ -14,7 +14,7 @@ class MyBookingContoller extends Controller
     {
         try {
             $ownerBooking = PaymentRequest::where('owner_id', $ownerId)
-                ->where('status', 'Accepted')
+                ->whereIn('status', ['Accepted', 'CancelRide'])  // Include 'CancelRide' status
                 ->with('driver.driverVehicle', 'job')
                 ->get();
 
@@ -28,12 +28,12 @@ class MyBookingContoller extends Controller
                     ->where('vehicle_id', $jobVehicleId)
                     ->values()
                     ->all();
-                if ($data->status !== 'CancelRide') {
-                    $result[] = [
-                        'payment_request' => $data,
-                        'filtered_driver_vehicles' => $filteredDriverVehicles,
-                    ];
-                }
+
+                // Include all bookings, regardless of status
+                $result[] = [
+                    'payment_request' => $data,
+                    'filtered_driver_vehicles' => $filteredDriverVehicles,
+                ];
             }
 
             if ($result) {
