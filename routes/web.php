@@ -114,7 +114,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::put('/roles/update/permissions/{role}', [RoleController::class, 'updatePermissions'])->name('roles.update.permissions');
     ######## Help And Sppurt Controler #####
     Route::get('help-and-support', [HelpAndSupportController::class, 'index'])->name('help-and-support.index');
-    Route::get('send-response/{id}', [HelpAndSupportController::class, 'send'])->name('send-response.send');
+    Route::get('send-response/{id}/{q_id}', [HelpAndSupportController::class, 'send'])->name('send-response.send');
     //Wallet Controller
     Route::get('show-wallets', [WalletController::class, 'index'])->name('show-wallets');
     // Route::get('request-counter', [WalletController::class, 'request_counter'])->name('request-counter');

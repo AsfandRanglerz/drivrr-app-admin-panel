@@ -135,7 +135,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('send-response.send', $owners->id) }}">
+                    <form action="{{ route('send-response.send', ['id'=>$owners->id,'q_id'=>$question->id]) }}">
                         @csrf
                         {{-- <input type="text" value="{{ $owners->id }}"> --}}
                         <div class="mb-2">
@@ -180,7 +180,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="{{ route('send-response.send', $drivers->id) }}">
+                            <form action="{{ route('send-response.send', ['id'=>$drivers->id,'q_id'=>$question->id]) }}">
                                 @csrf
                                 {{-- <input type="text" value="{{ $drivers->id }}"> --}}
                                 <div class="mb-2">

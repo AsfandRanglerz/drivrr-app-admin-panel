@@ -25,12 +25,16 @@ class HelpAndSupportController extends Controller
         return view('admin.helpAndSupport.index', compact('data'));
     }
 
-    public function send(Request $request, $id)
+    public function send(Request $request, $id , $q_id)
     {
         $user = User::find($id);
         $user_email = $user->email;
         $message = $request->message;
-
+        return [$q_id];
+        $query = Question::where('id',$id)->where('user_id',$q_id)->where('answer',NULL)->get();
+        $query->update([
+            'answer'=>$message,
+        ]);
         if ($message == "") {
             return redirect()->back()->with(['status' => true, 'message' => 'Your message is empty.']);
         } else {

@@ -31,4 +31,13 @@ class HelpAndSupportController extends Controller
             'your data' => $query,
         ], 200);
     }
+    public function get_query($id,$user_id)
+    {
+        $query = Question::where('id',$id)->where('user_id',$user_id)->whereNotNull('answer')->get();
+        return response()->json([
+            'message' => 'Your query.',
+            'status' => 'Success.',
+            'your data' => $query,
+        ], 200);
+    }
 }
