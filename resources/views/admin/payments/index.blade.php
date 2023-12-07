@@ -59,8 +59,11 @@
                                     <td>
                                          @if ($payments->status == 'pending')
                                         <div class="badge p-2 badge-shadow btn-warning text-black">Pending</div>
-                                        @else
+                                        @elseif($payments->status == 'CancelRide')
+                                            <div class="badge badge-danger badge-shadow">Ride Canceled</div>
+                                            @else
                                             <div class="badge badge-success badge-shadow">Accepted</div>
+
                                         @endif
                                     </td>
                                 </tr>
