@@ -34,9 +34,9 @@ class HelpAndSupportController extends Controller
             'queryData' => $query,
         ], 200);
     }
-    public function get_query($id,$user_id)
+    public function get_query($id, $user_id)
     {
-        $query = Question::where('id',$id)->where('user_id',$user_id)->whereNotNull('answer')->get();
+        $query = Question::where('id', $id)->where('user_id', $user_id)->whereNotNull('answer')->get();
         return response()->json([
             'message' => 'Your query.',
             'status' => 'Success.',
@@ -44,7 +44,7 @@ class HelpAndSupportController extends Controller
         ], 200);
     }
 
-        public function get($driverId)
+    public function get($driverId)
     {
         $driverQuery = Question::where('user_id', $driverId)->get();
         if ($driverQuery) {
