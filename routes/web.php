@@ -18,6 +18,8 @@ use App\Http\Controllers\Admin\UserPermssionController;
 use App\Http\Controllers\Admin\WalletController;
 use App\Http\Controllers\Admin\HandelBusinessOwnerPayments;
 
+use Spatie\Permission\Middlewares\PermissionMiddleware;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,7 +41,7 @@ Route::get('/change_password/{id}', [AdminController::class, 'change_password'])
 Route::post('/admin-reset-password', [AdminController::class, 'ResetPassword']);
 
 Route::prefix('admin')->middleware('admin')->group(function () {
-    Route::get('dashboard', [AdminController::class, 'getdashboard']);
+    Route::get('dashboard', [AdminController::class, 'getdashboard'])->middleware('permission:Dashboard');
     Route::get('profile', [AdminController::class, 'getProfile']);
     Route::post('update-profile', [AdminController::class, 'update_profile']);
     Route::get('Privacy-policy', [SecurityController::class, 'PrivacyPolicy']);
