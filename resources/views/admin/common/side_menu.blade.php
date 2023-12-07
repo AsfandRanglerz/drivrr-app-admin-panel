@@ -76,52 +76,93 @@
                 </li>
             @endif
             {{-- Wallet Management --}}
-            <li class="dropdown">
-                <a href="#" class="menu-toggle nav-link has-dropdown"><i
-                        class="
-                    fas fa-coins"></i>
-                    <span>Wallet Management</span>
-                </a>
-                <ul class="dropdown-menu active">
-                    {{-- Driver Wallet --}}
-                    <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
-                        <a href="{{ route('show-wallets') }}" class="nav-link"><i
-                                class="fas fa-wallet"></i><span>Driver Wallets</span></a>
-                    </li>
-                    {{-- Widthdrawal Requests --}}
-                    <li class="dropdown {{ request()->is('admin/withdrawal_requests*') ? 'active' : '' }}">
-                        @php
-                            $requestCount = App\Models\WithdrawalRequest::where('status', '0')
-                                ->where('seen', '0')
-                                ->count();
-                        @endphp
-                        <a href="{{ route('show-withdrawal-requests') }}" class="nav-link">
-                            <i class="fab fa-twitch"></i>
-                            @if ($requestCount > 0)
-                                <span class="danger">
-                                    Withdrawal Req. @if ($requestCount > 0)
-                                        <span class="px-1 py-0.5 rounded-circle text-white bg-danger"
-                                            style="border-radius: 50%; font-size:11px">
-                                            {{ $requestCount }}
+            @if (auth()->guard('web')->check() &&
+                    (auth()->guard('web')->user()->can('DriverWallets') ||
+                        auth()->guard('web')->user()->can('WithdrawRequest') ||
+                        auth()->guard('admin')->check()))
+                <li class="dropdown">
+                    <a href="#" class="menu-toggle nav-link has-dropdown"><i class="fas fa-coins"></i>
+                        <span>Wallet Management</span>
+                    </a>
+                    <ul class="dropdown-menu active">
+                        {{-- Driver Wallet --}}
+                        @if (auth()->guard('web')->check() &&
+                                auth()->guard('web')->user()->can('DriverWallets'))
+                            <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
+                                <a href="{{ route('show-wallets') }}" class="nav-link"><i
+                                        class="fas fa-wallet"></i><span>Driver Wallets</span></a>
+                            </li>
+                        @elseif(auth()->guard('admin')->check())
+                            <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
+                                <a href="{{ route('show-wallets') }}" class="nav-link"><i
+                                        class="fas fa-wallet"></i><span>Driver Wallets</span></a>
+                            </li>
+                        @endif
+
+                        {{-- Withdrawal Requests --}}
+                        @if (auth()->guard('web')->check() &&
+                                auth()->guard('web')->user()->can('WithdrawRequest'))
+                            <li class="dropdown {{ request()->is('admin/withdrawal_requests*') ? 'active' : '' }}">
+                                @php
+                                    $requestCount = App\Models\WithdrawalRequest::where('status', '0')
+                                        ->where('seen', '0')
+                                        ->count();
+                                @endphp
+                                <a href="{{ route('show-withdrawal-requests') }}" class="nav-link">
+                                    <i class="fab fa-twitch"></i>
+                                    @if ($requestCount > 0)
+                                        <span class="danger">
+                                            Withdrawal Req.
+                                            <span class="px-1 py-0.5 rounded-circle text-white bg-danger"
+                                                style="border-radius: 50%; font-size:11px">
+                                                {{ $requestCount }}
+                                            </span>
                                         </span>
+                                    @else
+                                        <span>Withdrawal Requests</span>
                                     @endif
-                                </span>
-                            @else
-                                <span>
-                                    Withdrawal Requests
-                                </span>
-                            @endif
-                        </a>
-                        @php
-                        @endphp
-                    </li>
-                </ul>
-            </li>
+                                </a>
+                            </li>
+                        @elseif(auth()->guard('admin')->check())
+                            <li class="dropdown {{ request()->is('admin/withdrawal_requests*') ? 'active' : '' }}">
+                                @php
+                                    $requestCount = App\Models\WithdrawalRequest::where('status', '0')
+                                        ->where('seen', '0')
+                                        ->count();
+                                @endphp
+                                <a href="{{ route('show-withdrawal-requests') }}" class="nav-link">
+                                    <i class="fab fa-twitch"></i>
+                                    @if ($requestCount > 0)
+                                        <span class="danger">
+                                            Withdrawal Req.
+                                            <span class="px-1 py-0.5 rounded-circle text-white bg-danger"
+                                                style="border-radius: 50%; font-size:11px">
+                                                {{ $requestCount }}
+                                            </span>
+                                        </span>
+                                    @else
+                                        <span>Withdrawal Requests</span>
+                                    @endif
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
+                </li>
+            @endif
+
             {{-- Owner Recipits --}}
-            <li class="dropdown {{ request()->is('admin/payments*') ? 'active' : '' }}">
-                <a href="{{ route('business-owner-payments') }}" class="nav-link"><i
-                        class="fas fa-receipt"></i><span>Payments</span></a>
-            </li>
+            @if (auth()->guard('web')->check() &&
+                    auth()->guard('web')->user()->can('Payments'))
+                <li class="dropdown {{ request()->is('admin/payments*') ? 'active' : '' }}">
+                    <a href="{{ route('business-owner-payments') }}" class="nav-link"><i
+                            class="fas fa-receipt"></i><span>Payments</span></a>
+                </li>
+            @elseif (auth()->guard('admin')->check())
+                <li class="dropdown {{ request()->is('admin/payments*') ? 'active' : '' }}">
+                    <a href="{{ route('business-owner-payments') }}" class="nav-link"><i
+                            class="fas fa-receipt"></i><span>Payments</span></a>
+                </li>
+            @endif
             {{-- Vehicles --}}
             @if (auth()->guard('web')->check() &&
                     auth()->guard('web')->user()->can('Vehicles'))
