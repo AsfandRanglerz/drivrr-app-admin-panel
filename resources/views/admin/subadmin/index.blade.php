@@ -45,16 +45,15 @@
                                                 <td>{{ $subAdmin->email }}</td>
 
                                                 <td>
-
-                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                    {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                         data-bs-target="#permissionModal{{ $subAdmin->id }}"
                                                         data-role-id="{{ $subAdmin->id }}">
                                                         <span class=" fa fa-pen"></span>
-                                                    </button>
-                                                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                                    </button> --}}
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                         data-bs-target="#updatePermissionModal{{ $subAdmin->id }}"
                                                         data-user-id="{{ $subAdmin->id }}">
-                                                        Update
+                                                        <span class=" fa fa-pen"></span>
                                                     </button>
                                                 </td>
 
@@ -335,11 +334,9 @@
 
             $('#permissionModalForm').submit(function(e) {
                 e.preventDefault();
-
                 var userId = $(this).data('user-id');
                 var formData = $(this).serialize();
 
-                // Make an AJAX request to update permissions
                 $.ajax({
                     type: 'POST',
                     url: '/update-permissions/' + userId,
@@ -347,11 +344,9 @@
                     success: function(response) {
                         toastr.success(response.message);
                         $('#updatePermissionModal').modal('hide');
-
                     },
                     error: function(xhr, status, error) {
                         console.error(error);
-
                     }
                 });
             });

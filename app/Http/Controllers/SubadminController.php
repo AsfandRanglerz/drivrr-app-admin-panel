@@ -148,11 +148,10 @@ class SubadminController extends Controller
 
         $user = User::find($userId);
         if (!$user) {
-            return response()->json(['success' => false, 'message' => 'User not found'], 404);
+            return redirect()->back()->with('message', 'User Not Found');
         }
         $permissions = $request->input('permissions');
         $user->syncPermissions($permissions);
-
-        return response()->json(['success' => true, 'message' => 'Permissions updated successfully']);
+        return redirect()->back()->with('message', 'Permissions updated successfully');
     }
 }
