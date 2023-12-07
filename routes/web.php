@@ -44,10 +44,10 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('dashboard', [AdminController::class, 'getdashboard'])->middleware('permission:Dashboard');
     Route::get('profile', [AdminController::class, 'getProfile']);
     Route::post('update-profile', [AdminController::class, 'update_profile']);
-    Route::get('Privacy-policy', [SecurityController::class, 'PrivacyPolicy']);
+    Route::get('Privacy-policy', [SecurityController::class, 'PrivacyPolicy'])->middleware('permission:Privacy policies');
     Route::get('privacy-policy-edit', [SecurityController::class, 'PrivacyPolicyEdit']);
     Route::post('privacy-policy-update', [SecurityController::class, 'PrivacyPolicyUpdate']);
-    Route::get('term-condition', [SecurityController::class, 'TermCondition']);
+    Route::get('term-condition', [SecurityController::class, 'TermCondition'])->middleware('permission:Term&Conditions');
     Route::get('term-condition-edit', [SecurityController::class, 'TermConditionEdit']);
     Route::post('term-condition-update', [SecurityController::class, 'TermConditionUpdate']);
     Route::get('logout', [AdminController::class, 'logout']);
@@ -67,9 +67,9 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     /**owner-request */
     Route::get('owner-job-status/{id}/{key}', [JobController::class, 'status'])->name('owner-job.status');
     #######Roles&Permission#####
-    Route::get('/role-permission', [RoleController::class, 'index'])->name('roles-permission.index');
+    Route::get('/role-permission', [RoleController::class, 'index'])->name('roles-permission.index')->middleware('permission:Roles & Permissions');
     #######SubAdmin#######
-    Route::get('/sub-admin', [SubadminController::class, 'index'])->name('subadmin.index');
+    Route::get('/sub-admin', [SubadminController::class, 'index'])->name('subadmin.index')->middleware('permission:SubAdmin');
     Route::get('/sub-admin/create', [SubadminController::class, 'create'])->name('subAdmin.create');
     Route::post('/sub-admin/store', [SubadminController::class, 'store'])->name('subAdmin.store');
     Route::get('/sub-admin/edit/{id}', [SubadminController::class, 'edit'])->name('subAdmin.edit');
@@ -79,13 +79,9 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/assign-permissions/{user}', [SubadminController::class, 'storePermissions'])->name('user.assign.permissions');
     Route::put('/update-permissions/{user}', [SubadminController::class, 'updatePermissions'])->name('user.update.permissions');
 
-
-
-
-
-    Route::resource('vehicle', VehicleController::class);
-    Route::resource('businessOwner', BusinessOwnerController::class);
-    Route::resource('driver', DriverController::class);
+    Route::resource('vehicle', VehicleController::class)->middleware('permission:Vehicles');
+    Route::resource('businessOwner', BusinessOwnerController::class)->middleware('permission:Business Owner');
+    Route::resource('driver', DriverController::class)->middleware('permission:Driver');
     // Route::resource('document', DocumentController::class);
     //Document Controller
     Route::get('document/{id}', [DocumentController::class, 'index'])->name('document.index');
@@ -115,7 +111,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/roles/assign/permissions/{role}', [RoleController::class, 'assignPermissions'])->name('roles.assign.permissions');
     Route::put('/roles/update/permissions/{role}', [RoleController::class, 'updatePermissions'])->name('roles.update.permissions');
     ######## Help And Sppurt Controler #####
-    Route::get('help-and-support', [HelpAndSupportController::class, 'index'])->name('help-and-support.index');
+    Route::get('help-and-support', [HelpAndSupportController::class, 'index'])->name('help-and-support.index')->middleware('permission:Help & Support');
     Route::get('send-response/{id}/{q_id}', [HelpAndSupportController::class, 'send'])->name('send-response.send');
     //Wallet Controller
     Route::get('show-wallets', [WalletController::class, 'index'])->name('show-wallets');

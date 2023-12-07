@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\DriverShowJobsController;
 use App\Http\Controllers\Api\DriverJobRequestController;
 use App\Http\Controllers\Api\MyBookingContoller;
 use App\Http\Controllers\Api\OwnerGetJobREquests;
+use App\Http\Controllers\Api\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -114,8 +115,9 @@ Route::post('owner-accept-job-request/{id}', 'Api\OwnerGetJobREquests@owner_acce
 Route::post('/owner-cancle-request/{id}', 'Api\OwnerGetJobREquests@owner_cancle_request');
 // ##################MY Booking###################
 Route::get('myBooking/{ownerId}', [MyBookingContoller::class, 'get']);
-
-
+// ############ PERMISIONS ############
+Route::post('addPermission',[PermissionController::class,'store']);
+Route::post('updatePermission',[PermissionController::class,'update']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
