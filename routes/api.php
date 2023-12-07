@@ -82,7 +82,7 @@ Route::get('driver-reviews/{id}', 'Api\ReviewController@showFeedBackToDriver');
 //users-queries
 Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
 Route::get('getuserquery/{id}', 'Api\HelpAndSupportController@get');
-Route::get('adminAnswer/{id}', 'Api\HelpAndSupportController@send');
+Route::get('getAnswer/{id}/{userId}', 'Api\HelpAndSupportController@get_query');
 
 Route::post('logout', 'Api\AuthController@logout');
 //driver bank account
