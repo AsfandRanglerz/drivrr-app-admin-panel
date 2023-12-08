@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\DriverVehicle;
 use App\Models\Vehicle;
+use Illuminate\Http\Request;
+use App\Models\DriverVehicle;
+use App\Http\Controllers\Controller;
+
 
 
 class DriverVehicleController extends Controller
 {
     public function index(Request $request, $id)
     {
+
         $data = User::with('driverVehicle.vehicle')->find($id);
-        // return $data;
+
         return view('admin.driver.vehicle.index', compact('data'));
     }
 

@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Vehicle;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DriverVehicle extends Model
 {
@@ -15,7 +16,7 @@ class DriverVehicle extends Model
     }
     public function vehicle()
     {
-        return $this->belongsTo(vehicle::class);
+        return $this->belongsTo(Vehicle::class,);
     }
     public function job()
     {
