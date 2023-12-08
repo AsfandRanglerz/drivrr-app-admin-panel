@@ -82,7 +82,7 @@ class AuthController extends Controller
             $token = $user->createToken($request->email)->plainTextToken;
             return response()->json([
                 'message' => "Added successfully.",
-                'status' => "success.",
+                'status' => "success",
                 'token' => $token,
                 'data' =>  $user,
                 'driver_wallet' =>  $wallet,
