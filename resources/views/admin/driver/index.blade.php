@@ -14,7 +14,7 @@
                             </div>
                             <div class="card-body  table-responsive">
                                 <a class="btn btn-success mb-3" href="{{ route('driver.create') }}">Add Driver</a>
-                                <table class="table table-striped table-bordered text-center " id="table-1">
+                                <table class="table table-striped table-bordered text-center" id="table-1">
                                     <thead>
                                         <tr>
                                             <th>Sr.</th>

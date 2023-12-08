@@ -68,13 +68,11 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'image' => $image,
                 'role_id' => 3,
-
-                // 'image' => $image,
             ]);
             $user->roles()->sync(3);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
-            $admin = Admin::where('email', 'admin@gmail.com')->first();
-            $admin->notify(new TestingNotification($user));
+            // $admin = Admin::where('email', 'admin@gmail.com')->first();
+            // $admin->notify(new TestingNotification($user));
             $wallet = DriverWallet::create([
                 'driver_id'=> $user->id,
                 'total_earning'=> 0,
@@ -88,8 +86,6 @@ class AuthController extends Controller
                 'token' => $token,
                 'data' =>  $user,
                 'driver_wallet' =>  $wallet,
-
-                // 'data' => $user,
             ], 200);
         }
         else {
@@ -118,18 +114,15 @@ class AuthController extends Controller
                 'company_name' => $request->company_name,
                 'company_info' => $request->company_info,
                 'role_id' => 2,
-                // 'password' => Hash::make($request->password),
-                // 'image' => $image,
             ]);
             $user->roles()->sync(2);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
-            // $otp = random_int(0000,9999);
-            $admin = Admin::where('email', 'admin@gmail.com')->first();
-            $admin->notify(new TestingNotification($user));
+            // $admin = Admin::where('email', 'admin@gmail.com')->first();
+            // $admin->notify(new TestingNotification($user));
             $token = $user->createToken($request->email)->plainTextToken;
             return response()->json([
                 'message' => "Added successfully.",
-                'status' => "success.",
+                'status' => "success",
                 'token' => $token,
                 'data' =>  $user,
                 // 'data' => $user,
