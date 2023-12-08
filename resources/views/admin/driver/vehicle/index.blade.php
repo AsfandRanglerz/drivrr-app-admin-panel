@@ -12,10 +12,11 @@
                                     <h4>Vehicles</h4>
                                 </div>
                             </div>
-                            <div class="card-body table-striped table-bordered table-responsive">
+                            <div class="card-body table-responsive">
                                 <a class="btn btn-primary mb-3" href="{{ url()->previous() }}">Back</a>
-                                <a class="btn btn-success mb-3" href="{{ route('driver-vehicle.create',$data->id) }}">Add Vehicle</a>
-                                <table class="table text-center" id="table_id_events">
+                                <a class="btn btn-success mb-3" href="{{ route('driver-vehicle.create', $data->id) }}">Add
+                                    Vehicle</a>
+                                <table class="table table-striped table-bordered text-center" id="table-1">
                                     <thead>
                                         <tr>
                                             <th>Sr.</th>
@@ -30,58 +31,61 @@
                                     </thead>
                                     <tbody>
 
-                                        @foreach($data->driverVehicle as $vehicle)
+                                        @foreach ($data->driverVehicle as $vehicle)
                                             <tr>
-                                                @if($vehicle)
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $vehicle->vehicle->name}}</td>
-                                                <td>{{ $vehicle->vehicle_brand}}</td>
-                                                <td>{{ $vehicle->model}}</td>
-                                                <td>{{ $vehicle->year}}</td>
-                                                <td>{{ $vehicle->license_plate}}</td>
-                                                <td>{{ $vehicle->color}}</td>
-                                                {{-- <td>
+                                                @if ($vehicle)
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $vehicle->vehicle->name }}</td>
+                                                    <td>{{ $vehicle->vehicle_brand }}</td>
+                                                    <td>{{ $vehicle->model }}</td>
+                                                    <td>{{ $vehicle->year }}</td>
+                                                    <td>{{ $vehicle->license_plate }}</td>
+                                                    <td>{{ $vehicle->color }}</td>
+                                                    {{-- <td>
                                                     <a href="{{route('driver-vehicle.show', $vehicle->id,$data->id)}}">View</a>
                                                 </td> --}}
-                                                {{-- @dd([$vehicle->id,$data->id]); --}}
-                                                <td
-                                                style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
+                                                    {{-- @dd([$vehicle->id,$data->id]); --}}
+                                                    <td
+                                                        style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
 
-                                                @if ($vehicle->is_active == 1)
-                                                    <a href="{{ route('driver-vehicle.status', ['id' => $vehicle->id ]) }}"
-                                                        class="btn btn-success"><svg xmlns="http://www.w3.org/2000/svg"
-                                                            width="24" height="24" viewBox="0 0 24 24"
-                                                            fill="none" stroke="currentColor"
-                                                            stroke-width="2"stroke-linecap="round"
-                                                            stroke-linejoin="round"class="feather feather-toggle-left">
-                                                            <rect x="1" y="5" width="22"
-                                                                height="14" rx="7" ry="7"></rect>
-                                                            <circle cx="16" cy="12" r="3">
-                                                            </circle>
-                                                        </svg></a>
-                                                @else
-                                                    <a href="{{ route('driver-vehicle.status', ['id' => $vehicle->id]) }}"
-                                                        class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg"
-                                                            width="24" height="24" viewBox="0 0 24 24"
-                                                            fill="none" stroke="currentColor" stroke-width="2"
-                                                            stroke-linecap="round" stroke-linejoin="round"
-                                                            class="feather feather-toggle-right">
-                                                            <rect x="1" y="5" width="22"
-                                                                height="14" rx="7" ry="7"></rect>
-                                                            <circle cx="8" cy="12" r="3">
-                                                            </circle>
-                                                        </svg></a>
-                                                @endif
-                                                <a class="btn btn-info"
-                                                    href="{{ route('driver-vehicle.edit', $vehicle->id) }}">Edit</a>
-                                                <form method="post"
-                                                    action="{{ route('driver-vehicle.destroy', $vehicle->id) }}">
-                                                    @csrf
-                                                    <input name="_method" type="hidden" value="DELETE">
-                                                    <button type="submit" class="btn btn-danger btn-flat show_confirm"
-                                                        data-toggle="tooltip">Delete</button>
-                                                </form>
-                                            </td>
+                                                        @if ($vehicle->is_active == 1)
+                                                            <a href="{{ route('driver-vehicle.status', ['id' => $vehicle->id]) }}"
+                                                                class="btn btn-success"><svg
+                                                                    xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor"
+                                                                    stroke-width="2"stroke-linecap="round"
+                                                                    stroke-linejoin="round"class="feather feather-toggle-left">
+                                                                    <rect x="1" y="5" width="22" height="14"
+                                                                        rx="7" ry="7"></rect>
+                                                                    <circle cx="16" cy="12" r="3">
+                                                                    </circle>
+                                                                </svg></a>
+                                                        @else
+                                                            <a href="{{ route('driver-vehicle.status', ['id' => $vehicle->id]) }}"
+                                                                class="btn btn-danger"><svg
+                                                                    xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                                    class="feather feather-toggle-right">
+                                                                    <rect x="1" y="5" width="22" height="14"
+                                                                        rx="7" ry="7"></rect>
+                                                                    <circle cx="8" cy="12" r="3">
+                                                                    </circle>
+                                                                </svg></a>
+                                                        @endif
+                                                        <a class="btn btn-info"
+                                                            href="{{ route('driver-vehicle.edit', $vehicle->id) }}">Edit</a>
+                                                        <form method="post"
+                                                            action="{{ route('driver-vehicle.destroy', $vehicle->id) }}">
+                                                            @csrf
+                                                            <input name="_method" type="hidden" value="DELETE">
+                                                            <button type="submit"
+                                                                class="btn btn-danger btn-flat show_confirm"
+                                                                data-toggle="tooltip">Delete</button>
+                                                        </form>
+                                                    </td>
                                                 @endif
                                             </tr>
                                         @endforeach

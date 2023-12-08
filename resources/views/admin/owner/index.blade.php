@@ -12,10 +12,10 @@
                                     <h4>Business Owner</h4>
                                 </div>
                             </div>
-                            <div class="card-body table-striped table-bordered table-responsive">
+                            <div class="card-body table-responsive">
                                 <a class="btn btn-success mb-3" href="{{ route('businessOwner.create') }}">Add Business
                                     Owner</a>
-                                <table class="table text-center" id="table_id_events">
+                                <table class="table table-striped table-bordered text-center" id="table-1">
                                     <thead>
                                         <tr>
                                             <th>Sr.</th>
@@ -40,18 +40,19 @@
                                                 <td>{{ $owner->phone }}</td>
                                                 <td>{{ $owner->email }}</td>
 
-                                                    <td>
-                                                        <img src="{{ asset($owner->image) }}" alt="" height="50"
-                                                            width="50" class="image">
-                                                    </td>
+                                                <td>
+                                                    <img src="{{ asset($owner->image) }}" alt="" height="50"
+                                                        width="50" class="image">
+                                                </td>
 
-                                                <td>{{ $owner->company_name}}</td>
-                                                <td>{{ $owner->company_info}}</td>
+                                                <td>{{ $owner->company_name }}</td>
+                                                <td>{{ $owner->company_info }}</td>
 
                                                 <td>
                                                     <a href="{{ route('owner-job.index', $owner->id) }}">View</a>
                                                     @if ($owner->jobsCount)
-                                                        <span class="px-2 py-1 rounded text-white bg-info">{{ $owner->jobsCount }}</span>
+                                                        <span
+                                                            class="px-2 py-1 rounded text-white bg-info">{{ $owner->jobsCount }}</span>
                                                     @else
                                                         <span class="px-2 py-1 rounded text-white bg-info">0</span>
                                                     @endif
@@ -125,11 +126,9 @@
             toastr.success('{{ \Illuminate\Support\Facades\Session::get('message') }}');
         </script>
     @endif
-    <script>
-        $(document).ready(function() {
-            $('#table_id_events').DataTable()
 
-        })
+    <script>
+        new DataTable('#table-1');
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script type="text/javascript">

@@ -145,7 +145,6 @@ class SubadminController extends Controller
     }
     public function updatePermissions(Request $request, $userId)
     {
-
         $user = User::find($userId);
         if (!$user) {
             return redirect()->back()->with('message', 'User Not Found');

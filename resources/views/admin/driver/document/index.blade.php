@@ -171,12 +171,11 @@
                                     <h4>Documents</h4>
                                 </div>
                             </div>
-                            <div class="card-body table-striped table-bordered table-responsive">
+                            <div class="card-body table-responsive">
                                 <a class="btn btn-primary mb-3" href="{{ url()->previous() }}">Back</a>
-
                                 <a class="btn btn-success mb-3" href="{{ route('document.create', $data->id) }}">Add
                                     Document</a>
-                                <table class="table text-center" id="table_id_events">
+                                <table class="table table-striped table-bordered text-center" id="table-1">
                                     <thead>
                                         <tr>
                                             <th>Sr.</th>

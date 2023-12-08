@@ -21,7 +21,7 @@
                                     <a class="btn btn-success mb-3" href="{{ route('subAdmin.create') }}">Add Sub Admin</a>
                                 @endif
 
-                                <table class="table text-center" id="table_id_events">
+                                <table class="table text-center" id="table-1">
                                     <thead>
                                         <tr>
                                             <th>Sr.</th>

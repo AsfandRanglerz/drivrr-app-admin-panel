@@ -12,9 +12,9 @@
                                     <h4>Driver</h4>
                                 </div>
                             </div>
-                            <div class="card-body table-striped table-bordered table-responsive">
+                            <div class="card-body  table-responsive">
                                 <a class="btn btn-success mb-3" href="{{ route('driver.create') }}">Add Driver</a>
-                                <table class="table text-center" id="table_id_events">
+                                <table class="table table-striped table-bordered text-center " id="table-1">
                                     <thead>
                                         <tr>
                                             <th>Sr.</th>
@@ -128,12 +128,6 @@
             toastr.success('{{ \Illuminate\Support\Facades\Session::get('message') }}');
         </script>
     @endif
-    <script>
-        $(document).ready(function() {
-            $('#table_id_events').DataTable()
-
-        })
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script type="text/javascript">
         $('.show_confirm').click(function(event) {

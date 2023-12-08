@@ -2,6 +2,8 @@
 @section('title', 'index')
 
 @section('content')
+<!-- datatables.html  21 Nov 2019 03:55:21 GMT -->
+
     <!-- Main Content -->
     <div class="main-content">
         <section class="section">
@@ -37,7 +39,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-bordered text-center" id="table">
+                                    <table class="table table-striped table-bordered text-center" id="table-1">
                                         <thead>
                                             <tr>
                                                 <th class="text-center">Sr.</th>
@@ -91,12 +93,7 @@
             toastr.success('{{ \Illuminate\Support\Facades\Session::get('message') }}');
         </script>
     @endif
-    <script>
-        $(document).ready(function() {
-            $('#table').DataTable();
 
-        });
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script type="text/javascript">
         $('.show_confirm').click(function(event) {
