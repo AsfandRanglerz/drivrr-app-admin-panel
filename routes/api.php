@@ -113,6 +113,8 @@ Route::get('owner-get-job-requests/{driver_id}', 'Api\OwnerGetJobREquests@show_d
 Route::post('/owner-pay-driver/{id}', 'Api\OwnerGetJobREquests@ownerPayDriver');
 Route::post('owner-accept-job-request/{id}', 'Api\OwnerGetJobREquests@owner_accept_job_request');
 Route::post('/owner-cancle-request/{id}', 'Api\OwnerGetJobREquests@owner_cancle_request');
+Route::delete('/owner-cancel-job/{id}', 'Api\OwnerJobsController@owner_cancelJob');
+
 // ##################MY Booking###################
 Route::get('myBooking/{ownerId}', [MyBookingContoller::class, 'get']);
 // ############ PERMISIONS ############

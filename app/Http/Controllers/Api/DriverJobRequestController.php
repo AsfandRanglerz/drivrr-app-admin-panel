@@ -170,6 +170,7 @@ class DriverJobRequestController extends Controller
     }
     public function cancelJob($id)
     { {
+
             try {
                 $cancelRequest = PaymentRequest::where('id', $id)->delete();
                 if (!$cancelRequest) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\PaymentRequest;
 use App\Http\Controllers\Controller;
 
 class OwnerJobsController extends Controller
@@ -23,5 +24,29 @@ class OwnerJobsController extends Controller
             'status' => 'success',
             'data' => $jobs->job,
         ], 200);
+    }
+    public function owner_cancelJob($id)
+    { {
+
+            try {
+                $cancelRequest = PaymentRequest::where('id', $id)->delete();
+                if (!$cancelRequest) {
+                    return response()->json([
+                        'message' => 'Job not found ',
+                        'status' => 'failed',
+                    ], 404);
+                }
+                return response()->json([
+                    'message' => 'Job requests successfully deleted',
+                    'status' => 'success',
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'Error deleting job requests.',
+                    'status' => 'error',
+                    'error' => $e->getMessage(),
+                ], 500);
+            }
+        }
     }
 }
