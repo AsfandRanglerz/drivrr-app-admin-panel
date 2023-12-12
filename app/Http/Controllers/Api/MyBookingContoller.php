@@ -14,7 +14,7 @@ class MyBookingContoller extends Controller
     {
         try {
             $ownerBooking = PaymentRequest::where('owner_id', $ownerId)
-                ->whereIn('status', ['Accepted', 'CancelRide'])  // Include 'CancelRide' status
+                ->whereIn('status', ['Accepted', 'CancelRide'])
                 ->with('driver.driverVehicle', 'job')
                 ->get();
 
