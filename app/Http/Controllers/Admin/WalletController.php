@@ -51,14 +51,9 @@ class WalletController extends Controller
         else {
             $image = 'public/admin/assets/images/users/owner.jpg';
         }
-
         $driver_id = WithdrawalRequest::where('id', $id)->value('driver_id');
-        // return $driver_id;
         $wallet_amount = DriverWallet::where('driver_id', $driver_id)->value('total_earning');
-        // return  [$wallet_amount-$amount];
         $updated_amount = $wallet_amount - $amount;
-        // return  $updated_amount;
-
         DriverWallet::where('driver_id', $driver_id)->update([
             'total_earning'=>$updated_amount,
         ]);
