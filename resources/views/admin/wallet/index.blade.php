@@ -14,8 +14,8 @@
                             </div>
                             {{--driver--}}
                     {{-- <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"> --}}
-                        <div class="card-body table-striped table-bordered table-responsive">
-                            <table class="table">
+                        <div class="card-body  table-responsive">
+                            <table class="table table-striped table-bordered" id="table-1">
                                 <thead>
                                     <tr>
                                         <th>Sr.</th>
@@ -79,12 +79,6 @@
             toastr.success('{{ \Illuminate\Support\Facades\Session::get('message') }}');
         </script>
     @endif
-    <script>
-        $(document).ready(function() {
-            $('#table_id_events').DataTable()
-
-        })
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script type="text/javascript">
         $('.show_confirm').click(function(event) {

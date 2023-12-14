@@ -62,7 +62,6 @@ class WalletController extends Controller
             'image'=>$image,
             'status'=>1,
         ]);
-        // return  [$approved_request,$image];
         return redirect()->back()->with(['status'=>'success','message'=>'Action is successfully taken.']);
 
     }

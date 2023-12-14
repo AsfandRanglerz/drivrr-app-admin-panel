@@ -14,8 +14,8 @@
                             </div>
                             {{-- driver --}}
                             {{-- <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"> --}}
-                            <div class="card-body table-striped table-bordered table-responsive">
-                                <table class="table">
+                            <div class="card-body table-responsive">
+                                <table class="table table-striped table-bordered" id="table-1">
                                     <thead>
                                         <tr>
                                             <th>Sr.</th>
@@ -39,11 +39,11 @@
                                                 <td>{{ $data->bankAccount->holder_name }}</td>
                                                 <td>{{ $data->withdrawal_amount }}</td>
                                                 <td>
-                                                    @if($data->image)
-                                                    <a href="{{ asset($data->image) }}" target="_blank">
-                                                        <img src="{{ asset($data->image) }}" alt=""
-                                                            height="50" width="50" class="image">
-                                                    </a>
+                                                    @if ($data->image)
+                                                        <a href="{{ asset($data->image) }}" target="_blank">
+                                                            <img src="{{ asset($data->image) }}" alt=""
+                                                                height="50" width="50" class="image">
+                                                        </a>
                                                     @else
                                                         Null
                                                     @endif
@@ -58,20 +58,21 @@
                                                         <div class="badge badge-danger badge-shadow">Rejected</div>
                                                     @endif
                                                 </td>
-                                                <td style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
+                                                <td
+                                                    style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
                                                     @if ($data->status == 0)
-                                                    <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                        data-target="#basicModal-{{ $data->id }}">
-                                                        <span class="fa fa-pen"></span>
-                                                    </button>
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                            data-target="#basicModal-{{ $data->id }}">
+                                                            <span class="fa fa-pen"></span>
+                                                        </button>
                                                     @endif
                                                     <form method="post"
-                                                    action="{{ route('delete-approve-request', $data->id) }}">
-                                                    @csrf
-                                                    <input name="_method" type="hidden" value="DELETE">
-                                                    <button type="submit" class="btn btn-danger btn-flat show_confirm"
-                                                        data-toggle="tooltip">Delete</button>
-                                                </form>
+                                                        action="{{ route('delete-approve-request', $data->id) }}">
+                                                        @csrf
+                                                        <input name="_method" type="hidden" value="DELETE">
+                                                        <button type="submit" class="btn btn-danger btn-flat show_confirm"
+                                                            data-toggle="tooltip">Delete</button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -97,7 +98,9 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="{{ route('action-on-request', ['id' => $data->id, 'amount' => $data->withdrawal_amount]) }}" method="POST" enctype="multipart/form-data">
+                        <form
+                            action="{{ route('action-on-request', ['id' => $data->id, 'amount' => $data->withdrawal_amount]) }}"
+                            method="POST" enctype="multipart/form-data">
 
                             @csrf
                             <div class="modal-body">
@@ -125,12 +128,6 @@
             toastr.success('{{ \Illuminate\Support\Facades\Session::get('message') }}');
         </script>
     @endif
-    <script>
-        $(document).ready(function() {
-            $('#table_id_events').DataTable()
-
-        })
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script type="text/javascript">
         $('.show_confirm').click(function(event) {
