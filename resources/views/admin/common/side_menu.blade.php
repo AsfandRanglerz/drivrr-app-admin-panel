@@ -76,10 +76,11 @@
                 </li>
             @endif
             {{-- Wallet Management --}}
-            @if (auth()->guard('web')->check() &&
+            @if (
+                (auth()->guard('web')->check() &&
                     (auth()->guard('web')->user()->can('DriverWallets') ||
-                        auth()->guard('web')->user()->can('WithdrawRequest') ||
-                        auth()->guard('admin')->check()))
+                        auth()->guard('web')->user()->can('WithdrawRequest'))) ||
+                    auth()->guard('admin')->check())
                 <li class="dropdown">
                     <a href="#" class="menu-toggle nav-link has-dropdown"><i class="fas fa-coins"></i>
                         <span>Wallet Management</span>
@@ -149,7 +150,6 @@
                     </ul>
                 </li>
             @endif
-
             {{-- Owner Recipits --}}
             @if (auth()->guard('web')->check() &&
                     auth()->guard('web')->user()->can('Payments'))
