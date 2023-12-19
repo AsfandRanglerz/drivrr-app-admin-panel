@@ -113,7 +113,10 @@ class OwnerGetJobREquests extends Controller
             if ($job_request->status !== 'CancelRide') {
                 $job_request->update(['status' => 'CancelRide']);
                 if ($job_request->job->is_active === '0') {
-                    $job_request->job->update(['is_active' => 1]);
+                    $job_request->job->update([
+                        'is_active' => 1,
+                        'active_job' => 0
+                    ]);
                 }
                 Mail::to($driver_email)->send(new OwnerCancelJobRequest($owner));
                 return response()->json([

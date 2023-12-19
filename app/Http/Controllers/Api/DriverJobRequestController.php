@@ -122,7 +122,7 @@ class DriverJobRequestController extends Controller
                 ->get();
 
             return response()->json([
-                'message' => 'Job requests without counter fetched successfully.',
+                'message' => 'Job requests fetched successfully.',
                 'status' => 'success',
                 'jobRequests' => $jobRequests,
             ], 200);
