@@ -15,7 +15,7 @@ class MyBookingContoller extends Controller
         try {
             $ownerBooking = PaymentRequest::where('owner_id', $ownerId)
                 ->whereIn('status', ['Accepted', 'CancelRide'])
-                ->with('driver.driverVehicle', 'job')
+                ->with('driver.driverVehicle', 'job', 'owner') // Include owner relationship
                 ->get();
 
             $result = [];
@@ -23,14 +23,18 @@ class MyBookingContoller extends Controller
             foreach ($ownerBooking as $data) {
                 $driver = $data->driver;
                 $job = $data->job;
+                $owner = $data->owner; // Fetch owner details
+
                 $jobVehicleId = $job->vehicle_id;
                 $filteredDriverVehicles = $driver->driverVehicle
                     ->where('vehicle_id', $jobVehicleId)
                     ->values()
                     ->all();
+
                 $result[] = [
                     'payment_request' => $data,
                     'filtered_driver_vehicles' => $filteredDriverVehicles,
+                    'owner_details' => $owner, // Include owner details in the result
                 ];
             }
 
