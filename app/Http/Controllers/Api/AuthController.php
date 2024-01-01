@@ -25,25 +25,6 @@ class AuthController extends Controller
 {
     public function register(Request $request, $id)
     {
-
-        // if ($request->hasFile('image')) {
-        //     $file = $request->file('image');
-        //     $extension = $file->getClientOriginalExtension();
-        //     $filename = time() . '.' . $extension;
-        //     $file->move(public_path('admin/assets/images/users/'), $filename);
-        //     $image = 'public/admin/assets/images/users/' . $filename;
-        // } else {
-        //     $image = 'public/admin/assets/images/users/1675332882.jpg';
-        // }
-        // $user = User::create([
-        //     'fname' => $request->fname,
-        //     'lname' => $request->lname,
-        //     'phone' => $request->phone,
-        //     'email' => $request->email,
-        //     // 'password' => Hash::make($request->password),
-        //     // 'image' => $image,
-        // ]);
-
         if ($id == 3) {
             $validator = Validator::make(
                 $request->all(),
@@ -52,6 +33,7 @@ class AuthController extends Controller
                     'lname' => 'required',
                     'phone' => 'required',
                     'email' => 'required|email|unique:users',
+
                     // 'password' => 'required|confirmed',
                 ]
             );
@@ -71,14 +53,10 @@ class AuthController extends Controller
             ]);
             $user->roles()->sync(3);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
-            // $admin = Admin::where('email', 'admin@gmail.com')->first();
-            // $admin->notify(new TestingNotification($user));
             $wallet = DriverWallet::create([
-                'driver_id'=> $user->id,
-                'total_earning'=> 0,
+                'driver_id' => $user->id,
+                'total_earning' => 0,
             ]);
-            // return  $wallet;
-            // $otp = random_int(0000,9999);
             $token = $user->createToken($request->email)->plainTextToken;
             return response()->json([
                 'message' => "Added successfully.",
@@ -87,8 +65,7 @@ class AuthController extends Controller
                 'data' =>  $user,
                 'driver_wallet' =>  $wallet,
             ], 200);
-        }
-        else {
+        } else {
             $validator = Validator::make(
                 $request->all(),
                 [
@@ -117,8 +94,6 @@ class AuthController extends Controller
             ]);
             $user->roles()->sync(2);
             Mail::to($user->email)->send(new ActiveUserStatus($id));
-            // $admin = Admin::where('email', 'admin@gmail.com')->first();
-            // $admin->notify(new TestingNotification($user));
             $token = $user->createToken($request->email)->plainTextToken;
             return response()->json([
                 'message' => "Added successfully.",
@@ -128,7 +103,6 @@ class AuthController extends Controller
                 // 'data' => $user,
             ], 200);
         }
-
     }
     public function checkEmailExists(Request $request)
     {
@@ -248,10 +222,6 @@ class AuthController extends Controller
             ], 404);
         }
     }
-
-
-
-
     public function logout(Request $request)
     {
         auth()->user()->tokens()->delete();
@@ -261,4 +231,101 @@ class AuthController extends Controller
         ], 200);
     }
 
+    public function socialLogin(Request $request)
+    {
+        $login_type = $request->login_type;
+        $find_user = User::where('email', $request->email)->first();
+
+        if ($find_user) {
+            // Update the user's name if it's empty
+            if (empty($find_user->fname)) {
+                $find_user->fname = $request->fname;
+            }
+            // Update the user's last name if it's empty
+            if (empty($find_user->lname)) {
+                $find_user->lname = $request->lname;
+            }
+            switch ($login_type) {
+                case "facebook":
+                    $login_type->facebook_social_id = $request->facebook_social_id;
+                    break;
+                case "google":
+                    $login_type->google_social_id = $request->google_social_id;
+                    break;
+                case "apple":
+                    $login_type->apple_social_id = $request->apple_social_id;
+                    break;
+            }
+            if ($request->has('image')) {
+                $find_user->image = $request->image;
+            }
+            if ($request->has('fcm_token')) {
+                $find_user->fcm_token = $request->fcm_token;
+            }
+            $find_user->save();
+            auth()->login($find_user);
+        } else {
+            $user = new User();
+            $user->fname = $request->fname;
+            $user->lname = $request->lname;
+            $user->email = $request->email;
+            $user->role_id = $request->role_id;
+            // Add the common registration logic based on the role_id
+            if ($request->role_id == 3) {
+                $user->role_id = 3;
+                $image = 'public/admin/assets/images/users/owner.jpg';
+            } else {
+                $user->role_id = 2;
+                $image = 'public/admin/assets/images/users/owner.jpg';
+                $user->company_name = $request->company_name;
+                $user->company_info = $request->company_info;
+            }
+
+            $user->password = Hash::make(Str::random(12));
+
+            switch ($login_type) {
+                case "facebook":
+                    $user->facebook_social_id = $request->facebook_social_id;
+                    break;
+                case "google":
+                    $user->google_social_id = $request->google_social_id;
+                    break;
+                case "apple":
+                    $user->apple_social_id = $request->apple_social_id;
+                    break;
+            }
+            if ($request->has('image')) {
+                $user->image = $request->image;
+            }
+            // Update FCM token if provided
+            if ($request->has('fcm_token')) {
+                $user->fcm_token = $request->fcm_token;
+            }
+
+            // Assign role to the new user
+            $user->save();
+            $user->roles()->sync([$request->role_id]);
+            // Log in the new user
+            auth()->login($user);
+
+            // Check if role_id is 3, then send email and create wallet
+            if ($user->role_id == 3) {
+                Mail::to($user->email)->send(new ActiveUserStatus($user->id));
+                $wallet = DriverWallet::create([
+                    'driver_id' => $user->id,
+                    'total_earning' => 0,
+                ]);
+            }
+        }
+
+        // Generate a new token for the authenticated user
+        $token = auth()->user()->createToken($request->email)->plainTextToken;
+        return response()->json([
+            'status' => 'success',
+            'message' => 'User Logged In Successfully',
+            'token' => $token,
+            'data' => $user,
+            'driver_wallet' => isset($wallet) ? $wallet : null,
+        ], 200);
+    }
 }

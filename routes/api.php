@@ -32,6 +32,8 @@ use App\Http\Controllers\Api\PermissionController;
 Route::group(['namespace' => 'Api'], function () {
     Route::post('login', 'AuthController@login')->name('login');
     Route::post('register/{id}', 'AuthController@register');
+    // Social LogIn
+    Route::post('socialLogin/{id}', 'AuthController@socialLogin');
     Route::get('/checkEmailExists', 'AuthController@checkEmailExists');
     Route::get('get-user-id', 'AuthController@getUserID');
     Route::post('login-otp-send', 'AuthController@user_otp_login_send')->name('login-otp-send');
@@ -118,8 +120,8 @@ Route::delete('/owner-cancel-job/{id}', 'Api\OwnerJobsController@owner_cancelJob
 // ##################MY Booking###################
 Route::get('myBooking/{ownerId}', [MyBookingContoller::class, 'get']);
 // ############ PERMISIONS ############
-Route::post('addPermission',[PermissionController::class,'store']);
-Route::post('updatePermission',[PermissionController::class,'update']);
+Route::post('addPermission', [PermissionController::class, 'store']);
+Route::post('updatePermission', [PermissionController::class, 'update']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
