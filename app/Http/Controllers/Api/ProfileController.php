@@ -57,6 +57,8 @@ class ProfileController extends Controller
             'lname' => $request->lname,
             'phone' => $request->phone,
             'email' => $request->email,
+            'company_name' => $request->company_name,
+            'company_info' => $request->company_info,
         ]);
 
         // Fetch the updated user data
@@ -137,7 +139,7 @@ class ProfileController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Image updated successfully',
-            'image'=> $image,
+            'image' => $image,
         ], 200);
     }
 }

@@ -320,15 +320,25 @@ class AuthController extends Controller
                     'driver_id' => $user->id,
                     'total_earning' => 0,
                 ]);
+                $token = auth()->user()->createToken($request->email)->plainTextToken;
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'User Logged In Successfully',
+                    'token' => $token,
+                    'data' => $user,
+                    'driver_wallet' => isset($wallet) ? $wallet : null,
+                ], 200);
+            } else if ($user->role_id == 2) {
+                $token = auth()->user()->createToken($request->email)->plainTextToken;
+                Mail::to($user->email)->send(new ActiveUserStatus($id));
+                $token = $user->createToken($request->email)->plainTextToken;
+                return response()->json([
+                    'message' => "Added successfully.",
+                    'status' => "success",
+                    'token' => $token,
+                    'data' =>  $user,
+                ], 200);
             }
-            $token = auth()->user()->createToken($request->email)->plainTextToken;
-            return response()->json([
-                'status' => 'success',
-                'message' => 'User Logged In Successfully',
-                'token' => $token,
-                'data' => $user,
-                'driver_wallet' => isset($wallet) ? $wallet : null,
-            ], 200);
         }
     }
 }
