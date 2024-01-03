@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class RoleUser extends Model
 {
-    use HasFactory;
+    use HasFactory,Notifiable;
+
     protected $table = 'role_user';
     public function user()
     {
