@@ -121,8 +121,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('action-on-request/{id}/{amount}', [WalletController::class, 'send_money'])->name('action-on-request');
     Route::delete('delete-approve-request/{id}', [WalletController::class, 'delete_request'])->name('delete-approve-request');
     Route::get('show-withdrawals-receipts/{id}', [WalletController::class, 'show_receipts'])->name('show-withdrawals-receipts');
-    // ##############Push Notification##############
+    // ############## Push Notification ##############
     Route::get('notification', [PushNotificationController::class, 'notificationIndex'])->name('notifications.index');
-    Route::get('notification/create', [PushNotificationController::class, 'notificationCreate'])->name('notifications.create');
-    Route::get('notification/store', [PushNotificationController::class, 'notificationStore'])->name('notifications.store');
+    Route::post('notifications/store', [PushNotificationController::class, 'notificationStore'])->name('notifications.store');
 });
