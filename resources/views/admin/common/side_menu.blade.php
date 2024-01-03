@@ -237,7 +237,13 @@
                 </li>
             @endif
 
-
+            {{-- Push Notifications --}}
+            <li class="dropdown {{ request()->is('admin/notifications*') ? 'active' : '' }}">
+                <a href="{{ route('notifications.index') }}" class="nav-link">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+            </li>
 
             {{--
             <li class="dropdown {{ request()->is('admin/helpAndSupport*') ? 'active' : '' }}">

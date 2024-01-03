@@ -17,7 +17,8 @@ use App\Http\Controllers\Admin\HelpAndSupportController;
 use App\Http\Controllers\Admin\UserPermssionController;
 use App\Http\Controllers\Admin\WalletController;
 use App\Http\Controllers\Admin\HandelBusinessOwnerPayments;
-
+use App\Http\Controllers\admin\PushNotificationController;
+use App\Models\PushNotification;
 use Spatie\Permission\Middlewares\PermissionMiddleware;
 
 /*
@@ -116,8 +117,12 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('show-wallets', [WalletController::class, 'index'])->name('show-wallets')->middleware('permission:DriverWallets');
     // Route::get('request-counter', [WalletController::class, 'request_counter'])->name('request-counter');
     Route::get('show-withdrawal-requests', [WalletController::class, 'show_withdrawal_requests'])->middleware('permission:WithdrawRequest')
-    ->name('show-withdrawal-requests');
+        ->name('show-withdrawal-requests');
     Route::post('action-on-request/{id}/{amount}', [WalletController::class, 'send_money'])->name('action-on-request');
     Route::delete('delete-approve-request/{id}', [WalletController::class, 'delete_request'])->name('delete-approve-request');
     Route::get('show-withdrawals-receipts/{id}', [WalletController::class, 'show_receipts'])->name('show-withdrawals-receipts');
+    // ##############Push Notification##############
+    Route::get('notification', [PushNotificationController::class, 'notificationIndex'])->name('notifications.index');
+    Route::get('notification/create', [PushNotificationController::class, 'notificationCreate'])->name('notifications.create');
+    Route::get('notification/store', [PushNotificationController::class, 'notificationStore'])->name('notifications.store');
 });
