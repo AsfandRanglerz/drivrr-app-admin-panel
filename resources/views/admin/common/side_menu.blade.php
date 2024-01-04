@@ -238,6 +238,15 @@
             @endif
 
             {{-- Push Notifications --}}
+            @if (auth()->guard('web')->check() &&
+            auth()->guard('web')->user()->can('Notification'))
+            <li class="dropdown {{ request()->is('admin/notifications*') ? 'active' : '' }}">
+                <a href="{{ route('notifications.index') }}" class="nav-link">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+            </li>
+            @elseif (auth()->guard('admin')->check())
             <li class="dropdown {{ request()->is('admin/notifications*') ? 'active' : '' }}">
                 <a href="{{ route('notifications.index') }}" class="nav-link">
                     <i class="fas fa-bell"></i>
@@ -245,6 +254,7 @@
                 </a>
             </li>
 
+            @endif
             {{--
             <li class="dropdown {{ request()->is('admin/helpAndSupport*') ? 'active' : '' }}">
                 <a href="{{ route('help-and-support.index') }}" class="nav-link"><i
