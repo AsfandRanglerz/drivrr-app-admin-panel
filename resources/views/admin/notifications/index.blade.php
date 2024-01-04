@@ -65,7 +65,7 @@
     </div>
     {{-- Notifications Modal --}}
     <div class="modal" id="notificationModal">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
@@ -161,8 +161,6 @@
             // Submit the form using AJAX
             $('form').submit(function(e) {
                 e.preventDefault();
-
-                // Show loading spinner and disable the button
                 $('.loading-spinner').show();
                 $('#submit').prop('disabled', true);
                 var formData = new FormData($(this)[0]);
@@ -173,7 +171,6 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-
                     contentType: false,
                     processData: false,
                     success: function(response) {
