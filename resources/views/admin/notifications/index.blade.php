@@ -19,20 +19,40 @@
                                     <thead>
                                         <tr>
                                             <th>Sr.</th>
+                                            <th>User Email</th>
                                             <th>User Name</th>
                                             <th>Title</th>
                                             <th>Description</th>
+                                            <th>See Satatus</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($notifications as $notification)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $notification->user_name }}</td>
+                                                <td>{{ $notification->user->email }}</td>
+                                                <td>
+                                                    @if ($notification->user_name == 1)
+                                                        <div class="badge badge-dark badge-shadow">SubAdmin</div>
+                                                    @elseif($notification->user_name == 2)
+                                                        <div class="badge badge-dark badge-shadow">Business Owner</div>
+                                                    @else
+                                                        <div class="badge badge-dark badge-shadow">Driver</div>
+                                                    @endif
+                                                </td>
                                                 <td>{{ $notification->title }}</td>
                                                 <td>{{ $notification->description }}</td>
+                                                <td>
+                                                    @if ($notification->seen_by == 0)
+                                                        <div class="badge badge-danger badge-shadow">Not Seen</div>
+                                                    @else
+                                                        <div class="badge badge-success badge-shadow">Seen</div>
+                                                    @endif
+
+                                                </td>
                                             </tr>
                                         @endforeach
+
                                     </tbody>
                                 </table>
                             </div>
@@ -70,7 +90,7 @@
                             <div class="col-sm-12 pl-sm-0 pr-sm-3 col-md-12 col-lg-12">
                                 <div class="form-group mb-2">
                                     <label>Send To</label>
-                                    <select name="select[]" id="user_name" class="form-control selectric" multiple="">
+                                    <select name="user_name[]" id="user_name" class="form-control selectric" multiple="">
                                         <option value="">Select Option</option>
                                         <option value="1">Subadmin</option>
                                         <option value="2">Business Owner</option>
@@ -98,7 +118,9 @@
                             <div class="col">
                                 <button type="submit" name="submit" class="btn btn-success mr-1 btn-bg"
                                     id="submit">Add</button>
+                                <div class="loading-spinner" style="display: none;">Loading...</div>
                             </div>
+
                         </div>
                     </form>
                 </div>
@@ -132,25 +154,38 @@
                     }
                 });
         });
+    </script>
+    <script>
         //######### AJAX CODE ############
         $(document).ready(function() {
-
             // Submit the form using AJAX
             $('form').submit(function(e) {
                 e.preventDefault();
+
+                // Show loading spinner and disable the button
+                $('.loading-spinner').show();
+                $('#submit').prop('disabled', true);
                 var formData = new FormData($(this)[0]);
                 $.ajax({
                     type: $(this).attr('method'),
                     url: $(this).attr('action'),
                     data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+
                     contentType: false,
                     processData: false,
                     success: function(response) {
                         console.log(response);
-
+                        $('.loading-spinner').hide();
+                        $('#submit').prop('disabled', false);
                         $('#notificationModal').modal('hide');
                     },
                     error: function(error) {
+                        $('.loading-spinner').hide();
+                        $('#submit').prop('disabled', false);
+
                         // Handle the error response
                         console.error(error);
                     }
@@ -158,4 +193,5 @@
             });
         });
     </script>
+
 @endsection

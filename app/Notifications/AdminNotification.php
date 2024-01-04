@@ -44,10 +44,10 @@ class AdminNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Notification Subject')
+            ->subject('Admin Notification')
             ->line('Title: ' . $this->title)
             ->line('Description: ' . $this->description)
-            ->action('Notification Action', url('/'))
+            // ->action('Notification Action', url('/'))
             ->line('Thank you for using our application!');
     }
 
