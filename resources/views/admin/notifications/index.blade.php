@@ -177,7 +177,7 @@
                     contentType: false,
                     processData: false,
                     success: function(response) {
-                        console.log(response);
+                        toastr.success(response.message);
                         $('.loading-spinner').hide();
                         $('#submit').prop('disabled', false);
                         $('#notificationModal').modal('hide');

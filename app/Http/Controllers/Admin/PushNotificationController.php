@@ -15,8 +15,8 @@ class PushNotificationController extends Controller
 {
     public function notificationIndex()
     {
-        $notifications = PushNotification::with('user') ->orderBy('created_at', 'desc')
-        ->get();
+        $notifications = PushNotification::with('user')->orderBy('created_at', 'desc')
+            ->get();
         return view('admin.notifications.index', compact('notifications'));
     }
     public function notificationCreate()
@@ -44,8 +44,7 @@ class PushNotificationController extends Controller
                 'user_id' => $user->user->id,
             ]);
         }
-
-        return redirect()->route('notifications.index')->with('success', 'Notifications sent and data stored successfully');
+        return redirect()->back()->with('message', 'Notification Send Successfully');
     }
     // public function notificationStore(Request $request)
     // {
