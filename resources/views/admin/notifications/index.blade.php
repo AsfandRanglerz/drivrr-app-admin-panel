@@ -30,7 +30,9 @@
                                         @foreach ($notifications as $notification)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $notification->user->email }}</td>
+                                                <td>
+                                                    {{ $notification->user->email }}
+                                                </td>
                                                 <td>
                                                     @if ($notification->user_name == 1)
                                                         <div class="badge badge-dark badge-shadow">SubAdmin</div>

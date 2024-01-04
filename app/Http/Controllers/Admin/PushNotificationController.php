@@ -15,7 +15,8 @@ class PushNotificationController extends Controller
 {
     public function notificationIndex()
     {
-        $notifications = PushNotification::with('user')->get();
+        $notifications = PushNotification::with('user') ->orderBy('created_at', 'desc')
+        ->get();
         return view('admin.notifications.index', compact('notifications'));
     }
     public function notificationCreate()
@@ -27,23 +28,25 @@ class PushNotificationController extends Controller
         $request->validate([
             'title' => 'required|string',
             'user_name' => 'required|array',
-            'user_name.*' => 'exists:role_user,role_id',
+            'user_name.*' => 'exists:roles,id', // Assuming the role ID is in the 'roles' table
             'description' => 'required|string',
         ]);
+
         $userRoles = $request->input('user_name');
-        $users = RoleUser::whereHas('role', function ($query) use ($userRoles) {
-            $query->whereIn('role_id', $userRoles);
-        })->get();
+        $users = RoleUser::whereIn('role_id', $userRoles)->get();
+
         foreach ($users as $user) {
+            // Send notification to the user
             $notification = new AdminNotification($request->input('title'), $request->input('description'));
             $user->user->notify($notification);
             PushNotification::create([
                 'title' => $request->input('title'),
                 'description' => $request->input('description'),
-                'user_name' => implode(', ', $userRoles),
+                'user_name' => $user->role->id, // Assuming you want to store role names
                 'user_id' => $user->user->id,
             ]);
         }
+
         return redirect()->route('notifications.index')->with('success', 'Notifications sent and data stored successfully');
     }
     // public function notificationStore(Request $request)
@@ -80,12 +83,5 @@ class PushNotificationController extends Controller
 
     //     return redirect()->route('notifications.index')->with('success', 'Sent Successfully.');
     // }
-    public function userRecevied(Request $request, PushNotification $notification)
-    {
-        $notification->update(['seen_by' => 1]);
-        return response()->json([
-            'message' => $notification->message,
-            'newNotifications' => PushNotification::where('seen_by', 0)->orderBy('created_at', 'desc')->get(),
-        ], 200);
-    }
+
 }

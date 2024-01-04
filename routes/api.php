@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\DriverJobRequestController;
 use App\Http\Controllers\Api\MyBookingContoller;
 use App\Http\Controllers\Api\OwnerGetJobREquests;
 use App\Http\Controllers\Api\PermissionController;
+use App\Http\Controllers\Api\PushNotificationController as ApiPushNotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,7 +125,7 @@ Route::get('myBooking/{ownerId}', [MyBookingContoller::class, 'get']);
 Route::post('addPermission', [PermissionController::class, 'store']);
 Route::post('updatePermission', [PermissionController::class, 'update']);
 //  ############### Push Notifications #############
-Route::put('/notifications/{notification}', [PushNotificationController::class, 'userRecevied']);
+Route::put('/notifications/{notification}', [ApiPushNotificationController::class, 'userRecevied']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
