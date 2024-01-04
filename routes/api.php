@@ -11,6 +11,7 @@ use App\Controllers\OwnerJobsController;
 use App\Controllers\ReviewController;
 use App\Controllers\BankAccountController;
 use App\Controllers\DriverWalletController;
+use App\Http\Controllers\admin\PushNotificationController;
 use App\Http\Controllers\Admin\WalletController;
 use App\Http\Controllers\Api\DriverShowJobsController;
 use App\Http\Controllers\Api\DriverJobRequestController;
@@ -122,6 +123,8 @@ Route::get('myBooking/{ownerId}', [MyBookingContoller::class, 'get']);
 // ############ PERMISIONS ############
 Route::post('addPermission', [PermissionController::class, 'store']);
 Route::post('updatePermission', [PermissionController::class, 'update']);
+//  ############### Push Notifications #############
+Route::put('/notifications/{notification}', [PushNotificationController::class, 'userRecevied']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

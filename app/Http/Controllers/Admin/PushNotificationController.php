@@ -80,4 +80,12 @@ class PushNotificationController extends Controller
 
     //     return redirect()->route('notifications.index')->with('success', 'Sent Successfully.');
     // }
+    public function userRecevied(Request $request, PushNotification $notification)
+    {
+        $notification->update(['seen_by' => 1]);
+        return response()->json([
+            'message' => $notification->message,
+            'newNotifications' => PushNotification::where('seen_by', 0)->orderBy('created_at', 'desc')->get(),
+        ], 200);
+    }
 }
