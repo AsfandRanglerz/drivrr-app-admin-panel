@@ -158,7 +158,6 @@
     <script>
         //######### AJAX CODE ############
         $(document).ready(function() {
-            // Submit the form using AJAX
             $('form').submit(function(e) {
                 e.preventDefault();
                 $('.loading-spinner').show();
