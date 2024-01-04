@@ -28,7 +28,7 @@ class PushNotificationController extends Controller
         $request->validate([
             'title' => 'required|string',
             'user_name' => 'required|array',
-            'user_name.*' => 'exists:roles,id', // Assuming the role ID is in the 'roles' table
+            'user_name.*' => 'exists:roles,id',
             'description' => 'required|string',
         ]);
 
@@ -80,5 +80,4 @@ class PushNotificationController extends Controller
 
     //     return redirect()->route('notifications.index')->with('success', 'Sent Successfully.');
     // }
-
 }
