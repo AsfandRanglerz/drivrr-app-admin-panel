@@ -83,6 +83,7 @@ class AuthController extends Controller
             $user->fname = $request->fname;
             $user->lname = $request->lname;
             $user->email = $request->email;
+            $user->phone = $request->phone;
             $user->role_id = $request->role_id;
             $user->company_info = $request->company_info;
             $user->company_name = $request->company_name;
