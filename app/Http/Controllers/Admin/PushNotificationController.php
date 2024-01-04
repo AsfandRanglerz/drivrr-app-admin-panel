@@ -34,9 +34,7 @@ class PushNotificationController extends Controller
 
         $userRoles = $request->input('user_name');
         $users = RoleUser::whereIn('role_id', $userRoles)->get();
-
         foreach ($users as $user) {
-            // Send notification to the user
             $notification = new AdminNotification($request->input('title'), $request->input('description'));
             $user->user->notify($notification);
             PushNotification::create([
