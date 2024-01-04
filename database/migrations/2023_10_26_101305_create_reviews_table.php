@@ -16,9 +16,9 @@ class CreateReviewsTable extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('owner_id');
-            $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');;
+            $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('driver_id');
-            $table->foreign('driver_id')->references('id')->on('users')->onDelete('cascade');;
+            $table->foreign('driver_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('stars')->nullable();
             $table->string('comment')->nullable();
             $table->timestamps();
