@@ -15,8 +15,10 @@ class User extends Authenticatable
     use HasApiTokens, Notifiable, HasRoles;
     // protected $guard = 'web';
 
-    protected $fillable = ['name', 'fname', 'maiden_name', 'lname', 'email', 'image', 'password', 'designation', 'is_active', 'address', 'role_id', 'phone', 'document', 'company_name','location',
-    'company_info'];
+    protected $fillable = [
+        'name', 'fname', 'maiden_name', 'lname', 'email', 'image', 'password', 'designation', 'is_active', 'address', 'role_id', 'phone', 'document', 'company_name', 'location',
+        'company_info'
+    ];
 
     public function usercompany()
     {
@@ -61,19 +63,22 @@ class User extends Authenticatable
     }
     public function review()
     {
-        return $this->hasMany(Review::class,'owner_id','driver_id');
+        return $this->hasMany(Review::class, 'owner_id', 'driver_id');
     }
     public function user_login_with_otps()
     {
-        return $this->hasOne(UserLoginWithOtp::class,'user_id');
+        return $this->hasOne(UserLoginWithOtp::class, 'user_id');
     }
     public function bankAccounts()
     {
-        return $this->hasMany(BankAccount::class,'user_id');
+        return $this->hasMany(BankAccount::class, 'user_id');
     }
     public function driverWallet()
     {
-        return $this->hasOne(DriverWallet::class,'driver_id');
+        return $this->hasOne(DriverWallet::class, 'driver_id');
     }
-
+    public function driverRewiews()
+    {
+        return $this->hasMany(Review::class, 'driver_id');
+    }
 }
