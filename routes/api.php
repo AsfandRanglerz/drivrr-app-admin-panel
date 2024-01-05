@@ -83,7 +83,7 @@ Route::post('owners-jobs/{id}', 'Api\JobController@jobStore');
 Route::post('owners-jobs-update/{userId}/{jobId}', 'Api\JobController@jobUpdate');
 
 Route::post('owners-reviews', 'Api\ReviewController@ownerReview');
-Route::get('driver-reviews/{id}', 'Api\ReviewController@showFeedBackToDriver');
+Route::get('driver-reviews/{driver_id}', 'Api\ReviewController@showFeedBackToDriver');
 //users-queries
 Route::post('user-query/{id}', 'Api\HelpAndSupportController@queryStore');
 Route::get('getuserquery/{id}', 'Api\HelpAndSupportController@get');
