@@ -32,7 +32,6 @@ class PushNotificationController extends Controller
             'user_name.*' => 'exists:roles,id',
             'description' => 'required|string',
         ]);
-
         $userRoles = $request->input('user_name');
         $users = RoleUser::whereIn('role_id', $userRoles)->get();
         foreach ($users as $user) {
