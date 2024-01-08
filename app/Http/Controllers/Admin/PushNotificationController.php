@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\AdminNotification;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Notification;
 
 class PushNotificationController extends Controller
 {
@@ -35,12 +36,12 @@ class PushNotificationController extends Controller
         $userRoles = $request->input('user_name');
         $users = RoleUser::whereIn('role_id', $userRoles)->get();
         foreach ($users as $user) {
-            $notification = new AdminNotification($request->input('title'), $request->input('description'));
-            $user->user->notify($notification);
+
+            Notification::send($user->user, new AdminNotification($request->input('title'), $request->input('description')));
             PushNotification::create([
                 'title' => $request->input('title'),
                 'description' => $request->input('description'),
-                'user_name' => $user->role->id, // Assuming you want to store role names
+                'user_name' => $user->role->id,
                 'user_id' => $user->user->id,
             ]);
         }
@@ -63,6 +64,8 @@ class PushNotificationController extends Controller
     //         2 => ['Business Owner', 2],
     //         3 => ['Driver', 3],
     //     ];
+    // $notification = new AdminNotification($request->input('title'), $request->input('description'));
+    // $user->user->notify($notification);
     //     foreach ($data as $selectedRole) {
     //         if (array_key_exists($selectedRole, $roles)) {
     //             list($userName, $roleId) = $roles[$selectedRole];

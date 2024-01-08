@@ -23,7 +23,6 @@ class ReviewController extends Controller
             $driverId = $review->driver_id;
             $averageRating = number_format($review->average_rating, 1);
             $driver = User::find($driverId);
-
             if ($driver) {
                 $driverName = "{$driver->fname} {$driver->lname}";
                 $driverEmail = $driver->email;
@@ -34,14 +33,8 @@ class ReviewController extends Controller
                 $driverReviews[$driverId]['reviews'] = $reviewsForDriver->toArray();
             } else {
                 echo "Driver with ID {$driverId} not found.\n";
-                $driverReviews[$driverId]['driverName'] = "Unknown Driver";
-                $driverReviews[$driverId]['driverEmail'] = "Unknown Email";
-                $driverReviews[$driverId]['averageRating'] = $averageRating;
-                $driverReviews[$driverId]['reviews'] = [];
             }
         }
-
-        // You can either return the data or pass it to the view
         return view('admin.driverreview.index', compact('driverReviews'));
     }
 
