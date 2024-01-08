@@ -23,6 +23,7 @@ class ReviewController extends Controller
             $driverId = $review->driver_id;
             $averageRating = number_format($review->average_rating, 1);
             $driver = User::find($driverId);
+
             if ($driver) {
                 $driverName = "{$driver->fname} {$driver->lname}";
                 $driverEmail = $driver->email;
@@ -35,7 +36,10 @@ class ReviewController extends Controller
                 echo "Driver with ID {$driverId} not found.\n";
             }
         }
+        usort($driverReviews, function ($a, $b) {
+            return $b['averageRating'] <=> $a['averageRating'];
+        });
+
         return view('admin.driverreview.index', compact('driverReviews'));
     }
-
 }
