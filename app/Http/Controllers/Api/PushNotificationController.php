@@ -26,18 +26,44 @@ class PushNotificationController extends Controller
             ], 500);
         }
     }
-    public function userRecevied(Request $request, $userId)
+    public function getNotificationCount($userId)
     {
         try {
-            PushNotification::where('user_id', $userId)->update(['seen_by' => 1]);
+            $notificationCount = PushNotification::where('user_id', $userId)
+                ->where('seen_by', 0)
+                ->count();
+
             return response()->json([
                 'status' => 'success',
-                'message' => 'Notifications marked as seen',
+                'notificationCount' => $notificationCount,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to retrieve notifications',
+                'message' => 'Failed to fetch notification count',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function userRecevied(Request $request, $userId)
+    {
+        try {
+            $notificationsWithStatusZero = PushNotification::where('user_id', $userId)
+                ->where('seen_by', 0)
+                ->get();
+            PushNotification::where('user_id', $userId)
+                ->where('seen_by', 0)
+                ->update(['seen_by' => 1]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Notifications marked as seen',
+                'notificationsWithStatusZero' => $notificationsWithStatusZero,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to retrieve or update notifications',
                 'error' => $e->getMessage(),
             ], 500);
         }
