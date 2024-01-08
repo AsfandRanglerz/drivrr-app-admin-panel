@@ -267,7 +267,7 @@
             @elseif (auth()->guard('admin')->check())
                 <li class="dropdown {{ request()->is('admin/driverreview*') ? 'active' : '' }}">
                     <a href="{{ route('driverreview.index') }}" class="nav-link">
-                        <i class="fas fa-bell"></i>
+                        <i class="fas fa-star"></i>
                         <span>Driver Ranking</span>
                     </a>
                 </li>
