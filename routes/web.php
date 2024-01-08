@@ -17,7 +17,7 @@ use App\Http\Controllers\Admin\HelpAndSupportController;
 use App\Http\Controllers\Admin\WalletController;
 use App\Http\Controllers\Admin\HandelBusinessOwnerPayments;
 use App\Http\Controllers\Admin\PushNotificationController;
-
+use App\Http\Controllers\Admin\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -122,4 +122,6 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     // ############## Push Notification ##############
     Route::get('notification', [PushNotificationController::class, 'notificationIndex'])->name('notifications.index')->middleware('permission:Notification');
     Route::post('notifications/store', [PushNotificationController::class, 'notificationStore'])->name('notifications.store');
+    // ############# Driver Reviews#########
+    Route::get('/driverReviews', [ReviewController::class, 'reviewIndex'])->name('driverreview.index');
 });
