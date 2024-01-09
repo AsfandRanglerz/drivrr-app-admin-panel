@@ -53,7 +53,6 @@ class OwnerGetJobREquests extends Controller
             ], 500);
         }
     }
-
     public function owner_accept_job_request(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -105,7 +104,6 @@ class OwnerGetJobREquests extends Controller
     public function owner_cancle_request($id)
     {
         $check = PaymentRequest::where('id', $id)->first();
-
         if ($check) {
             $job_request = PaymentRequest::find($id);
             $driver_email = User::where('id', $job_request->driver_id)->value('email');
@@ -114,8 +112,8 @@ class OwnerGetJobREquests extends Controller
                 $job_request->update(['status' => 'CancelRide']);
                 if ($job_request->job->is_active === '0') {
                     $job_request->job->update([
-                        'is_active' => 1,
-                        'active_job' => 0
+                        'is_active' => '1',
+                        'active_job' => '0'
                     ]);
                 }
                 Mail::to($driver_email)->send(new OwnerCancelJobRequest($owner));
