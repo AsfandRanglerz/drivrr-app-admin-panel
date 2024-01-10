@@ -26,6 +26,10 @@ class AuthController extends Controller
     ##### Registration code And Social Login Code ########
     public function socialLogin(Request $request, $id)
     {
+        $request->validate([
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|phone|unique:users,phone'
+        ]);
         $login_type = $request->login_type;
         $find_user = User::where('email', $request->email)->first();
 

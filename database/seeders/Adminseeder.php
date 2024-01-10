@@ -15,13 +15,15 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
+        $admin = Admin::firstOrNew(['email' => 'admin@gmail.com']);
 
-        Admin::create([
+        // Update the admin details
+        $admin->fill([
             'name' => 'admin',
-            'email' => 'admin@gmail.com',
-            'phone' => '03015262920',
-            'password' => bcrypt('12345678'), // Password should be enclosed in quotes
-            'image' => 'abc', // No extra characters here
+            'phone' => '0123456789',
+            'password' => bcrypt(12345678),
+            'image' => 'public/admin/assets/images/users/admin.png',
         ]);
+        $admin->save();
     }
 }

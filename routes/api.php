@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\MyBookingContoller;
 use App\Http\Controllers\Api\OwnerGetJobREquests;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\PushNotificationController as ApiPushNotificationController;
+use App\Http\Controllers\Api\TwilioSmsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,8 +44,12 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('reset-password', 'AuthController@reset_password');
     Route::post('verify-otp', 'AuthController@verify_code');
     Route::post('change-password', 'AuthController@change_password');
-});
 
+});
+    // ############## Twilio SMS #################
+Route::get('sendOtp',[TwilioSmsController::class,'sendOtp']);
+Route::post('/verify-otp', [TwilioSmsController::class, 'verifyOtp']);
+    // ############## Twilio SMS End #################
 Route::get('user-profile/{id}', 'Api\ProfileController@show');
 Route::post('edit-profile/{id}', 'Api\ProfileController@update');
 Route::get('users-imageget/{id}', 'Api\ProfileController@getImage');
