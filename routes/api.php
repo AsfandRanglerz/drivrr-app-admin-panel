@@ -69,7 +69,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Route::get('owners-jobs-show/{id}', 'Api\OwnerJobsController@index');
 });
 // ############## Twilio SMS #################
-Route::get('/sendOtp', [TwilioController::class, 'otp']);
+Route::get('/smsOtp', 'Api\TwilioController@otp');
 // ############## Twilio SMS End #################
 //user-documents
 Route::get('document-index/{id}', 'Api\DocumentController@index');
