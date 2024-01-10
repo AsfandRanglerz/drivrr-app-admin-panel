@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use Twilio\Rest\Client;
@@ -10,56 +10,33 @@ use App\Http\Controllers\Controller;
 
 class TwilioController extends Controller
 {
-    // public function otp(Request $request)
-    // {
-    //     $request->validate([
-    //         'mobile_no' => 'required|exists:users,phone',
-    //     ]);
-
-    //     try {
-    //         $user = User::where('phone', $request->input('mobile_no'))->first();
-    //         $smsRecord = TwilioSms::updateOrCreate(
-    //             ['user_id' => $user->id],
-    //             ['expired_at' => now()]
-    //         );
-
-    //         if ($smsRecord->expired_at && now()->lt($smsRecord->expired_at)) {
-    //             return response()->json(['message' => 'OTP is still valid'], 422);
-    //         }
-
-    //         $result = $smsRecord->sendOtp();
-    //         if ($result) {
-    //             return response()->json(['message' => 'OTP sent successfully', 'sid' => $result]);
-    //         } else {
-    //             return response()->json(['message' => 'Failed to send OTP'], 500);
-    //         }
-    //     } catch (\Exception $e) {
-    //         // Log the error or handle it appropriately
-    //         return response()->json(['message' => 'An error occurred'], 500);
-    //     }
-    // }
+    public function indexOtp()
+    {
+        return view('admin.otp.index');
+    }
     public function otp(Request $request)
     {
-        return $request->mobile_no;
         $request->validate([
-            'mobile_no' => 'required|numeric|digits:11',
+            'mobile_no' => 'required|numeric',
         ]);
         $user = User::where('phone', $request->mobile_no)->first();
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
+
         $otp = mt_rand(1000, 9999);
         $otpVerification = TwilioSms::updateOrCreate(
             ['user_id' => $user->id],
             [
+                'mobile_no' => $request->mobile_no,
                 'otp' => $otp,
                 'expired_at' => now()->addMinutes(1),
             ]
         );
         try {
-            $account_sid = getenv('TWILIO_SID');
-            $auth_token = getenv('TWILIO_TOKEN');
-            $twilio_number = getenv('TWILIO_FROM');
+            $account_sid = config('services.twilio.sid');
+            $auth_token = config('services.twilio.token');
+            $twilio_number = config('services.twilio.from');
             $client = new Client($account_sid, $auth_token);
             $client->messages->create(
                 $request->mobile_no,
@@ -69,8 +46,8 @@ class TwilioController extends Controller
                 ]
             );
             return response()->json(['message' => 'OTP sent successfully']);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to send OTP'], 500);
+        } catch (\Twilio\Exceptions\TwilioException $e) {
+            return response()->json(['message' => 'Failed to send OTP. TwilioException: ' . $e->getMessage()], 500);
         }
     }
     public function verifyOtp(Request $request, TwilioSms $twilioSms)

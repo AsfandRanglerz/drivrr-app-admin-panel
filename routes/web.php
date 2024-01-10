@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\WalletController;
 use App\Http\Controllers\Admin\HandelBusinessOwnerPayments;
 use App\Http\Controllers\Admin\PushNotificationController;
 use App\Http\Controllers\Admin\ReviewController;
+use App\Http\Controllers\Admin\TwilioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,4 +125,8 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('notifications/store', [PushNotificationController::class, 'notificationStore'])->name('notifications.store');
     // ############# Driver Reviews#########
     Route::get('/driverReviews', [ReviewController::class, 'reviewIndex'])->name('driverreview.index');
+    // ############# OTP #####
+    Route::get('/otp',[TwilioController::class,'indexOtp'])->name('otp.index');
+    Route::post('/sendOtp',[TwilioController::class,'Otp'])->name('otp.store');
+
 });

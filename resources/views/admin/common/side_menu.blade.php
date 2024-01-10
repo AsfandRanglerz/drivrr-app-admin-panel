@@ -272,6 +272,13 @@
                     </a>
                 </li>
             @endif
+
+            <li class="dropdown {{ request()->is('admin/otp*') ? 'active' : '' }}">
+                <a href="{{ route('otp.index') }}" class="nav-link">
+                    <i class="fas fa-bell"></i>
+                    <span>Otp</span>
+                </a>
+            </li>
             {{--
             <li class="dropdown {{ request()->is('admin/helpAndSupport*') ? 'active' : '' }}">
                 <a href="{{ route('help-and-support.index') }}" class="nav-link"><i
