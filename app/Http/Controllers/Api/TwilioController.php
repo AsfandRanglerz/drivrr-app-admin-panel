@@ -7,9 +7,9 @@ use App\Models\TwilioSms;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class TwilioSmsController extends Controller
+class TwilioController extends Controller
 {
-    public function sendOtp(Request $request, TwilioSms $twilioSms)
+    public function otp(Request $request, TwilioSms $twilioSms)
     {
         $request->validate([
             'mobile_no' => 'required|numeric',

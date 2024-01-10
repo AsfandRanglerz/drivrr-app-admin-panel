@@ -19,7 +19,7 @@ use App\Http\Controllers\Api\MyBookingContoller;
 use App\Http\Controllers\Api\OwnerGetJobREquests;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\PushNotificationController as ApiPushNotificationController;
-use App\Http\Controllers\Api\TwilioSmsController;
+use App\Http\Controllers\Api\TwilioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ use App\Http\Controllers\Api\TwilioSmsController;
 
 Route::group(['namespace' => 'Api'], function () {
     Route::post('login', 'AuthController@login')->name('login');
-    Route::post('register/{id}', 'AuthController@register');
+    // Route::post('register/{id}', 'AuthController@register');
     // Social LogIn
     Route::post('socialLogin/{id}', 'AuthController@socialLogin');
     Route::get('/checkEmailExists', 'AuthController@checkEmailExists');
@@ -44,12 +44,8 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('reset-password', 'AuthController@reset_password');
     Route::post('verify-otp', 'AuthController@verify_code');
     Route::post('change-password', 'AuthController@change_password');
-
 });
-    // ############## Twilio SMS #################
-Route::get('sendOtp',[TwilioSmsController::class,'sendOtp']);
-Route::post('/verify-otp', [TwilioSmsController::class, 'verifyOtp']);
-    // ############## Twilio SMS End #################
+
 Route::get('user-profile/{id}', 'Api\ProfileController@show');
 Route::post('edit-profile/{id}', 'Api\ProfileController@update');
 Route::get('users-imageget/{id}', 'Api\ProfileController@getImage');
@@ -72,6 +68,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //get owners jobs
     // Route::get('owners-jobs-show/{id}', 'Api\OwnerJobsController@index');
 });
+// ############## Twilio SMS #################
+Route::get('/sendOtp', [TwilioController::class, 'otp']);
+// ############## Twilio SMS End #################
 //user-documents
 Route::get('document-index/{id}', 'Api\DocumentController@index');
 Route::post('document-store/{id}', 'Api\DocumentController@store');
@@ -130,8 +129,8 @@ Route::get('myBooking/{ownerId}', [MyBookingContoller::class, 'get']);
 Route::post('addPermission', [PermissionController::class, 'store']);
 Route::post('updatePermission', [PermissionController::class, 'update']);
 //  ############### Push Notifications #############
-Route::get('getNotification/{userId}',[ApiPushNotificationController::class,'getNotification']);
-Route::get('getNotificationCount/{userId}',[ApiPushNotificationController::class,'getNotificationCount']);
+Route::get('getNotification/{userId}', [ApiPushNotificationController::class, 'getNotification']);
+Route::get('getNotificationCount/{userId}', [ApiPushNotificationController::class, 'getNotificationCount']);
 Route::get('/readNotifications/{userId}', [ApiPushNotificationController::class, 'userRecevied']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

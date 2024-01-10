@@ -69,6 +69,6 @@ class TwilioSms extends Model
 
     private function generateToken()
     {
-        return bcrypt(str_random(30));
+        // return bcrypt(str_random(30));
     }
 }

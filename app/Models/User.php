@@ -24,10 +24,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Models\Company', 'company_id', 'id');
     }
-    public function userdocument()
-    {
-        return $this->hasMany(UserDocument::class, 'user_id');
-    }
+    // public function userdocument()
+    // {
+    //     return $this->hasMany(UserDocument::class, 'user_id');
+    // }
 
     public function roles()
     {
