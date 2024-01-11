@@ -48,22 +48,23 @@ class PushNotificationController extends Controller
     public function userRecevied(Request $request, $userId)
     {
         try {
-            $notificationsWithStatusZero = PushNotification::where('user_id', $userId)
-                ->where('seen_by', 0)
-                ->get();
-            PushNotification::where('user_id', $userId)
+            $notifications = PushNotification::where('user_id', $userId)
                 ->where('seen_by', 0)
                 ->update(['seen_by' => 1]);
+
+            $updatedNotifications = PushNotification::where('user_id', $userId)
+                ->where('seen_by', 1)
+                ->get();
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Notifications marked as seen',
-                'notificationsWithStatusZero' => $notificationsWithStatusZero,
+                'notifications' => $updatedNotifications,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to retrieve or update notifications',
+                'message' => 'Failed to update or retrieve notifications',
                 'error' => $e->getMessage(),
             ], 500);
         }
