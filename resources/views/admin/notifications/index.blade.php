@@ -195,7 +195,6 @@
                     }
                 });
             });
-
             // Clear validation errors when typing
             $('form .form-control').on('input', function() {
                 $(this).removeClass('is-invalid');
