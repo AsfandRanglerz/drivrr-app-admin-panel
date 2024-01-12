@@ -154,15 +154,15 @@
                     }
                 });
         });
-    </script>
-    <script>
-        //######### AJAX CODE ############
+
         $(document).ready(function() {
             $('form').submit(function(e) {
                 e.preventDefault();
                 $('.loading-spinner').show();
                 $('#submit').prop('disabled', true);
                 var formData = new FormData($(this)[0]);
+                $('form .text-danger').remove();
+                $('form .form-control').removeClass('is-invalid');
                 $.ajax({
                     type: $(this).attr('method'),
                     url: $(this).attr('action'),
@@ -182,12 +182,25 @@
                         $('.loading-spinner').hide();
                         $('#submit').prop('disabled', false);
 
-                        // Handle the error response
-                        console.error(error);
+                        if (error.responseJSON && error.responseJSON.errors) {
+                            $.each(error.responseJSON.errors, function(key, value) {
+                                var inputField = $('form').find('[name="' + key + '"]');
+                                inputField.addClass('is-invalid');
+                                inputField.after('<div class="text-danger">' + value[
+                                    0] + '</div>');
+                            });
+                        } else {
+                            console.error(error);
+                        }
                     }
                 });
             });
+
+            // Clear validation errors when typing
+            $('form .form-control').on('input', function() {
+                $(this).removeClass('is-invalid');
+                $(this).next('.text-danger').remove();
+            });
         });
     </script>
-
 @endsection
