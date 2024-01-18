@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use Stripe\Stripe;
 use App\Models\Job;
 use App\Models\User;
 use App\Models\Document;
+use Stripe\PaymentIntent;
 use App\Models\BankAccount;
 use App\Models\DriverWallet;
 use Illuminate\Http\Request;
@@ -53,6 +55,53 @@ class OwnerGetJobREquests extends Controller
             ], 500);
         }
     }
+    // public function owner_accept_job_request(Request $request, $id)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'card_number' => 'required',
+    //         'expiry_date' => 'required',
+    //         'card_holder' => 'required',
+    //         'cvc' => 'required',
+    //     ]);
+    //     if ($validator->fails()) {
+    //         return $this->sendError($validator->errors()->first());
+    //     }
+    //     $owner_accept = PaymentRequest::find($id);
+    //     if (!$owner_accept) {
+    //         return response()->json([
+    //             'message' => 'Request Rejected.',
+    //             'status' => 'failed',
+    //         ], 400);
+    //     }
+    //     $job = $owner_accept->job;
+    //     $owner = $owner_accept->owner;
+    //     if ($job) {
+    //         $owner_accept->update([
+    //             'card_number' => $request->card_number,
+    //             'expiry_date' => $request->expiry_date,
+    //             'card_holder' => $request->card_holder,
+    //             'cvc' => $request->cvc,
+    //             'status' => 'Accepted',
+    //         ]);
+    //         $job->update([
+    //             'active_job' => '1',
+    //         ]);
+    //         $driver = $owner_accept->driver;
+    //         if ($driver && $driver->email) {
+    //             Mail::to($driver->email)->send(new OwnerAcceptJobRequest($owner));
+    //         }
+    //         return response()->json([
+    //             'message' => 'Request Accepted Successfully.',
+    //             'status' => 'success',
+    //             'data' => $owner_accept,
+    //         ], 200);
+    //     } else {
+    //         return response()->json([
+    //             'message' => 'Job not found for the given PaymentRequest.',
+    //             'status' => 'failed',
+    //         ], 400);
+    //     }
+    // }
     public function owner_accept_job_request(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -61,8 +110,12 @@ class OwnerGetJobREquests extends Controller
             'card_holder' => 'required',
             'cvc' => 'required',
         ]);
+
         if ($validator->fails()) {
-            return $this->sendError($validator->errors()->first());
+            return response()->json([
+                'message' => $validator->errors()->first(),
+                'status' => 'failed',
+            ], 400);
         }
         $owner_accept = PaymentRequest::find($id);
         if (!$owner_accept) {
@@ -74,25 +127,44 @@ class OwnerGetJobREquests extends Controller
         $job = $owner_accept->job;
         $owner = $owner_accept->owner;
         if ($job) {
-            $owner_accept->update([
-                'card_number' => $request->card_number,
-                'expiry_date' => $request->expiry_date,
-                'card_holder' => $request->card_holder,
-                'cvc' => $request->cvc,
-                'status' => 'Accepted',
-            ]);
-            $job->update([
-                'active_job' => '1',
-            ]);
-            $driver = $owner_accept->driver;
-            if ($driver && $driver->email) {
-                Mail::to($driver->email)->send(new OwnerAcceptJobRequest($owner));
+            try {
+                Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+                $paymentIntent = PaymentIntent::create([
+                    'amount' => $request->input('amount'),
+                    'currency' => 'usd',
+                    'payment_method' => $request->input('payment_method'),
+                    'confirmation_method' => 'manual',
+                    'confirm' => true,
+                ]);
+                $owner_accept->update([
+                    'card_number' => $request->card_number,
+                    'expiry_date' => $request->expiry_date,
+                    'card_holder' => $request->card_holder,
+                    'cvc' => $request->cvc,
+                    'status' => 'Accepted',
+                ]);
+
+                $job->update([
+                    'active_job' => '1',
+                ]);
+
+                $driver = $owner_accept->driver;
+
+                if ($driver && $driver->email) {
+                    Mail::to($driver->email)->send(new OwnerAcceptJobRequest($owner));
+                }
+                return response()->json([
+                    'message' => 'Payment submitted successfully.',
+                    'status' => 'success',
+                    'data' => $owner_accept,
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'Payment failed.',
+                    'status' => 'failed',
+                    'error' => $e->getMessage(),
+                ], 500);
             }
-            return response()->json([
-                'message' => 'Request Accepted Successfully.',
-                'status' => 'success',
-                'data' => $owner_accept,
-            ], 200);
         } else {
             return response()->json([
                 'message' => 'Job not found for the given PaymentRequest.',
@@ -100,7 +172,6 @@ class OwnerGetJobREquests extends Controller
             ], 400);
         }
     }
-
     public function owner_cancle_request($id)
     {
         $check = PaymentRequest::where('id', $id)->first();

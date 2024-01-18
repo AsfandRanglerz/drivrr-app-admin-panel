@@ -2,24 +2,25 @@
 
 use Illuminate\Http\Request;
 use App\Controllers\JobController;
+use App\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 use App\Controllers\ProfileController;
 use App\Controllers\DocumentController;
-use App\Controllers\DriverVehicleController;
-use App\Controllers\HelpAndSupportController;
 use App\Controllers\OwnerJobsController;
-use App\Controllers\ReviewController;
 use App\Controllers\BankAccountController;
 use App\Controllers\DriverWalletController;
-use App\Http\Controllers\admin\PushNotificationController;
+use App\Controllers\DriverVehicleController;
+use App\Controllers\HelpAndSupportController;
+use App\Http\Controllers\Api\StripeController;
+use App\Http\Controllers\Api\TwilioController;
 use App\Http\Controllers\Admin\WalletController;
-use App\Http\Controllers\Api\DriverShowJobsController;
-use App\Http\Controllers\Api\DriverJobRequestController;
 use App\Http\Controllers\Api\MyBookingContoller;
 use App\Http\Controllers\Api\OwnerGetJobREquests;
 use App\Http\Controllers\Api\PermissionController;
+use App\Http\Controllers\Api\DriverShowJobsController;
+use App\Http\Controllers\Api\DriverJobRequestController;
+use App\Http\Controllers\admin\PushNotificationController;
 use App\Http\Controllers\Api\PushNotificationController as ApiPushNotificationController;
-use App\Http\Controllers\Api\TwilioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -131,6 +132,11 @@ Route::post('updatePermission', [PermissionController::class, 'update']);
 //  ############### Push Notifications #############
 Route::get('getNotificationCount/{userId}', [ApiPushNotificationController::class, 'getNotificationCount']);
 Route::get('/readNotifications/{userId}', [ApiPushNotificationController::class, 'userRecevied']);
+// ########## Strip Payment Api #######
+Route::get('/', [StripeController::class, 'index']);
+Route::get('/checkBalance', [StripeController::class, 'checkBalance']);
+Route::post('/payout-client', [StripeController::class, 'payoutClient']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
