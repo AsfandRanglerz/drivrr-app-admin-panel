@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use Stripe\Payout;
 use Stripe\Stripe;
+use Stripe\Customer;
+use Stripe\EphemeralKey;
+use Stripe\PaymentIntent;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -36,27 +39,32 @@ class StripeController extends Controller
             'data' => $balance,
         ]);
     }
-
-    public function payoutClient(Request $request)
+    public function payoutClient(Request $request,)
     {
-        try {
-            $amount = $request->input('amount');
-            $currency = $request->input('currency');
 
-            $payout = Payout::create([
-                'amount' => $amount,
-                'currency' => $currency,
-            ]);
+        $data = $request->json()->all();
+        $amount = $data['amount'];
+        $currency = $data['currency'];
 
-            return response()->json([
-                'status' => 200,
-                'message' => 'Working Fine',
-                'data' => $payout,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        Stripe::setApiKey('your_stripe_secret_key');
+
+        $customer = Customer::create();
+        $ephemeralKey = EphemeralKey::create(
+            ['customer' => $customer->id],
+            ['api_version' => '2022-08-01']
+        );
+        $paymentIntent = PaymentIntent::create([
+            'amount' => $amount,
+            'currency' => $currency,
+            'customer' => $customer->id,
+            'payment_method_types' => ['card'],
+        ]);
+
+        return response()->json([
+            'paymentIntent' => $paymentIntent->client_secret,
+            'ephemeralKey' => $ephemeralKey->secret,
+            'customer' => $customer->id,
+        ]);
     }
-
     // Add other methods similar to the Node.js routes...
 }
