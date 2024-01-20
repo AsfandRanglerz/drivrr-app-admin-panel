@@ -54,7 +54,7 @@ class OwnerGetJobREquests extends Controller
             ], 500);
         }
     }
-
+    // ########## Ride Accept + Stripe Integration Code #############
     public function owner_accept_job_request(Request $request, $id)
     {
         try {
@@ -66,37 +66,29 @@ class OwnerGetJobREquests extends Controller
                     'status' => 'failed',
                 ], 400);
             }
-
             $job = $owner_accept->job;
             $owner = $owner_accept->owner;
-
             if (!$job) {
                 return response()->json([
                     'message' => 'Job not found for the given PaymentRequest.',
                     'status' => 'failed',
                 ], 400);
             }
-
             $amountToUse = $owner_accept->payment_amount ? $owner_accept->payment_amount * 100 : $owner_accept->counter_offer * 100;
             Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
-
-            // Ensure customer email is available
             if (!$owner->email) {
                 return response()->json([
                     'message' => 'Customer email is required for the payment.',
                     'status' => 'failed',
                 ], 400);
             }
-
             $customer = Customer::create([
                 'email' => $owner->email,
             ]);
-
             $ephemeralKey = EphemeralKey::create(
                 ['customer' => $customer->id],
                 ['stripe_version' => '2023-10-16']
             );
-
             $data = [
                 'amount' => $amountToUse,
                 'currency' => 'usd',
@@ -104,32 +96,24 @@ class OwnerGetJobREquests extends Controller
                 'customer' => $customer->id,
                 'receipt_email' => $owner->email,
             ];
-
             $paymentIntent = PaymentIntent::create($data);
-
             $owner_accept->update([
                 'status' => 'Accepted',
             ]);
-
             $job->update([
                 'active_job' => '1',
             ]);
-
             $driver = $owner_accept->driver;
-
             if ($driver && $driver->email) {
                 Mail::to($driver->email)->send(new OwnerAcceptJobRequest($owner));
             }
-
             return response()->json([
                 'message' => 'Payment submitted successfully.',
                 'status' => 'success',
                 'client_secret' => $paymentIntent->client_secret,
             ], 200);
         } catch (\Exception $e) {
-            // Log the detailed error message for debugging purposes.
             Log::error('Payment failed: ' . $e->getMessage());
-
             return response()->json([
                 'message' => 'Payment failed.',
                 'status' => 'failed',
@@ -137,12 +121,6 @@ class OwnerGetJobREquests extends Controller
             ], 500);
         }
     }
-
-
-
-
-
-
     public function owner_cancle_request($id)
     {
         $check = PaymentRequest::where('id', $id)->first();
