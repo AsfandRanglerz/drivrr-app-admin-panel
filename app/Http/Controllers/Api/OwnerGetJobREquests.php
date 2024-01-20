@@ -107,7 +107,7 @@ class OwnerGetJobREquests extends Controller
                 'message' => 'Payment submitted successfully.',
                 'status' => 'success',
                 'data' => $owner_accept,
-                'paymentIntent'=>$paymentIntent->id,
+                'paymentIntent'=>$paymentIntent,
                 'client_secret' => $paymentIntent->client_secret,
 
             ], 200);
