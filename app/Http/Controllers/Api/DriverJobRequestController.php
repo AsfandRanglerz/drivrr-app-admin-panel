@@ -47,6 +47,7 @@ class DriverJobRequestController extends Controller
                     'owner_id' => $owner_id,
                     'driver_id' => $driver_id,
                     'job_id' => $job_id,
+                    'payment_amount' => $job->price,
                     'location' => $location,
                 ]);
                 $driver_job_request->load('owner', 'driver', 'job');
