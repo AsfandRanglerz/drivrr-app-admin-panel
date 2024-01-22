@@ -20,9 +20,9 @@ class DocumentController extends Controller
     {
         $data = User::with('document')->find($id);
         return response()->json([
-            'user'=>$data,
-            'status'=>"success",
-        ],200);
+            'user' => $data,
+            'status' => "success",
+        ], 200);
     }
 
     /**
@@ -41,17 +41,15 @@ class DocumentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request ,$id)
+    public function store(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[
-            'image'=>'required',
+        $validator = Validator::make($request->all(), [
+            'image' => 'required',
         ]);
-        if(!$validator)
-        {
+        if (!$validator) {
             return $this->sendError($validator->errors()->first());
         }
-        if($request->hasFile('image'))
-        {
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
@@ -59,17 +57,16 @@ class DocumentController extends Controller
             $image = 'public/admin/assets/images/users/' . $filename;
         }
         $document = Document::create([
-            'user_id'=>$id,
-            'image'=>$image,
+            'user_id' => $id,
+            'image' => $image,
         ]);
         $data = User::with('document')->find($id);
         return response()->json([
-            "message"=>"Document added successfully.",
-            "status"=>"Success",
-            "data"=>$data,
-            'document'=> $document
-        ],200);
-
+            "message" => "Document added successfully.",
+            "status" => "Success",
+            "data" => $data,
+            'document' => $document
+        ], 200);
     }
 
     /**
