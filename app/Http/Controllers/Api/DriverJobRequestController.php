@@ -15,24 +15,7 @@ use Illuminate\Support\Facades\Validator;
 
 class DriverJobRequestController extends Controller
 {
-    // private function sendFcmNotification($fcmToken, $title, $description)
-    // {
-    //     $response = Http::withHeaders([
-    //         'Authorization' => 'key=AAAAerlut_I:APA91bHPRL6PQ0T1Mbb1EtU-SHFxb2XkMylJfNPSAWsjq4NF9ib3no_t3RZfniHVWMOXHAkI3nfYyLHqcNaqrKUyCkUuJEc6fhs9KKUOCNFbHE_V1bekRONfyIEY1arm0JavFKO6vv-_',
-    //         'Content-Type' => 'application/json',
-    //     ])->post('https://fcm.googleapis.com/fcm/send', [
-    //         'to' => $fcmToken,
-    //         'notification' => [
-    //             'title' => $title,
-    //             'body' => $description,
-    //         ],
-    //     ]);
-    //     if ($response->successful()) {
-    //         return response()->json(['message' => 'Notificatins Send Successfully'], 200);
-    //     } else {
-    //         return response()->json(['error' => 'Notificatins Send UnSuccessfully'], 400);
-    //     }
-    // }
+
     public function add_job_request_without_counter(Request $request, $owner_id, $driver_id, $job_id)
     {
         try {
