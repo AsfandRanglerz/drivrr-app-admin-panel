@@ -143,11 +143,11 @@ class OwnerGetJobREquests extends Controller
                     ]);
                 }
                 $title =  $owner->fname . ' ' . $owner->lname;
-                $description = 'Your Job Is Cancelled';
+                $description = 'Your Ride Is Cancelled';
                 FcmNotificationHelper::sendFcmNotification($driver->fcm_token, $title, $description);
             }
             return response()->json([
-                'message' => 'This request has been canceled, and the job is now active.',
+                'message' => 'This request has been canceled',
                 'status' => 'success',
             ], 200);
         } else {
