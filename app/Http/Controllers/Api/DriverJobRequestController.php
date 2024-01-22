@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\Job;
+use App\Models\User;
+use App\Models\Review;
+use App\Models\Document;
 use Illuminate\Http\Request;
 use App\Models\PaymentRequest;
-use App\Models\User;
-use App\Models\Job;
-use App\Models\Document;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -134,6 +135,41 @@ class DriverJobRequestController extends Controller
             ], 500);
         }
     }
+    // public function getJobRequestsByOwner($job_id)
+    // {
+    //     try {
+    //         $fetchjob = PaymentRequest::where('job_id', $job_id)->first();
+
+    //         if (!$fetchjob) {
+    //             return response()->json([
+    //                 'message' => 'Job not found.',
+    //                 'status' => 'failed',
+    //             ], 404);
+    //         }
+    //         $jobRequests = PaymentRequest::where('job_id', $job_id)
+    //             ->with([
+
+    //                 'job',
+    //                 'driver.driverRewiews.owner',
+    //                 'driver.driverRewiews',
+    //                 'driver.bankAccounts' => function ($query) {
+    //                     $query->where('status', 'Active');
+    //                 }
+    //             ])
+    //             ->get();
+    //         return response()->json([
+    //             'message' => 'Job requests Successfully',
+    //             'status' => 'success',
+    //             'jobRequests' => $jobRequests,
+    //         ], 200);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'message' => 'Error fetching job requests.',
+    //             'status' => 'Error',
+    //             'error' => $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
     public function getJobRequestsByOwner($job_id)
     {
         try {
@@ -145,17 +181,33 @@ class DriverJobRequestController extends Controller
                     'status' => 'failed',
                 ], 404);
             }
+
             $jobRequests = PaymentRequest::where('job_id', $job_id)
                 ->with([
                     'job',
                     'driver.driverRewiews.owner',
+                    'driver.driverRewiews',
                     'driver.bankAccounts' => function ($query) {
                         $query->where('status', 'Active');
                     }
                 ])
                 ->get();
+            $driverIds = $jobRequests->pluck('driver.id')->unique()->toArray();
+            $driverReviews = Review::whereIn('driver_id', $driverIds)->get();
+
+            foreach ($jobRequests as &$jobRequest) {
+                $driverId = $jobRequest->driver->id;
+                $reviews = $driverReviews->where('driver_id', $driverId);
+                $averageRating = $reviews->avg('stars');
+                $totalReviews = $reviews->count();
+                $jobRequest['driver_reviews'] = [
+                    'average_rating' => number_format($averageRating, 1),
+                    'total_reviews' => $totalReviews,
+                ];
+            }
+
             return response()->json([
-                'message' => 'Job requests Successfully',
+                'message' => 'Job requests successfully fetched with driver reviews.',
                 'status' => 'success',
                 'jobRequests' => $jobRequests,
             ], 200);
@@ -167,6 +219,7 @@ class DriverJobRequestController extends Controller
             ], 500);
         }
     }
+
     public function cancelJob($id)
     { {
 
