@@ -210,7 +210,6 @@ class DriverJobRequestController extends Controller
                 ->get();
             $driverIds = $jobRequests->pluck('driver.id')->unique()->toArray();
             $driverReviews = Review::whereIn('driver_id', $driverIds)->get();
-
             foreach ($jobRequests as &$jobRequest) {
                 $driverId = $jobRequest->driver->id;
                 $reviews = $driverReviews->where('driver_id', $driverId);
