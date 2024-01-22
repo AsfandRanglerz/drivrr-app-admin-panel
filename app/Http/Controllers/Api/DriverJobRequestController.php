@@ -53,12 +53,10 @@ class DriverJobRequestController extends Controller
                 $title = $driver->fname . '.' . $driver->lname;
                 $description = 'Sent You a Job Request';
                 $this->sendFcmNotification($owner->fcm_token, $title, $description);
-                $all_requests = PaymentRequest::all();
                 return response()->json([
                     'message' => 'Your request is sent successfully.',
                     'status' => 'success',
                     'data' => $driver_job_request,
-                    // 'all_requests' => $all_requests
                 ], 200);
             } else {
                 return response()->json([
