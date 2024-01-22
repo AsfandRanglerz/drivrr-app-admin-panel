@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\FcmNotificationHelper;
 use App\Models\User;
 use App\Models\RoleUser;
 use Illuminate\Http\Request;
@@ -59,7 +60,7 @@ class PushNotificationController extends Controller
         $users = RoleUser::whereIn('role_id', $userRoles)->get();
         foreach ($users as $user) {
             $fcmToken = $user->user->fcm_token;
-            $this->sendFcmNotification($fcmToken, $request->input('title'), $request->input('description'));
+            FcmNotificationHelper::sendFcmNotification($fcmToken, $request->input('title'), $request->input('description'));
             PushNotification::create([
                 'title' => $request->input('title'),
                 'description' => $request->input('description'),
@@ -68,24 +69,6 @@ class PushNotificationController extends Controller
             ]);
         }
         return redirect()->back()->with('message', 'Notification Sent Successfully');
-    }
-    private function sendFcmNotification($fcmToken, $title, $description)
-    {
-        $response = Http::withHeaders([
-            'Authorization' => 'key=AAAAerlut_I:APA91bHPRL6PQ0T1Mbb1EtU-SHFxb2XkMylJfNPSAWsjq4NF9ib3no_t3RZfniHVWMOXHAkI3nfYyLHqcNaqrKUyCkUuJEc6fhs9KKUOCNFbHE_V1bekRONfyIEY1arm0JavFKO6vv-_',
-            'Content-Type' => 'application/json',
-        ])->post('https://fcm.googleapis.com/fcm/send', [
-            'to' => $fcmToken,
-            'notification' => [
-                'title' => $title,
-                'body' => $description,
-            ],
-        ]);
-        if ($response->successful()) {
-            return response()->json(['message' => 'Notificatins Send Successfully'], 200);
-        } else {
-            return response()->json(['error' => 'Notificatins Send UnSuccessfully'], 400);
-        }
     }
 
     // public function notificationStore(Request $request)
