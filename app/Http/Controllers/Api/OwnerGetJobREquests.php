@@ -10,11 +10,11 @@ use Stripe\PaymentIntent;
 use App\Models\DriverWallet;
 use Illuminate\Http\Request;
 use App\Models\PaymentRequest;
-use App\Mail\OwnerAcceptJobRequest;
 use App\Mail\OwnerCancelJobRequest;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use App\Helpers\FcmNotificationHelper;
 
 
 class OwnerGetJobREquests extends Controller
@@ -100,12 +100,15 @@ class OwnerGetJobREquests extends Controller
             $owner_accept->update([
                 'status' => 'Accepted',
             ]);
+
             $job->update([
                 'active_job' => '1',
             ]);
-            $driver = $owner_accept->driver;
-            if ($driver && $driver->email) {
-                Mail::to($driver->email)->send(new OwnerAcceptJobRequest($owner));
+            $driver = $owner_accept->driver_id;
+            if ($driver) {
+                $title =  $owner->fname . '' .  $owner->lname;
+                $description = 'Job Is Accepted';
+                FcmNotificationHelper::sendFcmNotification($driver->fcm_token, $title, $description);
             }
             return response()->json([
                 'message' => 'Payment submitted successfully.',
@@ -126,30 +129,30 @@ class OwnerGetJobREquests extends Controller
         $check = PaymentRequest::where('id', $id)->first();
         if ($check) {
             $job_request = PaymentRequest::find($id);
-            $driver_email = User::where('id', $job_request->driver_id)->value('email');
+            $driver = User::find($job_request->driver_id);
+            $driver_email = $driver->email;
             $owner = User::find($job_request->owner_id);
+
             if ($job_request->status !== 'CancelRide') {
                 $job_request->update(['status' => 'CancelRide']);
+
                 if ($job_request->job->is_active === '0') {
                     $job_request->job->update([
                         'is_active' => '1',
                         'active_job' => '0'
                     ]);
                 }
-                Mail::to($driver_email)->send(new OwnerCancelJobRequest($owner));
-                return response()->json([
-                    'message' => 'This request has been canceled, and the job is now active.',
-                    'status' => 'success',
-                ], 200);
-            } else {
-                return response()->json([
-                    'message' => 'This request has already been canceled.',
-                    'status' => 'failed',
-                ], 400);
+                $title =  $owner->fname . ' ' . $owner->lname;
+                $description = 'Your Job Is Cancelled';
+                FcmNotificationHelper::sendFcmNotification($driver->fcm_token, $title, $description);
             }
+            return response()->json([
+                'message' => 'This request has been canceled, and the job is now active.',
+                'status' => 'success',
+            ], 200);
         } else {
             return response()->json([
-                'message' => 'Request is not found.',
+                'message' => 'This request has already been canceled.',
                 'status' => 'failed',
             ], 400);
         }

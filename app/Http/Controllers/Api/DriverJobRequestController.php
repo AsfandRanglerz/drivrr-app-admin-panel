@@ -109,7 +109,7 @@ class DriverJobRequestController extends Controller
                 $driver_job_request->load('owner', 'driver', 'job');
                 $title = $driver->fname . '' . $driver->lname;
                 $description = 'Job Request with Counter Offer: $' . $request->counter_offer;
-                $this->sendFcmNotification($owner->fcm_token, $title, $description);
+                FcmNotificationHelper::sendFcmNotification($owner->fcm_token, $title, $description);
                 return response()->json([
                     'message' => 'Your request is sent successfully.',
                     'status' => 'success',
@@ -129,8 +129,6 @@ class DriverJobRequestController extends Controller
             ], 500);
         }
     }
-
-
     public function getJobRequestsByJob($driver_id)
     {
         try {
