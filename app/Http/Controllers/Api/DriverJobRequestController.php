@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helpers\FcmNotificationHelper;
 use App\Models\Job;
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use App\Models\PaymentRequest;
+use App\Models\PushNotification;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
+use App\Helpers\FcmNotificationHelper;
+use App\Models\RoleUser;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -54,7 +56,7 @@ class DriverJobRequestController extends Controller
                 $driver_job_request->load('owner', 'driver', 'job');
                 $title = $driver->fname . ' ' . $driver->lname;
                 $description = 'Sent You a Job Request';
-                FcmNotificationHelper::sendFcmNotification($owner->fcm_token, $title, $description);
+                FcmNotificationHelper::sendFcmNotification($owner->fcm_token, $title, $description, $job);
                 return response()->json([
                     'message' => 'Your request is sent successfully.',
                     'status' => 'success',
@@ -109,7 +111,17 @@ class DriverJobRequestController extends Controller
                 $driver_job_request->load('owner', 'driver', 'job');
                 $title = $driver->fname . ' ' . $driver->lname;
                 $description = 'Job Request with Counter Offer: $' . $request->counter_offer;
-                FcmNotificationHelper::sendFcmNotification($owner->fcm_token, $title, $description);
+                $notificationData = [
+                    'job_id' => $job->id,
+                ];
+               FcmNotificationHelper::sendFcmNotification($owner->fcm_token, $title, $description, $notificationData);
+                PushNotification::create([
+                    'title' => $title,
+                    'description' => $description,
+                    'user_name' => $driver->fname . ' ' . $driver->lname,
+                    'user_id' => $owner_id,
+                    'job_id' => $job_id,
+                ]);
                 return response()->json([
                     'message' => 'Your request is sent successfully.',
                     'status' => 'success',
