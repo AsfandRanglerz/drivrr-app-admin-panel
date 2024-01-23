@@ -17,16 +17,15 @@ class FcmNotificationHelper
             'notification' => [
                 'title' => $title,
                 'body' => $description,
-                'data' => $notificationData,
             ],
-
+            'data' => $notificationData
         ]);
         if ($response->successful()) {
             return response()->json([
                 'message' => 'Notifications Sent Successfully',
-                'fcm'=>$notificationData
+                'fcm' => $notificationData
 
-        ], 200);
+            ], 200);
         } else {
             return response()->json(['error' => 'Notifications Send Unsuccessfully'], 400);
         }
