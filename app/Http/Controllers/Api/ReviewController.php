@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use App\Models\PushNotification;
 use App\Http\Controllers\Controller;
 use App\Helpers\FcmNotificationHelper;
 use Illuminate\Support\Facades\Validator;
@@ -34,6 +35,19 @@ class ReviewController extends Controller
         ]);
         $owner = User::find($request->owner_id);
         $driver = User::find($request->driver_id);
+        $title = $owner->fname . ' ' . $owner->lname;
+        $description = 'The rider has given you a review. Check it out!';
+        $notificationData = [
+            'job_idd' =>  $driver->driver_id,
+        ];
+        FcmNotificationHelper::sendFcmNotification($driver->fcm_token, $title, $description, $notificationData);
+        PushNotification::create([
+            'title' => $title,
+            'description' => $description,
+            'user_name' =>  $owner->id,
+            'user_id' => $driver->id,
+            // 'job_id' => $job_request->job_id,
+        ]);
         $title = $owner->fname . ' ' . $owner->lname;
 
         $description = 'Gives You Review';
