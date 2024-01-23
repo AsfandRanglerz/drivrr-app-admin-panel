@@ -48,10 +48,6 @@ class ReviewController extends Controller
             'user_id' => $driver->id,
             // 'job_id' => $job_request->job_id,
         ]);
-        $title = $owner->fname . ' ' . $owner->lname;
-
-        $description = 'Gives You Review';
-        FcmNotificationHelper::sendFcmNotification($driver->fcm_token, $title, $description);
         return response()->json([
             'message' => 'Thanks for giving a review.',
             'status' => 'success',
