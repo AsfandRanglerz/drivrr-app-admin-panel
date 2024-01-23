@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Twilio\Http\Client;
+
 class User extends Authenticatable
 {
     use HasFactory;
@@ -80,5 +81,9 @@ class User extends Authenticatable
     public function driverRewiews()
     {
         return $this->hasMany(Review::class, 'driver_id');
+    }
+    public function user_name()
+    {
+        return $this->hasMany(PushNotification::class, 'user_name');
     }
 }

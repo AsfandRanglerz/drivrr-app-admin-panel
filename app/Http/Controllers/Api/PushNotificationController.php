@@ -30,12 +30,13 @@ class PushNotificationController extends Controller
     public function userRecevied(Request $request, $userId)
     {
         try {
-            $notifications = PushNotification::where('user_id', $userId)
+            // Update notifications
+            PushNotification::where('user_id', $userId)
                 ->where('seen_by', 0)
                 ->update(['seen_by' => 1]);
 
             $updatedNotifications = PushNotification::where('user_id', $userId)
-                ->where('seen_by', 1)
+                ->with(['user.user_name'])
                 ->get();
 
             return response()->json([
