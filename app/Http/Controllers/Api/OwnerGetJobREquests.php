@@ -122,7 +122,7 @@ class OwnerGetJobREquests extends Controller
                 $title = $owner->fname . ' ' . $owner->lname;
                 $description = 'Your Job Request Is Accepted';
                 $notificationData = [
-                    'job_id' =>  $job->id,
+                    'job_idd' =>  $job->id,
                 ];
                 FcmNotificationHelper::sendFcmNotification($driver->fcm_token, $title, $description, $notificationData);
                 PushNotification::create([
