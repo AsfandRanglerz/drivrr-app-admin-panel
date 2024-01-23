@@ -52,7 +52,7 @@ class DriverJobRequestController extends Controller
                     'location' => $location,
                 ]);
                 $driver_job_request->load('owner', 'driver', 'job');
-                $title = $driver->fname . '' . $driver->lname;
+                $title = $driver->fname . ' ' . $driver->lname;
                 $description = 'Sent You a Job Request';
                 FcmNotificationHelper::sendFcmNotification($owner->fcm_token, $title, $description);
                 return response()->json([
@@ -107,7 +107,7 @@ class DriverJobRequestController extends Controller
                 ]);
                 // Eager load the related models
                 $driver_job_request->load('owner', 'driver', 'job');
-                $title = $driver->fname . '' . $driver->lname;
+                $title = $driver->fname . ' ' . $driver->lname;
                 $description = 'Job Request with Counter Offer: $' . $request->counter_offer;
                 FcmNotificationHelper::sendFcmNotification($owner->fcm_token, $title, $description);
                 return response()->json([
