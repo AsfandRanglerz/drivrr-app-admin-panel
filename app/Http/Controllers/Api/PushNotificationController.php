@@ -34,8 +34,17 @@ class PushNotificationController extends Controller
                 ->where('seen_by', 0)
                 ->update(['seen_by' => 1]);
 
-            $updatedNotifications = PushNotification::where('user_id', $userId)
+            $updatedNotifications = PushNotification::where('push_notifications.user_id', $userId)
                 ->where('seen_by', 1)
+                ->leftJoin('users', 'push_notifications.user_name', '=', 'users.id')
+                ->leftJoin('role_user', 'push_notifications.user_name', '=', 'role_user.user_id')
+                ->select(
+                    'push_notifications.*',
+                    'users.image as user_image',
+                    'users.fname as user_fname',
+                    'users.lname as user_lname',
+                    'role_user.role_id'
+                )
                 ->get();
 
             return response()->json([
