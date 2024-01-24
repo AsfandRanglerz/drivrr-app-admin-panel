@@ -66,6 +66,7 @@ class PushNotificationController extends Controller
                 'description' => $request->input('description'),
                 'user_name' => $user->role->id,
                 'user_id' => $user->user->id,
+                'admin' => 'Admin'
             ]);
         }
         return redirect()->back()->with('message', 'Notification Sent Successfully');
