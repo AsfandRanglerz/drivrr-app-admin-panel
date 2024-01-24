@@ -38,6 +38,7 @@ Route::group(['namespace' => 'Api'], function () {
     // Route::post('register/{id}', 'AuthController@register');
     // Social LogIn
     Route::post('socialLogin/{id}', 'AuthController@socialLogin');
+    Route::post('getLocation/{id}', 'AuthController@getLocation');
     Route::get('/checkEmailExists', 'AuthController@checkEmailExists');
     Route::get('get-user-id', 'AuthController@getUserID');
     Route::post('login-otp-send', 'AuthController@user_otp_login_send')->name('login-otp-send');
