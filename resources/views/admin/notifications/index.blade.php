@@ -28,31 +28,33 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($notifications as $notification)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>
-                                                    {{ $notification->user->email }}
-                                                </td>
-                                                <td>
-                                                    @if ($notification->user_name == 1)
-                                                        <div class="badge badge-dark badge-shadow">SubAdmin</div>
-                                                    @elseif($notification->user_name == 2)
-                                                        <div class="badge badge-dark badge-shadow">Business Owner</div>
-                                                    @else
-                                                        <div class="badge badge-dark badge-shadow">Driver</div>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $notification->title }}</td>
-                                                <td>{{ $notification->description }}</td>
-                                                <td>
-                                                    @if ($notification->seen_by == 0)
-                                                        <div class="badge badge-danger badge-shadow">Not Seen</div>
-                                                    @else
-                                                        <div class="badge badge-success badge-shadow">Seen</div>
-                                                    @endif
+                                            @if ($notification->admin === 'Admin')
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>
+                                                        {{ $notification->user->email }}
+                                                    </td>
+                                                    <td>
+                                                        @if ($notification->user_name == 1)
+                                                            <div class="badge badge-dark badge-shadow">SubAdmin</div>
+                                                        @elseif($notification->user_name == 2)
+                                                            <div class="badge badge-dark badge-shadow">Business Owner</div>
+                                                        @else
+                                                            <div class="badge badge-dark badge-shadow">Driver</div>
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $notification->title }}</td>
+                                                    <td>{{ $notification->description }}</td>
+                                                    <td>
+                                                        @if ($notification->seen_by == 0)
+                                                            <div class="badge badge-danger badge-shadow">Not Seen</div>
+                                                        @else
+                                                            <div class="badge badge-success badge-shadow">Seen</div>
+                                                        @endif
 
-                                                </td>
-                                            </tr>
+                                                    </td>
+                                                </tr>
+                                            @endif
                                         @endforeach
                                     </tbody>
                                 </table>
