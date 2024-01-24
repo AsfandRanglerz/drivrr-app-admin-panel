@@ -154,15 +154,25 @@ class DriverJobRequestController extends Controller
     public function getJobRequestsByJob($driver_id)
     {
         try {
-
             $jobRequests = PaymentRequest::where('driver_id', $driver_id)
                 ->with('job.vehicle', 'owner', 'driver')
                 ->get();
 
+            $buttonEnabledJobRequests = $jobRequests->filter(function ($jobRequest) {
+                return $jobRequest->job->date == now()->format('d-m-Y') && $jobRequest->status == 'Accepted';
+            });
+
+            $responseJobRequests = $jobRequests->map(function ($jobRequest) use ($buttonEnabledJobRequests) {
+                return [
+                    'jobRequest' => $jobRequest,
+                    'buttonCondition' => $buttonEnabledJobRequests->contains($jobRequest),
+                ];
+            });
+
             return response()->json([
                 'message' => 'Job requests fetched successfully.',
                 'status' => 'success',
-                'jobRequests' => $jobRequests,
+                'jobRequests' => $responseJobRequests,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -172,6 +182,7 @@ class DriverJobRequestController extends Controller
             ], 500);
         }
     }
+
     // public function getJobRequestsByOwner($job_id)
     // {
     //     try {
