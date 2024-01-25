@@ -41,6 +41,7 @@ Route::post('/admin-reset-password-link', [AdminController::class, 'adminResetPa
 Route::get('/change_password/{id}', [AdminController::class, 'change_password']);
 Route::post('/admin-reset-password', [AdminController::class, 'ResetPassword']);
 
+
 Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('dashboard', [AdminController::class, 'getdashboard'])->middleware('permission:Dashboard');
     Route::get('profile', [AdminController::class, 'getProfile']);
@@ -133,4 +134,6 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/contactus', [ContactUsController::class, 'contactIndex'])->name('contactus.index');
     Route::post('/contactus-save', [ContactUsController::class, 'submitForm'])->name('submit.form');
 });
+
+
 

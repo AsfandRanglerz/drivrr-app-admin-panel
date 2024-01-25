@@ -41,4 +41,9 @@ class SecurityController extends Controller
         TermCondition::find($data->id)->update($request->all());
         return redirect('/admin/term-condition')->with(['status'=>true, 'message' => 'Term&Condition Updated Successfully']);
     }
+    public function webViewPrivacyPolicy()
+    {
+        $data=PrivacyPolicy::first();
+        return view('security.webView',compact('data'));
+    }
 }
