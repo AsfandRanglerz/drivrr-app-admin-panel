@@ -41,6 +41,8 @@ Route::post('/admin-reset-password-link', [AdminController::class, 'adminResetPa
 Route::get('/change_password/{id}', [AdminController::class, 'change_password']);
 Route::post('/admin-reset-password', [AdminController::class, 'ResetPassword']);
 Route::get('/privacy-policy-drivrr', [SecurityController::class, 'webViewPrivacyPolicy']);
+Route::get('/about-us-drivrr', [SecurityController::class, 'webViewAboutUs']);
+Route::get('/terms-conditions-drivrr', [SecurityController::class, 'webViewTermCondition']);
 
 
 Route::prefix('admin')->middleware('admin')->group(function () {
@@ -53,6 +55,11 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('term-condition', [SecurityController::class, 'TermCondition'])->middleware('permission:Term&Conditions');
     Route::get('term-condition-edit', [SecurityController::class, 'TermConditionEdit']);
     Route::post('term-condition-update', [SecurityController::class, 'TermConditionUpdate']);
+
+    Route::get('about-us', [SecurityController::class, 'AboutUs']);
+    Route::get('about-us-edit', [SecurityController::class, 'AboutUsEdit']);
+    Route::post('about-us-update', [SecurityController::class, 'AboutUsUpdate']);
+
     Route::get('logout', [AdminController::class, 'logout']);
     Route::get('notifications-seen', [AdminController::class, 'seen_notification'])->name('notifications-seen');
 
