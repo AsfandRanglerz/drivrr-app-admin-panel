@@ -89,7 +89,7 @@
 
 </style>
 <div class="banner">
-    <h1>Privacy Policy</h1>
+    <h1>Terms & Conditions</h1>
 </div>
 <div class="container">
     {!! $data->description !!}

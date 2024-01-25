@@ -208,17 +208,24 @@
             @if (auth()->guard('web')->check() &&
                     auth()->guard('web')->user()->can('Term&Conditions'))
                 <li class="dropdown {{ request()->is('admin/termCondition') ? 'active' : '' }}">
-                    <a href="{{ url('/admin/termCondition') }}" class="nav-link"> <i
+                    <a href="{{ url('/admin/term-condition') }}" class="nav-link"> <i
                             class="fas fa-globe"></i><span>Term
                             & Conditions</span></a>
                 </li>
             @elseif (auth()->guard('admin')->check())
                 <li class="dropdown {{ request()->is('admin/termCondition') ? 'active' : '' }}">
-                    <a href="{{ url('/admin/termCondition') }}" class="nav-link"> <i
+                    <a href="{{ url('/admin/term-condition') }}" class="nav-link"> <i
                             class="fas fa-globe"></i><span>Term
                             & Conditions</span></a>
                 </li>
             @endif
+
+            {{-- contact us --}}
+            <li class="dropdown {{ request()->is('admin/aboutus') ? 'active' : '' }}">
+                <a href="{{ url('/admin/about-us') }}" class="nav-link"> <i
+                        class="fas fa-globe"></i><span>About Us</span></a>
+            </li>
+
             {{-- Help & Support --}}
             @if (auth()->guard('web')->check() &&
                     auth()->guard('web')->user()->can('Help & Support'))
