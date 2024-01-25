@@ -16,9 +16,13 @@ class AdminContactUs extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public $email;
+    public $description;
+    public function __construct($email, $description)
     {
         //
+        $this->email = $email;
+        $this->description = $description;
     }
 
     /**

@@ -15,7 +15,6 @@
                             <div class="card-body">
                                 <form method="post" action="{{ route('submit.form') }}">
                                     @csrf <!-- Add this line to include CSRF protection -->
-
                                     <div class="form-group">
                                         <label for="email">Email:</label>
                                         <input type="email" name="email" class="form-control" id="email"

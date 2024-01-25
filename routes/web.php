@@ -131,4 +131,6 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/sendOtp', [TwilioController::class, 'Otp'])->name('otp.store');
     // ############# Contact Us #####
     Route::get('/contactus', [ContactUsController::class, 'contactIndex'])->name('contactus.index');
+    Route::post('/contactus-save', [ContactUsController::class, 'submitForm'])->name('submit.form');
 });
+
