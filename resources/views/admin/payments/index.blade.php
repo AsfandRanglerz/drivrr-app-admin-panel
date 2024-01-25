@@ -33,46 +33,64 @@
                                                      <tr>
                                                          <th>#</th>
                                                          <th>Business Owner</th>
+                                                         <th>Owner Email</th>
+                                                         <th>Job Location</th>
+                                                         <th>Job Date</th>
+                                                         <th>Job Time</th>
+                                                         <th>Job Days</th>
                                                          <th>Payment</th>
                                                          <th>Driver</th>
+                                                         <th>Driver Email</th>
                                                          <th>Vehicle</th>
                                                          <th>Job Status</th>
                                                      </tr>
                                                  </thead>
                                                  <tbody>
                                                      @foreach ($paymentRequests as $payments)
-                                                         <tr>
-                                                             <td>{{ $loop->iteration }}</td>
-                                                             <td>{{ $payments->owner->fname . ' ' . $payments->owner->lname }}
-                                                             </td>
-                                                             <td>
-                                                                 @if (isset($payments->payment_amount) && $payments->payment_amount !== null)
-                                                                     ${{ $payments->payment_amount }}
-                                                                 @elseif(isset($payments->counter_offer) && $payments->counter_offer !== null)
-                                                                     ${{ $payments->counter_offer }}
-                                                                 @else
-                                                                     <div class="badge badge-danger badge-shadow">No Payment
-                                                                     </div>
-                                                                 @endif
-                                                             </td>
+                                                         @if ($payments->status === 'Accepted' || $payments->status == 'CancelRide')
+                                                             <tr>
+                                                                 <td>{{ $loop->iteration }}</td>
+                                                                 <td>{{ $payments->owner->fname . ' ' . $payments->owner->lname }}
+                                                                 </td>
+                                                                 <td>{{ $payments->owner->email }}</td>
+                                                                 <td>{{ $payments->job->location }}</td>
+                                                                 <td>{{ $payments->job->date }}</td>
+                                                                 <td>{{ $payments->job->time }}</td>
+                                                                 <td>{{ $payments->job->days }}</td>
 
-                                                             <td>{{ $payments->driver->fname . ' ' . $payments->driver->lname }}
-                                                             </td>
-                                                             <td>{{ $payments->job->vehicle->name }}</td>
-                                                             <td>
-                                                                 @if ($payments->status == 'pending')
-                                                                     <div
-                                                                         class="badge p-2 badge-shadow btn-warning text-white">
-                                                                         Pending</div>
-                                                                 @elseif($payments->status == 'CancelRide')
-                                                                     <div class="badge badge-danger badge-shadow">Ride
-                                                                         Canceled</div>
-                                                                 @else
-                                                                     <div class="badge p-2 badge-success badge-shadow">Paid
-                                                                     </div>
-                                                                 @endif
-                                                             </td>
-                                                         </tr>
+                                                                 <td>
+                                                                     @if (isset($payments->payment_amount) && $payments->payment_amount !== null)
+                                                                         ${{ $payments->payment_amount }}
+                                                                     @elseif(isset($payments->counter_offer) && $payments->counter_offer !== null)
+                                                                         ${{ $payments->counter_offer }}
+                                                                     @else
+                                                                         <div class="badge badge-danger badge-shadow">No
+                                                                             Payment
+                                                                         </div>
+                                                                     @endif
+                                                                 </td>
+
+                                                                 <td>{{ $payments->driver->fname . ' ' . $payments->driver->lname }}
+                                                                 </td>
+                                                                 <td>{{ $payments->driver->email }}</td>
+                                                                 <td>{{ $payments->job->vehicle->name }}</td>
+                                                                 <td>
+                                                                     @if ($payments->status == 'pending')
+                                                                         <div
+                                                                             class="badge p-2 badge-shadow btn-warning text-white">
+                                                                             Pending</div>
+                                                                     @elseif($payments->status == 'CancelRide')
+                                                                         <div class="badge p-2 badge-danger badge-shadow">
+                                                                             Ride
+                                                                             Canceled</div>
+                                                                     @else
+                                                                         <div class="badge p-2 badge-success badge-shadow">
+                                                                             Paid
+                                                                         </div>
+                                                                     @endif
+                                                                 </td>
+                                                             </tr>
+                                                         @endif
                                                      @endforeach
                                                  </tbody>
                                              </table>
