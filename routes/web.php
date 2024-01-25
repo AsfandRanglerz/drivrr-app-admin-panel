@@ -40,6 +40,7 @@ Route::get('/admin-forgot-password', [AdminController::class, 'forgetPassword'])
 Route::post('/admin-reset-password-link', [AdminController::class, 'adminResetPasswordLink']);
 Route::get('/change_password/{id}', [AdminController::class, 'change_password']);
 Route::post('/admin-reset-password', [AdminController::class, 'ResetPassword']);
+Route::get('/privacy-policy-drivrr', [SecurityController::class, 'webViewPrivacyPolicy']);
 
 
 Route::prefix('admin')->middleware('admin')->group(function () {
