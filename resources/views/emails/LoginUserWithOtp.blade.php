@@ -1,11 +1,9 @@
 @component('mail::message')
-# OTP.
+    # One-Time Password (OTP)
 
+    Your One-Time Password (OTP) is:
+    **{{ $OTP }}**
 
-<p>{{ $OTP }}</p>
-
-
-
-Thanks,<br>
-from:{{ config('app.name') }}
+    Thanks
+    From: {{ config('app.name') }}
 @endcomponent
