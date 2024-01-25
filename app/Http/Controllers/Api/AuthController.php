@@ -473,6 +473,23 @@ class AuthController extends Controller
             'driverLocation' => $user,
         ]);
     }
+    public function getLocations($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        $latitude = $user->latitude;
+        $longitude = $user->longitude;
+
+        return response()->json([
+            'userId' => $user->id,
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+        ]);
+    }
 }
 
     ############ OTP CODE End ###########################

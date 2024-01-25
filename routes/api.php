@@ -47,6 +47,8 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('change-password', 'AuthController@change_password');
 });
 Route::post('getLocation/{id}', 'Api\AuthController@getLocation');
+Route::get('getLocations/{id}', 'Api\AuthController@getLocations');
+
 Route::get('user-profile/{id}', 'Api\ProfileController@show');
 Route::post('edit-profile/{id}', 'Api\ProfileController@update');
 Route::get('users-imageget/{id}', 'Api\ProfileController@getImage');

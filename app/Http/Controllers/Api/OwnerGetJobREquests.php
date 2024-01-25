@@ -24,7 +24,7 @@ class OwnerGetJobREquests extends Controller
     {
         try {
             $ownerPay = PaymentRequest::findOrFail($id);
-            if ($ownerPay->counter_offer === '0') {
+            if ($ownerPay->counter_offer == null) {
                 $ownerJob = $ownerPay->job->price;
                 $ownerPay->update(['payment_amount' =>  $ownerJob]);
                 $driverId = $ownerPay->driver_id;
@@ -56,9 +56,16 @@ class OwnerGetJobREquests extends Controller
         }
     }
     // ########## Ride Accept + Stripe Integration Code #############
+
     public function owner_accept_job_request(Request $request, $id)
     {
         try {
+            // Create a new instance of the Stripe client
+            $stripe = new \Stripe\StripeClient('sk_test_51OZ9CNH4pKZw8NygRAES6G6JbKVPxg1q96ViQV5PCKWPizBNIWSbUWW56TjAVFrAycu8nMCJ7TtSZe0B2Q9JdiOm00NZ6ir3uP');
+
+            // Set the API key using the Stripe client instance
+            \Stripe\Stripe::setApiKey('sk_test_51OZ9CNH4pKZw8NygRAES6G6JbKVPxg1q96ViQV5PCKWPizBNIWSbUWW56TjAVFrAycu8nMCJ7TtSZe0B2Q9JdiOm00NZ6ir3uP');
+
             $owner_accept = PaymentRequest::find($id);
 
             if (!$owner_accept) {
@@ -80,8 +87,6 @@ class OwnerGetJobREquests extends Controller
 
             $amountToUse = $owner_accept->payment_amount ? $owner_accept->payment_amount * 100 : $owner_accept->counter_offer * 100;
 
-            Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
-
             if (!$owner->email) {
                 return response()->json([
                     'message' => 'Customer email is required for the payment.',
@@ -89,24 +94,27 @@ class OwnerGetJobREquests extends Controller
                 ], 400);
             }
 
-            $customer = Customer::create([
+            // Create a customer in Stripe
+            $customer = $stripe->customers->create([
                 'email' => $owner->email,
             ]);
 
-            $ephemeralKey = EphemeralKey::create(
+            // Create an ephemeral key for the customer
+            $ephemeralKey = $stripe->ephemeralKeys->create(
                 ['customer' => $customer->id],
                 ['stripe_version' => '2023-10-16']
             );
 
             $data = [
                 'amount' => $amountToUse,
-                'currency' => 'gbp', // Set currency to GBP
+                'currency' => 'gbp',
                 'payment_method_types' => ['card'],
                 'customer' => $customer->id,
                 'receipt_email' => $owner->email,
             ];
 
-            $paymentIntent = PaymentIntent::create($data);
+            // Create a payment intent
+            $paymentIntent = $stripe->paymentIntents->create($data);
 
             $owner_accept->update([
                 'status' => 'Accepted',
@@ -148,6 +156,7 @@ class OwnerGetJobREquests extends Controller
             ], 500);
         }
     }
+
     public function owner_cancle_request($id)
     {
         $check = PaymentRequest::where('id', $id)->first();
