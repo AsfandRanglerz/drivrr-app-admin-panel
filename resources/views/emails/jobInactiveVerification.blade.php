@@ -1,12 +1,12 @@
 @component('mail::message')
-    # Cancelation Status
+    # Cancellation Status
 
     @if ($status == 1)
-        Your Request For Job Cancelltion has be Successfully Approved.
+        Your request for job cancellation has been successfully approved.
     @else
-        Your Request Are Not Accepted For job Cancellation.
+        Unfortunately, your request for job cancellation has not been accepted.
     @endif
 
-    Thanks,
+    Thanks,<br>
     {{ config('app.name') }}
 @endcomponent
