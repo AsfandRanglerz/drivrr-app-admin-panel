@@ -130,5 +130,5 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/otp', [TwilioController::class, 'indexOtp'])->name('otp.index');
     Route::post('/sendOtp', [TwilioController::class, 'Otp'])->name('otp.store');
     // ############# Contact Us #####
-    Route::get('/otp', [ContactUsController::class, 'contactIndex'])->name('contactus.index');
+    Route::get('/contactus', [ContactUsController::class, 'contactIndex'])->name('contactus.index');
 });
