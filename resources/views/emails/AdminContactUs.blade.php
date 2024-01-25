@@ -1,9 +1,11 @@
 @component('mail::message')
-    <p>Email: {{ $email }}</p>
-    <p>Description:</p>
-    <p>{{ $description }}</p>
+    # Contact Us Form Submission
 
+    **Email:** {{ $email }}
 
-    Thanks,<br>
+    **Description:**
+    {{ $description }}
+
+    Thanks,
     {{ config('app.name') }}
 @endcomponent
