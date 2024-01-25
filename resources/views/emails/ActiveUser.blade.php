@@ -8,7 +8,7 @@
         Congratulations! You've successfully registered as a business owner.
         <p>Your journey with {{ config('app.name') }} as a business owner begins now.</p>
     @else
-        Welcome, Admin!
+        Welcome, Sub Admin!
         <p>You've been successfully registered as an SubAdmin. Get ready to manage and oversee the platform.</p>
     @endif
 

@@ -7,6 +7,6 @@
         Unfortunately, your request for job cancellation has not been accepted.
     @endif
 
-    Thanks,<br>
+    Thanks,
     {{ config('app.name') }}
 @endcomponent
