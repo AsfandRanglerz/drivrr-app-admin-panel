@@ -458,26 +458,21 @@ class AuthController extends Controller
 
     public function getLocation(Request $request, $id)
     {
+
         $user = User::find($id);
 
-        if ($user) {
-            // Update latitude and longitude with the actual location data
-            $user->update([
-                'latitude' => $request->input('latitude'),
-                'longitude' => $request->input('longitude'),
-            ]);
-
-            return response()->json([
-                'latitude' => $user->latitude,
-                'longitude' => $user->longitude,
-            ]);
-        } else {
-            return response()->json([
-                'error' => 'User with the specified id not found.',
-            ], 404);
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
         }
+        $user->update([
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+        ]);
+        return response()->json([
+            'message' => 'Location updated successfully',
+            'driverLocation' => $user,
+        ]);
     }
+}
 
     ############ OTP CODE End ###########################
-
-}

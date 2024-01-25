@@ -38,7 +38,6 @@ Route::group(['namespace' => 'Api'], function () {
     // Route::post('register/{id}', 'AuthController@register');
     // Social LogIn
     Route::post('socialLogin/{id}', 'AuthController@socialLogin');
-    Route::post('getLocation/{id}', 'AuthController@getLocation');
     Route::get('/checkEmailExists', 'AuthController@checkEmailExists');
     Route::get('get-user-id', 'AuthController@getUserID');
     Route::post('login-otp-send', 'AuthController@user_otp_login_send')->name('login-otp-send');
@@ -47,13 +46,11 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('verify-otp', 'AuthController@verify_code');
     Route::post('change-password', 'AuthController@change_password');
 });
-
+Route::post('getLocation/{id}', 'Api\AuthController@getLocation');
 Route::get('user-profile/{id}', 'Api\ProfileController@show');
 Route::post('edit-profile/{id}', 'Api\ProfileController@update');
 Route::get('users-imageget/{id}', 'Api\ProfileController@getImage');
 Route::post('users-imageupdate/{id}', 'Api\ProfileController@updateImage');
-
-
 
 Route::middleware(['auth:sanctum'])->group(function () {
     //edit-user-profile

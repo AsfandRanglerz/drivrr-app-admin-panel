@@ -18,7 +18,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name', 'fname', 'maiden_name', 'lname', 'email', 'image', 'password', 'designation', 'is_active', 'address', 'role_id', 'phone', 'document', 'company_name', 'location',
-        'company_info'
+        'company_info','latitude','longitude'
     ];
 
     public function usercompany()
