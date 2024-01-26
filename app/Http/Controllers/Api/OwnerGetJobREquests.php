@@ -204,22 +204,27 @@ class OwnerGetJobREquests extends Controller
     {
         $jobUpdated = PaymentRequest::where('id', $id)->update(['status' => 'Completed']);
         if ($jobUpdated) {
-            $title =   $jobUpdated->owner->fname . ' ' .    $jobUpdated->owner->lname;
-            $description = 'Congratulation! Your Job Is Completed';
-            $notificationData = [
-                'job_idd' =>  $jobUpdated->job_id,
-            ];
-            FcmNotificationHelper::sendFcmNotification($jobUpdated->driver->fcm_token, $title, $description, $notificationData);
-            PushNotification::create([
-                'title' => $title,
-                'description' => $description,
-                'user_name' =>  $jobUpdated->owner->id,
-                'user_id' => $jobUpdated->driver->id,
-                'job_id' => $jobUpdated->job_id,
-            ]);
-            return response()->json(['message' => 'Job completed successfully'], 200);
+            $updateJobCompletion = PaymentRequest::find($id);
+            if ($updateJobCompletion) {
+                $title = $updateJobCompletion->owner->fname . ' ' . $updateJobCompletion->owner->lname;
+                $description = 'Congratulation! Your Job Is Completed';
+                $notificationData = [
+                    'job_idd' =>  $updateJobCompletion->job_id,
+                ];
+                FcmNotificationHelper::sendFcmNotification($updateJobCompletion->driver->fcm_token, $title, $description, $notificationData);
+                PushNotification::create([
+                    'title' => $title,
+                    'description' => $description,
+                    'user_name' =>  $updateJobCompletion->owner_id,
+                    'user_id' => $updateJobCompletion->driver_id,
+                    'job_id' => $updateJobCompletion->job_id,
+                ]);
+                return response()->json(['message' => 'Job completed successfully'], 200);
+            } else {
+                return response()->json(['message' => 'Updated Job completed not found'], 404);
+            }
         } else {
-            return response()->json(['message' => 'Payment request not found or status not updated'], 404);
+            return response()->json(['message' => 'Updated Job not found or status not updated'], 404);
         }
     }
 }
