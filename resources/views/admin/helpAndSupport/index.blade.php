@@ -1,18 +1,6 @@
 @extends('admin.layout.app')
-
-@section('title', 'Dashboard')
-
+@section('title', 'Help&Support')
 @section('content')
-
-    <head>
-        <!-- Bootstrap 5.1.3 CDN-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Bootstrap 5.1.3 CDN -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-    </head>
     <style>
         .toggle[data-toggle="toggle"] {
             width: 98.3855px !important;
@@ -41,7 +29,7 @@
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
                         <div class="card-body table-striped table-bordered table-responsive">
-                            <table class="table" id="table_id_1">
+                            <table class="table" class="table-1">
                                 <thead>
                                     <tr>
                                         <th>Sr.</th>
@@ -107,7 +95,7 @@
                     {{-- driver --}}
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="card-body table-striped table-bordered table-responsive">
-                            <table class="table" id="table_id_2">
+                            <table class="table" class="table-1">
                                 <thead>
                                     <tr>
                                         <th>Sr.</th>
@@ -177,29 +165,30 @@
     @endsection
 
 
-
-    @section('scripts')
-
-        @if (\Illuminate\Support\Facades\Session::has('message'))
-            <script>
-                toastr.success('{{ \Illuminate\Support\Facades\Session::get('message') }}');
-            </script>
-        @endif
-
-
-        <script>
-            $(document).ready(function() {
-                $('#table_id_1').DataTable();
-                $('#table_id_2').DataTable();
-                $('#table_id_3').DataTable();
-            });
-        </script>
     @section('js')
         @if (\Illuminate\Support\Facades\Session::has('message'))
             <script>
                 toastr.success('{{ \Illuminate\Support\Facades\Session::get('message') }}');
             </script>
         @endif
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+        <script type="text/javascript">
+            $('.show_confirm').click(function(event) {
+                var form = $(this).closest("form");
+                var name = $(this).data("name");
+                event.preventDefault();
+                swal({
+                        title: `Are you sure you want to delete this record?`,
+                        text: "If you delete this, it will be gone forever.",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            form.submit();
+                        }
+                    });
+            });
+        </script>
     @endsection
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
-@endsection
