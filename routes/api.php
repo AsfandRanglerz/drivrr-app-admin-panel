@@ -121,6 +121,7 @@ Route::put('/updateRequestStatus/{id}', 'Api\DriverJobRequestController@updateSt
 Route::get('owner-get-job-requests/{driver_id}', 'Api\OwnerGetJobREquests@show_driverActiveAccountDetails');
 Route::post('/owner-pay-driver/{id}', 'Api\OwnerGetJobREquests@ownerPayDriver');
 Route::post('owner-accept-job-request/{id}', 'Api\OwnerGetJobREquests@owner_accept_job_request');
+Route::post('ownerCompleteJob/{id}', 'Api\OwnerGetJobREquests@completeJob');
 Route::post('/owner-cancle-request/{id}', 'Api\OwnerGetJobREquests@owner_cancle_request');
 Route::delete('/owner-cancel-job/{id}', 'Api\OwnerJobsController@owner_cancelJob');
 
