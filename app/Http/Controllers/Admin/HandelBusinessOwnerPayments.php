@@ -18,7 +18,7 @@ class HandelBusinessOwnerPayments extends Controller
     }
     public function completeJobs()
     {
-        $paymentRequests = PaymentRequest::with('owner', 'driver', 'job.vehicle')->get()->latest();
+        $paymentRequests = PaymentRequest::with('owner', 'driver', 'job.vehicle')->latest()->get();
         return view('admin.completedjobs.index', compact('paymentRequests'));
     }
 }
