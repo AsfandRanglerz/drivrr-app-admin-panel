@@ -222,8 +222,8 @@
 
             {{-- contact us --}}
             <li class="dropdown {{ request()->is('admin/aboutus') ? 'active' : '' }}">
-                <a href="{{ url('/admin/about-us') }}" class="nav-link"> <i
-                        class="fas fa-globe"></i><span>About Us</span></a>
+                <a href="{{ url('/admin/about-us') }}" class="nav-link"> <i class="fas fa-globe"></i><span>About
+                        Us</span></a>
             </li>
 
             {{-- Help & Support --}}
@@ -279,13 +279,7 @@
                     </a>
                 </li>
             @endif
-            {{-- Contact Us --}}
-            <li class="dropdown {{ request()->is('admin/contactus*') ? 'active' : '' }}">
-                <a href="{{ route('contactus.index') }}" class="nav-link">
-                    <i class="fas fa-envelope"></i>
-                    <span>Contact Us</span>
-                </a>
-            </li>
+
             {{-- <li class="dropdown {{ request()->is('admin/otp*') ? 'active' : '' }}">
                 <a href="{{ route('otp.index') }}" class="nav-link">
                     <i class="fas fa-bell"></i>

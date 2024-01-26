@@ -12,7 +12,6 @@ use App\Http\Controllers\Admin\VehicleController;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\SecurityController;
 use App\Http\Controllers\Admin\BusinessOwnerController;
-use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\DriverVehicleController;
 use App\Http\Controllers\Admin\HelpAndSupportController;
 use App\Http\Controllers\Admin\WalletController;
@@ -138,9 +137,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     // ############# OTP #####
     Route::get('/otp', [TwilioController::class, 'indexOtp'])->name('otp.index');
     Route::post('/sendOtp', [TwilioController::class, 'Otp'])->name('otp.store');
-    // ############# Contact Us #####
-    Route::get('/contactus', [ContactUsController::class, 'contactIndex'])->name('contactus.index');
-    Route::post('/contactus-save', [ContactUsController::class, 'submitForm'])->name('submit.form');
+
 });
 
 
