@@ -55,7 +55,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('term-condition-edit', [SecurityController::class, 'TermConditionEdit']);
     Route::post('term-condition-update', [SecurityController::class, 'TermConditionUpdate']);
 
-    Route::get('about-us', [SecurityController::class, 'AboutUs']);
+    Route::get('about-us', [SecurityController::class, 'AboutUs'])->middleware('permission:AboutUs');
     Route::get('about-us-edit', [SecurityController::class, 'AboutUsEdit']);
     Route::post('about-us-update', [SecurityController::class, 'AboutUsUpdate']);
 
@@ -137,8 +137,4 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     // ############# OTP #####
     Route::get('/otp', [TwilioController::class, 'indexOtp'])->name('otp.index');
     Route::post('/sendOtp', [TwilioController::class, 'Otp'])->name('otp.store');
-
 });
-
-
-

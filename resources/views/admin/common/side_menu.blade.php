@@ -220,11 +220,19 @@
                 </li>
             @endif
 
-            {{-- contact us --}}
-            <li class="dropdown {{ request()->is('admin/aboutus') ? 'active' : '' }}">
-                <a href="{{ url('/admin/about-us') }}" class="nav-link"> <i class="fas fa-globe"></i><span>About
-                        Us</span></a>
-            </li>
+            {{-- About Us --}}
+            @if (auth()->guard('web')->check() &&
+                    auth()->guard('web')->user()->can('AboutUs'))
+                <li class="dropdown {{ request()->is('admin/aboutus') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/about-us') }}" class="nav-link"> <i class="fas fa-globe"></i><span>About
+                            Us</span></a>
+                </li>
+            @elseif (auth()->guard('admin')->check())
+                <li class="dropdown {{ request()->is('admin/aboutus') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/about-us') }}" class="nav-link"> <i class="fas fa-globe"></i><span>About
+                            Us</span></a>
+                </li>
+            @endif
 
             {{-- Help & Support --}}
             @if (auth()->guard('web')->check() &&
