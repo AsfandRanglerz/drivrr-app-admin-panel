@@ -490,63 +490,63 @@ class AuthController extends Controller
             'longitude' => $longitude,
         ]);
     }
-    public function appleLogin(Request $request, $id)
-    {
-        try {
-            $appleSocialId = $request->apple_social_id;
-            $user = User::where('apple_social_id', $appleSocialId)->first();
+    // public function appleLogin(Request $request, $id)
+    // {
+    //     try {
+    //         $appleSocialId = $request->apple_social_id;
+    //         $user = User::where('apple_social_id', $appleSocialId)->first();
 
-            if ($user) {
-                $user->fill($request->only(['fname', 'lname', 'email', 'phone', 'image', 'fcm_token']));
-                $user->save();
-                $user->roles()->sync([$request->role_id]);
-            } else {
-                $user = new User();
-                $user->fill($request->only(['fname', 'lname', 'email', 'phone', 'role_id', 'company_info', 'company_name']));
-                $user->apple_social_id = $appleSocialId;
-                $user->save();
-                $user->roles()->sync([$request->role_id]);
-            }
-            if ($user->role_id == 2 || $user->role_id == 3) {
-                $wallet = null;
-                if ($user->role_id == 3) {
-                    Mail::to($user->email)->send(new ActiveUserStatus($user->id));
-                    $wallet = DriverWallet::firstOrNew(['driver_id' => $user->id]);
-                    $wallet->total_earning = 0;
-                    $wallet->save();
-                }
+    //         if ($user) {
+    //             $user->fill($request->only(['fname', 'lname', 'email', 'phone', 'image', 'fcm_token']));
+    //             $user->save();
+    //             $user->roles()->sync([$request->role_id]);
+    //         } else {
+    //             $user = new User();
+    //             $user->fill($request->only(['fname', 'lname', 'email', 'phone', 'role_id', 'company_info', 'company_name']));
+    //             $user->apple_social_id = $appleSocialId;
+    //             $user->save();
+    //             $user->roles()->sync([$request->role_id]);
+    //         }
+    //         if ($user->role_id == 2 || $user->role_id == 3) {
+    //             $wallet = null;
+    //             if ($user->role_id == 3) {
+    //                 Mail::to($user->email)->send(new ActiveUserStatus($user->id));
+    //                 $wallet = DriverWallet::firstOrNew(['driver_id' => $user->id]);
+    //                 $wallet->total_earning = 0;
+    //                 $wallet->save();
+    //             }
 
-                $token = $user->createToken($request->email)->plainTextToken;
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'User Logged In Successfully',
-                    'token' => $token,
-                    'data' => $user,
-                    'driver_wallet' => $wallet,
-                ], 200);
-            } elseif ($user->role_id == 2) {
-                $token = $user->createToken($request->email)->plainTextToken;
-                Mail::to($user->email)->send(new ActiveUserStatus($id));
-                return response()->json([
-                    'message' => "Added successfully.",
-                    'status' => "success",
-                    'token' => $token,
-                    'data' =>  $user,
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Invalid role_id',
-                ], 400);
-            }
-        } catch (ValidationException $e) {
-            // Validation failed, return validation error messages
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
-        }
-    }
+    //             $token = $user->createToken($request->email)->plainTextToken;
+    //             return response()->json([
+    //                 'status' => 'success',
+    //                 'message' => 'User Logged In Successfully',
+    //                 'token' => $token,
+    //                 'data' => $user,
+    //                 'driver_wallet' => $wallet,
+    //             ], 200);
+    //         } elseif ($user->role_id == 2) {
+    //             $token = $user->createToken($request->email)->plainTextToken;
+    //             Mail::to($user->email)->send(new ActiveUserStatus($id));
+    //             return response()->json([
+    //                 'message' => "Added successfully.",
+    //                 'status' => "success",
+    //                 'token' => $token,
+    //                 'data' =>  $user,
+    //             ], 200);
+    //         } else {
+    //             return response()->json([
+    //                 'status' => 'error',
+    //                 'message' => 'Invalid role_id',
+    //             ], 400);
+    //         }
+    //     } catch (ValidationException $e) {
+    //         // Validation failed, return validation error messages
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'Validation failed',
+    //             'errors' => $e->errors(),
+    //         ], 422);
+    //     }
+    // }
 }
     ############ OTP CODE End ###########################
