@@ -219,12 +219,20 @@ class OwnerGetJobREquests extends Controller
                     'user_id' => $updateJobCompletion->driver_id,
                     'job_id' => $updateJobCompletion->job_id,
                 ]);
-                return response()->json(['message' => 'Job completed successfully'], 200);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Job completed successfully'
+                ], 200);
             } else {
-                return response()->json(['message' => 'Updated Job completed not found'], 404);
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => 'Updated Job completed not found'
+                ], 400);
             }
         } else {
-            return response()->json(['message' => 'Updated Job not found or status not updated'], 404);
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Updated Job not found or status not updated'], 403);
         }
     }
 }

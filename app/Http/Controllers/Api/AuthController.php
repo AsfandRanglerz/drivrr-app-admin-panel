@@ -490,6 +490,95 @@ class AuthController extends Controller
             'longitude' => $longitude,
         ]);
     }
+    public function appleLogin(Request $request, $id)
+    {
+        try {
+            $appleSocialId = $request->apple_social_id;
+            $user = User::where('apple_social_id', $appleSocialId)->first();
+
+            if ($user) {
+                if (empty($user->fname)) {
+                    $user->fname = $request->fname;
+                }
+                if (empty($user->lname)) {
+                    $user->lname = $request->lname;
+                }
+                if (empty($user->email)) {
+                    $user->email = $request->email;
+                }
+                if (empty($user->phone)) {
+                    $user->phone = $request->phone;
+                }
+                if (empty($user->phone)) {
+                    $user->phone = $request->phone;
+                }
+                if (empty($user->image)) {
+                    $user->image = $request->image;
+                }
+
+                if (empty($user->image)) {
+                    $user->image = $request->fcm_token;
+                }
+                $user->save();
+                $user->roles()->sync([$request->role_id]);
+                auth()->login($user);
+                $user->save();
+            } else {
+                $user = new User();
+                $user->fname = $request->fname;
+                $user->lname = $request->lname;
+                $user->email = $request->email;
+                $user->phone = $request->phone;
+                $user->role_id = $request->role_id;
+                $user->company_info = $request->company_info;
+                $user->company_name = $request->company_name;
+            }
+
+            // Perform additional actions based on user role
+            if ($user->role_id == 2 || $user->role_id == 3) {
+                $wallet = null;
+                if ($user->role_id == 3) {
+                    Mail::to($user->email)->send(new ActiveUserStatus($user->id));
+                    $wallet = DriverWallet::firstOrNew(['driver_id' => $user->id]);
+                    $wallet->total_earning = 0;
+                    $wallet->save();
+                }
+                auth()->login($user);
+                $token = auth()->user()->createToken($request->email)->plainTextToken;
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'User Logged In Successfully',
+                    'token' => $token,
+                    'data' => $user,
+                    'driver_wallet' => isset($wallet) ? $wallet : null,
+                ], 200);
+            }
+            else if ($user->role_id == 2) {
+                $token = auth()->user()->createToken($request->email)->plainTextToken;
+                Mail::to($user->email)->send(new ActiveUserStatus($id));
+
+                return response()->json([
+                    'message' => "Added successfully.",
+                    'status' => "success",
+                    'token' => $token,
+                    'data' =>  $user,
+                ], 200);
+            }
+            else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Invalid role_id',
+                ], 400);
+            }
+        } catch (ValidationException $e) {
+            // Validation failed, return validation error messages
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $e->errors(),
+            ], 422);
+        }
+    }
 }
 
     ############ OTP CODE End ###########################
