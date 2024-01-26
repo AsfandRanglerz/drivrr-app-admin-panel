@@ -287,7 +287,23 @@
                     </a>
                 </li>
             @endif
-
+            {{-- Completed Jobs --}}
+            @if (auth()->guard('web')->check() &&
+                    auth()->guard('web')->user()->can('CompletedJobs'))
+                <li class="dropdown {{ request()->is('admin/completedjobs*') ? 'active' : '' }}">
+                    <a href="{{ route('completedjobs.index') }}" class="nav-link">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Driver Completed Jobs</span>
+                    </a>
+                </li>
+            @elseif (auth()->guard('admin')->check())
+                <li class="dropdown {{ request()->is('admin/driverreview*') ? 'active' : '' }}">
+                    <a href="{{ route('completedjobs.index') }}" class="nav-link">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Driver Completed Jobs</span>
+                    </a>
+                </li>
+            @endif
             {{-- <li class="dropdown {{ request()->is('admin/otp*') ? 'active' : '' }}">
                 <a href="{{ route('otp.index') }}" class="nav-link">
                     <i class="fas fa-bell"></i>
