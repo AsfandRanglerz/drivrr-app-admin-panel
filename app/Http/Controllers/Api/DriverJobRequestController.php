@@ -6,36 +6,20 @@ use App\Models\Job;
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Document;
+use App\Models\RoleUser;
 use Illuminate\Http\Request;
 use App\Models\PaymentRequest;
 use App\Models\PushNotification;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Helpers\FcmNotificationHelper;
-use App\Models\RoleUser;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 
 
 class DriverJobRequestController extends Controller
 {
-    // private function sendFcmNotification($fcmToken, $title, $description)
-    // {
-    //     $response = Http::withHeaders([
-    //         'Authorization' => 'key=AAAAerlut_I:APA91bHPRL6PQ0T1Mbb1EtU-SHFxb2XkMylJfNPSAWsjq4NF9ib3no_t3RZfniHVWMOXHAkI3nfYyLHqcNaqrKUyCkUuJEc6fhs9KKUOCNFbHE_V1bekRONfyIEY1arm0JavFKO6vv-_',
-    //         'Content-Type' => 'application/json',
-    //     ])->post('https://fcm.googleapis.com/fcm/send', [
-    //         'to' => $fcmToken,
-    //         'notification' => [
-    //             'title' => $title,
-    //             'body' => $description,
-    //         ],
-    //     ]);
-    //     if ($response->successful()) {
-    //         return response()->json(['message' => 'Notificatins Send Successfully'], 200);
-    //     } else {
-    //         return response()->json(['error' => 'Notificatins Send UnSuccessfully'], 400);
-    //     }
-    // }
+
     public function add_job_request_without_counter(Request $request, $owner_id, $driver_id, $job_id)
     {
         try {
@@ -183,41 +167,6 @@ class DriverJobRequestController extends Controller
         }
     }
 
-    // public function getJobRequestsByOwner($job_id)
-    // {
-    //     try {
-    //         $fetchjob = PaymentRequest::where('job_id', $job_id)->first();
-
-    //         if (!$fetchjob) {
-    //             return response()->json([
-    //                 'message' => 'Job not found.',
-    //                 'status' => 'failed',
-    //             ], 404);
-    //         }
-    //         $jobRequests = PaymentRequest::where('job_id', $job_id)
-    //             ->with([
-
-    //                 'job',
-    //                 'driver.driverRewiews.owner',
-    //                 'driver.driverRewiews',
-    //                 'driver.bankAccounts' => function ($query) {
-    //                     $query->where('status', 'Active');
-    //                 }
-    //             ])
-    //             ->get();
-    //         return response()->json([
-    //             'message' => 'Job requests Successfully',
-    //             'status' => 'success',
-    //             'jobRequests' => $jobRequests,
-    //         ], 200);
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'message' => 'Error fetching job requests.',
-    //             'status' => 'Error',
-    //             'error' => $e->getMessage(),
-    //         ], 500);
-    //     }
-    // }
     public function getJobRequestsByOwner($job_id)
     {
         try {
@@ -268,27 +217,40 @@ class DriverJobRequestController extends Controller
     }
 
     public function cancelJob($id)
-    { {
-
-            try {
-                $cancelRequest = PaymentRequest::where('id', $id)->delete();
-                if (!$cancelRequest) {
-                    return response()->json([
-                        'message' => 'Job not found ',
-                        'status' => 'failed',
-                    ], 404);
-                }
+    {
+        try {
+            $cancelRequest = PaymentRequest::where('id', $id)->delete();
+            if (!$cancelRequest) {
                 return response()->json([
-                    'message' => 'Job requests successfully deleted',
-                    'status' => 'success',
-                ], 200);
-            } catch (\Exception $e) {
-                return response()->json([
-                    'message' => 'Error deleting job requests.',
-                    'status' => 'error',
-                    'error' => $e->getMessage(),
-                ], 500);
+                    'message' => 'Job not found ',
+                    'status' => 'failed',
+                ], 404);
             }
+            return response()->json([
+                'message' => 'Job requests successfully deleted',
+                'status' => 'success',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error deleting job requests.',
+                'status' => 'error',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function getDriverCompletedStatus(Request $request, $driverId)
+    {
+
+        try {
+            $completedCount = PaymentRequest::where('driver_id', $driverId)
+                ->where('status', 'Completed')
+                ->count();
+            return response()->json(['status' => 'success', 'completed_count' => $completedCount]);
+        } catch (QueryException $e) {
+
+            return response()->json(['status' => 'failed', 'error' => 'Database error'], 500);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An unexpected error occurred'], 500);
         }
     }
 }
