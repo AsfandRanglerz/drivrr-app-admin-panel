@@ -37,7 +37,7 @@ class OwnerGetJobREquests extends Controller
                 ], 200);
             } else if ($ownerPay->counter_offer > 0) {
                 $ownerCounterpay = $ownerPay->counter_offer;
-                $ownerPay->update(['payment_amount' =>  $ownerCounterpay]);
+                $ownerPay->update(['counter_offer' =>  $ownerCounterpay]);
                 $driverId = $ownerPay->driver_id;
                 $driverWallet = DriverWallet::where('driver_id', $driverId)->firstOrFail();
                 $driverWallet->update(['total_earning' => $driverWallet->total_earning + $ownerCounterpay]);
@@ -85,7 +85,13 @@ class OwnerGetJobREquests extends Controller
                 ], 400);
             }
 
-            $amountToUse = $owner_accept->payment_amount ? $owner_accept->payment_amount * 100 : $owner_accept->counter_offer * 100;
+            if ($owner_accept->payment_amount !== null) {
+                $amountToUse = $owner_accept->payment_amount;
+            } elseif ($owner_accept->counter_offer !== null) {
+                $amountToUse = $owner_accept->counter_offer;
+            }
+
+            $amountToUse *= 100;
 
             if (!$owner->email) {
                 return response()->json([
@@ -232,7 +238,8 @@ class OwnerGetJobREquests extends Controller
         } else {
             return response()->json([
                 'status' => 'failed',
-                'message' => 'Updated Job not found or status not updated'], 403);
+                'message' => 'Updated Job not found or status not updated'
+            ], 403);
         }
     }
 }
