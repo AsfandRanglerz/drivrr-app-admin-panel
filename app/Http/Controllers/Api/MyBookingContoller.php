@@ -15,7 +15,7 @@ class MyBookingContoller extends Controller
     {
         try {
             $ownerBooking = PaymentRequest::where('owner_id', $ownerId)
-                ->whereIn('status', ['Accepted', 'CancelRide','Completed'])
+                ->whereIn('status', ['Accepted', 'CancelRide', 'Completed'])
                 ->with('driver.driverVehicle', 'job', 'owner', 'driver.driverRewiews')
                 ->get();
 
@@ -67,7 +67,7 @@ class MyBookingContoller extends Controller
                 return response()->json([
                     'message' => 'No Booking Data Found',
                     'status' => 'failed',
-                ], 400);
+                ]);
             }
         } catch (\Exception $e) {
             return response()->json([
