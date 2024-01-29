@@ -261,7 +261,7 @@ class AuthController extends Controller
                     ], 200);
                 } else if ($user->role_id == 2) {
                     $token = auth()->user()->createToken($request->email)->plainTextToken;
-                    Mail::to($user->email)->send(new ActiveUserStatus($id));
+                    Mail::to($user->email)->send(new ActiveUserStatus($user->id));
 
                     return response()->json([
                         'message' => "Added successfully.",
