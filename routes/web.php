@@ -137,6 +137,6 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     // ############# OTP #####
     Route::get('/otp', [TwilioController::class, 'indexOtp'])->name('otp.index');
     Route::post('/sendOtp', [TwilioController::class, 'Otp'])->name('otp.store');
-     // ############# Complete Job #####
-     Route::get('/completeJobs', [HandelBusinessOwnerPayments::class, 'completeJobs'])->name('completedjobs.index');
+    // ############# Complete Job #####
+    Route::get('/completeJobs', [HandelBusinessOwnerPayments::class, 'completeJobs'])->name('completedjobs.index')->middleware('permission:CompleteJob');
 });

@@ -289,7 +289,7 @@
             @endif
             {{-- Completed Jobs --}}
             @if (auth()->guard('web')->check() &&
-                    auth()->guard('web')->user()->can('CompletedJobs'))
+                    auth()->guard('web')->user()->can('CompleteJob'))
                 <li class="dropdown {{ request()->is('admin/completedjobs*') ? 'active' : '' }}">
                     <a href="{{ route('completedjobs.index') }}" class="nav-link">
                         <i class="fas fa-check-circle"></i>
