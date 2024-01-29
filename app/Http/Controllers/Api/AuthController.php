@@ -446,7 +446,35 @@ class AuthController extends Controller
             ], 404);
         }
     }
+    public function resendOtp(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'status' => 'Failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found.',
+                'status' => 'Failed',
+            ], 404);
+        }
+        $newOtp = rand(1000, 9999);
+        DB::table('user_login_with_otps')->where('user_id', $user->id)->update(['otp' => $newOtp]);
+        Mail::to($request->email)->send(new LoginUserWithOtp($newOtp));
+
+        return response()->json([
+            'message' => 'OTP resent successfully.',
+            'status' => 'success',
+        ], 200);
+    }
     public function logout(Request $request)
     {
         auth()->user()->tokens()->delete();
