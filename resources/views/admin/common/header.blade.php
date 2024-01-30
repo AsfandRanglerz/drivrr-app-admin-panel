@@ -99,25 +99,27 @@
             </a>
 
             <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
-                {{-- Your existing dropdown content here --}}
-                @foreach ($updatedNotifications as $notification)
-                    <a href="#" class="dropdown-item dropdown-item-unread">
-                        <span class="dropdown-item-icon bg-primary text-white">
-                            <i class="fas fa-user"></i>
-                        </span>
-                        <span class="dropdown-item-desc">
-                            <strong>{{ $notification->title }}</strong>
-                            <p>{{ $notification->description }}</p>
-                        </span>
-
-                    </a>
-                    {{-- Add logic to update the 'read_at' field when the notification is clicked --}}
-                    @php
-                        $notification->update(['seen_by' => now()]);
-                    @endphp
-                @endforeach
+                @if ($counter > 0)
+                    @foreach ($updatedNotifications as $notification)
+                        <a href="#" class="dropdown-item dropdown-item-unread">
+                            <span class="dropdown-item-icon bg-primary text-white">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <span class="dropdown-item-desc">
+                                <strong>{{ $notification->title }}</strong>
+                                <p>{{ $notification->description }}</p>
+                            </span>
+                        </a>
+                        @php
+                            $notification->update(['seen_by' => now()]);
+                        @endphp
+                    @endforeach
+                @else
+                    <p class="text-center m-3">No new notifications</p>
+                @endif
             </div>
         </li>
+
 
         <li class="dropdown"><a href="#" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image"
