@@ -35,7 +35,7 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $driver->fname }}</td>
                                                 <td>{{ $driver->lname }}</td>
-                                                <td>{{ $driver->phone }}</td>
+                                                <td>{{ $driver->phone ?? '--' }}</td>
                                                 <td>{{ $driver->email }}</td>
                                                 <td>
                                                     <img src="{{ asset($driver->image) }}" alt="" height="50"

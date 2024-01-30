@@ -37,7 +37,7 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $owner->fname }}</td>
                                                 <td>{{ $owner->lname }}</td>
-                                                <td>{{ $owner->phone }}</td>
+                                                <td>{{ $owner->phone ?? '--'  }}</td>
                                                 <td>{{ $owner->email }}</td>
 
                                                 <td>
@@ -45,8 +45,8 @@
                                                         width="50" class="image">
                                                 </td>
 
-                                                <td>{{ $owner->company_name ?? 'N/A' }}</td>
-                                                <td>{{ $owner->company_info ?? 'N/A'}}</td>
+                                                <td>{{ $owner->company_name ?? '--' }}</td>
+                                                <td>{{ $owner->company_info ?? '--'}}</td>
 
                                                 <td>
                                                     <a href="{{ route('owner-job.index', $owner->id) }}">View</a>

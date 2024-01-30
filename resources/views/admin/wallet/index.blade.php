@@ -12,59 +12,49 @@
                                     <h4>Driver</h4>
                                 </div>
                             </div>
-                            {{--driver--}}
-                    {{-- <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"> --}}
-                        <div class="card-body  table-responsive">
-                            <table class="table table-striped table-bordered" id="table-1">
-                                <thead>
-                                    <tr>
-                                        <th>Sr.</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Earnings</th>
-                                        <th>Withdrawals</th>
-                                        <th scope="col" class="text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        @foreach ($data as $drivers)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td> <!-- Parent loop index for owner -->
-                                        <td>{{ $drivers->fname . ' ' . $drivers->lname }}</td>
-                                        <td>{{ $drivers->email }}
-                                        {{-- <td>{{ $drivers->driverWallet->total_earning }}</td> --}}
-                                        <td>
-                                            @if ($drivers->driverWallet)
-                                                {{ $drivers->driverWallet->total_earning }}
-                                            @else
-                                             <span>0</span>
-                                            @endif
-                                        </td>
-                                        <td style="justify-content: center">
-                                            {{-- {{$drivers->id}} --}}
-                                            <a href="{{route('show-withdrawals-receipts',$drivers->id)}}">View</a>
-                                        </td>
-                                        {{-- <td>{{ $question->details }}</td> --}}
-                                        <td class="text-center">
-                                            {{-- @dd($drivers->id) --}}
-                                            {{-- <button id={{ $drivers->id }} type="button" class="btn btn-primary"
-                                                data-bs-toggle="modal" data-bs-target="#exampleModal2">
-                                                <span class=" fa fa-pen"></span>
-                                            </button> --}}
-                                            <button type="button" class="btn btn-primary">
-                                                <span class="fa fa-pen"></span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                            {{-- driver --}}
+                            {{-- <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"> --}}
+                            <div class="card-body  table-responsive">
+                                <table class="table table-striped table-bordered" id="table-1">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Earnings</th>
+                                            <th>Withdrawals</th>
 
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            @foreach ($data as $drivers)
+                                                <td>{{ $loop->iteration }}</td> <!-- Parent loop index for owner -->
+                                                <td>{{ $drivers->fname . ' ' . $drivers->lname }}</td>
+                                                <td>{{ $drivers->email }}
+
+                                                <td>
+                                                    @if ($drivers->driverWallet)
+                                                        {{ $drivers->driverWallet->total_earning }}
+                                                    @else
+                                                        <span>0</span>
+                                                    @endif
+                                                </td>
+                                                <td style="justify-content: center">
+                                                    {{-- {{$drivers->id}} --}}
+                                                    <a
+                                                        href="{{ route('show-withdrawals-receipts', $drivers->id) }}">View</a>
+                                                </td>
+
+                                        </tr>
+                                        @endforeach
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
+
+                    </div>
                     {{-- </div> --}}
                 </div>
             </div>
