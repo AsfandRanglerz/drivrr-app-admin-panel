@@ -78,59 +78,47 @@
         </div>
     </div>
 </li> --}}
-
         <li class="dropdown dropdown-list-toggle">
             @php
-                $notifications = App\Models\Notification::orderBy('created_at', 'DESC')->where('read_at',NULL)->get();
-                $counter = App\Models\Notification::where('read_at',NULL)->count();
+                // Assuming you have the currently authenticated user available
+                $userId = Auth::id();
+                use App\Models\PushNotification;
+                $updatedNotifications = PushNotification::where('push_notifications.user_id', $userId)
+                    ->where('seen_by', 0)
+                    ->leftJoin('users', 'push_notifications.user_name', '=', 'users.id')
+                    ->leftJoin('role_user', 'push_notifications.user_name', '=', 'role_user.user_id')
+                    ->select('push_notifications.*', 'users.image as user_image', 'users.fname as user_fname', 'users.lname as user_lname', 'role_user.role_id')
+                    ->get();
+
+                $counter = $updatedNotifications->count();
             @endphp
-            {{-- <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg">
-                <i data-feather="bell" class="bell"></i><span class="text-danger">{{$counter}}</span>
-            </a> --}}
 
             <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg">
-                <span class="badge badge-danger" id="notificationCounter">{{$counter}}</span>
+                <span class="badge badge-danger" id="notificationCounter">{{ $counter }}</span>
                 <i data-feather="bell" class="bell"></i>
             </a>
 
             <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
-                <div class="dropdown-header">
-                    Notifications
-                    <div class="float-right">
-                        <a href="{{route('notifications-seen')}}">Mark All As Read</a>
-                    </div>
-                </div>
-                <div class="dropdown-list-content dropdown-list-icons">
-                    @forelse ($notifications as $notification)
-                        @php
-                            $userDataArray = json_decode($notification->data, true);
-                            $message = $userDataArray['message'];
-                        @endphp
-                                    <a href="#" class="dropdown-item dropdown-item-unread">
-                                        <span class="dropdown-item-icon bg-primary text-white">
-                                            <i class="fas fa-user"></i>
-                                        </span>
-                                        <span class="dropdown-item-desc">
-                                            {{ $message }}
-                                        </span>
-                                    </a>
-                     @empty
-                     <a href="#" class="dropdown-item dropdown-item-unread">
+                {{-- Your existing dropdown content here --}}
+                @foreach ($updatedNotifications as $notification)
+                    <a href="#" class="dropdown-item dropdown-item-unread">
                         <span class="dropdown-item-icon bg-primary text-white">
-                            <i class="fas fa-question"></i>
+                            <i class="fas fa-user"></i>
                         </span>
                         <span class="dropdown-item-desc">
-                            Oops no any notifications yet.!
+                            <strong>{{ $notification->title }}</strong>
+                            <p>{{ $notification->description }}</p>
                         </span>
-                    </a>
 
-                    @endforelse
-                </div>
-                <div class="dropdown-footer text-center">
-                    <a href="#">View All <i class="fas fa-chevron-right"></i></a>
-                </div>
+                    </a>
+                    {{-- Add logic to update the 'read_at' field when the notification is clicked --}}
+                    @php
+                        $notification->update(['seen_by' => now()]);
+                    @endphp
+                @endforeach
             </div>
         </li>
+
         <li class="dropdown"><a href="#" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image"
                     src="{{ asset('public/admin/assets/img/user.png') }}" class="user-img-radious-style"> <span
