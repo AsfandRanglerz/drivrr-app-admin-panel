@@ -42,6 +42,7 @@ Route::post('/admin-reset-password', [AdminController::class, 'ResetPassword']);
 Route::get('/privacy-policy-drivrr', [SecurityController::class, 'webViewPrivacyPolicy']);
 Route::get('/about-us-drivrr', [SecurityController::class, 'webViewAboutUs']);
 Route::get('/terms-conditions-drivrr', [SecurityController::class, 'webViewTermCondition']);
+
 Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('dashboard', [AdminController::class, 'getdashboard'])->middleware('permission:Dashboard');
     Route::get('profile', [AdminController::class, 'getProfile']);
