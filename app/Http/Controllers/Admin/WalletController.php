@@ -2,44 +2,39 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\DriverWallet;
-use App\Models\WithdrawalRequest;
+use App\Mail\PaymentProved;
 use App\Models\BankAccount;
+use App\Models\DriverWallet;
+use Illuminate\Http\Request;
+use App\Models\WithdrawalRequest;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 
 class WalletController extends Controller
 {
     public function index()
     {
-        // return "running";
-        // $data = User::whereHas('roles', function ($q) {
-        //     $q->where('name', 'driver');
-        // })->has('driverWallet')->with('driverWallet')->orderBy('id', 'DESC')->get();
-        $data = User::with('driverWallet')->where('role_id',3)->orderBy('id', 'DESC')->get();
-        // return $data;
-        // return   $data;
-        // $driver_id = $data->id;
-        // $wallet = User::with('driverWallet')->find($driver_id);
+
+        $data = User::with('driverWallet')->where('role_id', 3)->orderBy('id', 'DESC')->get();
         return view('admin.wallet.index', compact('data'));
     }
     public function show_withdrawal_requests()
     {
-        $requestCount = WithdrawalRequest::where('status','0')->where('seen','0')->get();
-        if($requestCount->isNotEmpty())
-        {
-            WithdrawalRequest::where('status','0')->where('seen','0')->update([
-            'seen'=>1,]);
+        $requestCount = WithdrawalRequest::where('status', '0')->where('seen', '0')->get();
+        if ($requestCount->isNotEmpty()) {
+            WithdrawalRequest::where('status', '0')->where('seen', '0')->update([
+                'seen' => 1,
+            ]);
         }
-        $withdraw_requests = WithdrawalRequest::with('bankAccount','user')->orderBy('id', 'DESC')->get();
-        return view('admin.withdrawal_requests.index',compact('withdraw_requests'));
+        $withdraw_requests = WithdrawalRequest::with('bankAccount', 'user')->orderBy('id', 'DESC')->get();
+        return view('admin.withdrawal_requests.index', compact('withdraw_requests'));
     }
-    public function send_money(Request $request , $id ,$amount)
+    public function send_money(Request $request, $id, $amount)
     {
         $request->validate([
-             'image'=>'required',
+            'image' => 'required',
         ]);
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -47,36 +42,40 @@ class WalletController extends Controller
             $filename = time() . '.' . $extension;
             $file->move(public_path('admin/assets/images/users/'), $filename);
             $image = 'public/admin/assets/images/users/' . $filename;
-        }
-        else {
+        } else {
             $image = 'public/admin/assets/images/users/owner.jpg';
         }
         $driver_id = WithdrawalRequest::where('id', $id)->value('driver_id');
         $wallet_amount = DriverWallet::where('driver_id', $driver_id)->value('total_earning');
         $updated_amount = $wallet_amount - $amount;
         DriverWallet::where('driver_id', $driver_id)->update([
-            'total_earning'=>$updated_amount,
+            'total_earning' => $updated_amount,
         ]);
         $approved_request = WithdrawalRequest::find($id);
         $approved_request->update([
-            'image'=>$image,
-            'status'=>1,
+            'image' => $image,
+            'status' => 1,
         ]);
-        return redirect()->back()->with(['status'=>'success','message'=>'Action is successfully taken.']);
-
+        $driver_email = User::where('id', $driver_id)->value('email');
+        $data = [
+            'driver_id' => $driver_id,
+            'amount' => $amount,
+            'image' => $image,
+        ];
+        Mail::to($driver_email)->send(new PaymentProved($data));
+        return redirect()->back()->with(['status' => 'success', 'message' => 'Action is successfully taken.']);
     }
     public function delete_request($id)
     {
         $approved_request = WithdrawalRequest::find($id);
         WithdrawalRequest::destroy($id);
-        return redirect()->back()->with(['status'=>'success','message'=>'Request deleted successfully.']);
+        return redirect()->back()->with(['status' => 'success', 'message' => 'Request deleted successfully.']);
     }
 
     public function show_receipts($id)
     {
-        $driver = WithdrawalRequest::where('driver_id',$id)->where('status',1)->get();
-        return view('admin.wallet.withdrawals.index',compact('driver'));
+        $driver = WithdrawalRequest::where('driver_id', $id)->where('status', 1)->get();
+        return view('admin.wallet.withdrawals.index', compact('driver'));
         return $driver;
     }
-
 }
