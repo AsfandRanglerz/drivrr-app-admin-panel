@@ -354,51 +354,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'You are not allowed to send OTP.', 'status' => 'failed'], 401);
         }
     }
-    // public function user_otp_login_verify(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'otp' => 'required',
-    //         'fcm_token' => 'required'
-    //     ]);
 
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'message' => 'Validation failed',
-    //             'status' => 'Failed',
-    //             'errors' => $validator->errors(),
-    //         ], 422);
-    //     }
-
-    //     $user_otp = DB::table('user_login_with_otps')->where('otp', $request->otp)->first();
-
-    //     if (!$user_otp) {
-    //         return response()->json([
-    //             'message' => 'OTP verification failed.',
-    //             'status' => 'Failed',
-    //         ], 400);
-    //     }
-
-    //     $user_id = $user_otp->user_id;
-    //     $user_data = User::with('roles')->find($user_id);
-
-    //     if ($user_data) {
-    //         $token = Str::random(30);
-    //         $role_id = $user_data->roles->first()->pivot->role_id;
-    //         $user_data['role_id'] = $role_id;
-
-    //         return response()->json([
-    //             'message' => 'OTP verify successfully.',
-    //             'status' => 'success',
-    //             'token' => $token,
-    //             'data' => $user_data,
-    //         ], 200);
-    //     } else {
-    //         return response()->json([
-    //             'message' => 'User not found.',
-    //             'status' => 'Failed',
-    //         ], 404);
-    //     }
-    // }
     public function user_otp_login_verify(Request $request)
     {
         $validator = Validator::make($request->all(), [
