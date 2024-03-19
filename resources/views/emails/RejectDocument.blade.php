@@ -1,14 +1,18 @@
-<div style="background-color: #FFD6D6; color: #fff; padding: 20px; border-radius: 10px;">
-    <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;color:red">Document Rejection Notice</h2>
-
-    <p style="font-size: 16px;color:red">Unfortunately, your submitted document has been rejected for the following
-        reason:</p>
-
-    <h4 style="font-size: 18px; color: #fff; background-color: #c0392b; padding: 10px; border-radius: 5px;">
-        not clear</h4>
-
-    <p style="font-size: 16px; margin-top: 20px;color:red">Kindly review and resubmit the document. We appreciate your
-        cooperation.</p>
-
-    <p style="font-size: 16px;color:red">Thanks for your understanding!</p>
-</div>
+@component('mail::message')
+    <div style="text-align:center;">
+        <img src="https://ranglerzwp.xyz/drivrrapp/public/admin/assets/img/blacklogo.png" alt="App Icon"
+            style="vertical-align: middle;margin-bottom: -3px;height: 50px;margin-bottom: 35px">
+        <h3>Welcome to Drivrr</h3>
+    </div>
+    <h2 style="font-size: 24px;">Document Rejection Notice</h2>
+    <div>
+        <p style="font-size: 16px;">Unfortunately, your submitted document has been rejected for the following
+            Reason:</p>
+    </div>
+    <div>
+        <h4 style="font-size: 18px;">
+            Not clear</h4>
+        <p style="font-size: 16px; margin-top: 20px;">Kindly review and resubmit the document. We appreciate your
+            cooperation.Thanks!</p>
+    </div>
+@endcomponent

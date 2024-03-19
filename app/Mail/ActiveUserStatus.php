@@ -29,6 +29,6 @@ class ActiveUserStatus extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.ActiveUser')->with('id',$this->id)->subject('User Activation Status');
+        return $this->markdown('emails.ActiveUser')->with('id',$this->id)->subject('User Registration Status');
     }
 }

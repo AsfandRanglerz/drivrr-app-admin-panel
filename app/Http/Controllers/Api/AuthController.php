@@ -189,7 +189,7 @@ class AuthController extends Controller
                 if ($find_user->role_id == 2 || $find_user->role_id == 3) {
                     $wallet = null;
                     if ($find_user->role_id == 3) {
-                        Mail::to($find_user->email)->send(new ActiveUserStatus($find_user->id));
+                        Mail::to($find_user->email)->send(new ActiveUserStatus($find_user->role_id));
                         $wallet = DriverWallet::firstOrNew(['driver_id' => $find_user->id]);
                         $wallet->total_earning = 0;
                         $wallet->save();
@@ -245,7 +245,7 @@ class AuthController extends Controller
                 auth()->login($user);
 
                 if ($user->role_id == 3) {
-                    Mail::to($user->email)->send(new ActiveUserStatus($user->id));
+                    Mail::to($user->email)->send(new ActiveUserStatus($user->role_id));
                     $wallet = DriverWallet::firstOrNew(['driver_id' => $user->id]);
                     $wallet->total_earning = 0;
                     $wallet->save();
@@ -261,7 +261,7 @@ class AuthController extends Controller
                     ], 200);
                 } else if ($user->role_id == 2) {
                     $token = auth()->user()->createToken($request->email)->plainTextToken;
-                    Mail::to($user->email)->send(new ActiveUserStatus($user->id));
+                    Mail::to($user->email)->send(new ActiveUserStatus($user->role_id));
 
                     return response()->json([
                         'message' => "Added successfully.",
