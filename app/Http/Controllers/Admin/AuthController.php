@@ -20,11 +20,11 @@ class AuthController extends Controller
         ]);
 
         if (auth()->guard('web')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect('admin/dashboard');
+            return redirect('admin/dashboard')->with(['status' => true, 'message' => 'Login Successfully']);
         }
 
         if (auth()->guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect('admin/dashboard');
+            return redirect('admin/dashboard')->with(['status' => true, 'message' => 'Login Successfully']);
         }
 
         return back()->with('err_message', 'Invalid email or password');

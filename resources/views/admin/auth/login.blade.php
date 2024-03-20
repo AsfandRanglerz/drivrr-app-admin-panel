@@ -10,29 +10,32 @@
                             <h4>Login</h4>
                         </div>
                         <div class="card-body">
-                            <form method="POST" action="{{url('login')}}" class="needs-validation" novalidate="">
+                            <form method="POST" action="{{ url('login') }}" class="needs-validation" novalidate="">
                                 @csrf
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus name="email">
+                                    <input id="email" type="email" class="form-control" name="email" tabindex="1"
+                                        required autofocus name="email">
                                     @error('email')
-                                    <span class="text-danger">Email required</span>
+                                        <span class="text-danger">Email required</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="password" class="control-label">Password</label>
-                                    <input id="password" type="password" class="form-control" name="password" tabindex="2" required name="password">
+                                    <input id="password" type="password" class="form-control" name="password"
+                                        tabindex="2" required name="password">
                                     @error('password')
-                                    <span class="text-danger">{{$errors->first('password')}}</span>
+                                        <span class="text-danger">{{ $errors->first('password') }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" tabindex="3" id="remember-me" name="remember">
+                                        <input type="checkbox" class="custom-control-input" tabindex="3" id="remember-me"
+                                            name="remember">
                                         <div class="d-block">
                                             <label class="custom-control-label" for="remember-me">Remember Me</label>
                                             <div class="float-right">
-                                                <a href="{{url('admin-forgot-password')}}" class="text-small">
+                                                <a href="{{ url('admin-forgot-password') }}" class="text-small">
                                                     Forgot Password?
                                                 </a>
                                             </div>
@@ -45,7 +48,7 @@
                                     </button>
                                 </div>
                             </form>
-                            {{--<div class="text-center mt-4 mb-3">
+                            {{-- <div class="text-center mt-4 mb-3">
                                 <div class="text-job text-muted">Login With Social</div>
                             </div>
                             <div class="row sm-gutters">
@@ -59,16 +62,21 @@
                                         <span class="fab fa-twitter"></span> Twitter
                                     </a>
                                 </div>
-                            </div>--}}
+                            </div> --}}
                         </div>
                     </div>
-{{--                    <div class="mt-5 text-muted text-center">--}}
-{{--                        Don't have an account? <a href="{{ route('admin.register') }}">Create One</a>--}}
-{{--                    </div>--}}
+                    {{--                    <div class="mt-5 text-muted text-center"> --}}
+                    {{--                        Don't have an account? <a href="{{ route('admin.register') }}">Create One</a> --}}
+                    {{--                    </div> --}}
                 </div>
             </div>
         </div>
     </section>
 @endsection
 @section('script')
+    @if (\Illuminate\Support\Facades\Session::has('message'))
+        <script>
+            toastr.success('{{ \Illuminate\Support\Facades\Session::get('message') }}');
+        </script>
+    @endif
 @endsection
