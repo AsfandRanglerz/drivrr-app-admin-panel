@@ -1,23 +1,23 @@
-<div style="color: #fff; padding: 20px; border-radius: 10px; background-color: #198754;">
-    <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Withdrawal Approval</h2>
-
-    <p style="font-size: 16px; color: #fff;">Hello Driver</p>
-
-    <p style="font-size: 18px; color: #fff; font-weight: bold;">
-        Your withdrawal request has been approved.
-    </p>
-
-    <p style="font-size: 16px; color: #fff;">
-        Here is the proof:
-    </p>
-
-    <img src="{{ asset($data['image']) }}" alt="Withdrawal Proof Image" style="max-width: 100%; margin-top: 10px;">
-
-    <p style="font-size: 16px; color: #fff; margin-top: 10px;">
-        Withdrawal Amount: ${{ $data['amount'] }}
-    </p>
-
-    <p style="font-size: 16px; color: #fff; margin-top: 20px;">
-        Thank you for using our service.
-    </p>
-</div>
+@component('mail::message')
+    <div style="text-align:center;">
+        <img src="https://ranglerzwp.xyz/drivrrapp/public/admin/assets/img/blacklogo.png" alt="App Icon"
+            style="vertical-align: middle;margin-bottom: -3px;height: 50px;margin-bottom: 35px">
+        <h3>Welcome to Drivrr</h3>
+    </div>
+    <div style="align-items: center">
+        <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Withdrawal Approval</h2>
+        <p style="font-size: 16px; ">Hello Driver</p>
+        <p style="font-size: 18px;  font-weight: bold;">
+            Your withdrawal request has been approved.
+        </p>
+        <p style="font-size: 16px; ">
+            Here is the proof:
+        </p>
+        <img src="{{ asset($data['image']) }}" alt="Withdrawal Proof Image" style="max-width: 100%; margin-top: 10px;">
+        <div>
+            <p style="font-size: 16px;  margin-top: 10px;">
+                Withdrawal Amount: ${{ $data['amount'] }}
+            </p>
+        </div>
+    </div>
+@endcomponent
