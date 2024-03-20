@@ -31,6 +31,6 @@ class PaymentProved extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.PaymentProved')->subject('Withdrawal Proof');
+        return $this->markdown('emails.PaymentProved')->subject('Withdrawal Proof')->with('data', $this->data);
     }
 }

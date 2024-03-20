@@ -62,7 +62,8 @@ class WalletController extends Controller
             'amount' => $amount,
             'image' => $image,
         ];
-        Mail::to($driver_email)->send(new PaymentProved($data));
+
+            Mail::to($driver_email)->send(new PaymentProved($data));
         return redirect()->back()->with(['status' => 'success', 'message' => 'Action is successfully taken.']);
     }
     public function delete_request($id)

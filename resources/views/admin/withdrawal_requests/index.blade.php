@@ -37,7 +37,7 @@
                                                 <td>{{ $data->bankAccount->bank_name }}</td>
                                                 <td>{{ $data->bankAccount->account_number }}</td>
                                                 <td>{{ $data->bankAccount->holder_name }}</td>
-                                                <td>{{ $data->withdrawal_amount }}</td>
+                                                <td>${{ $data->withdrawal_amount }}</td>
                                                 <td>
                                                     @if ($data->image)
                                                         <a href="{{ asset($data->image) }}" target="_blank">
