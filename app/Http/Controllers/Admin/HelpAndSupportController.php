@@ -29,18 +29,17 @@ class HelpAndSupportController extends Controller
     {
         $user = User::find($uId);
         $user_email = $user->email;
-        $message = $request->message;
-
-        $query = Question::where('id', $qId)->where('user_id', $uId)->where('answer', NULL);
+        $query = Question::where('id', $qId)->where('user_id', $uId)->where('answer', NULL)->first();
+        $data['message'] = $request->message;
+        $data['question'] = $query->title;
         if ($query->exists()) {
             $query->update([
-                'answer' => $message,
+                'answer' => $request->message,
             ]);
-
-            if ($message == "") {
+            if ($request->message == "") {
                 return redirect()->back()->with(['status' => true, 'message' => 'Your message is empty.']);
             } else {
-                Mail::to($user_email)->send(new SendResponseToUser($message));
+                Mail::to($user_email)->send(new SendResponseToUser($data));
             }
             return redirect()->back()->with(['status' => true, 'message' => 'Email sent to that user successfully.']);
         } else {

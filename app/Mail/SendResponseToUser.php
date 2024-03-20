@@ -17,19 +17,19 @@ class SendResponseToUser extends Mailable
      *
      * @return void
      */
-    protected $message;
-    public function __construct($message)
+    protected $data;
+    public function __construct($data)
     {
-        $this->message = $message;
+        $this->data = $data;
     }
 
     /**
-     * Build the message.
+     * Build the data.
      *
      * @return $this
      */
     public function build()
     {
-        return $this->markdown('emails.SendQueryResponse')->with("message", $this->message)->subject('Response from Drivrr');
+        return $this->markdown('emails.SendQueryResponse')->with("data", $this->data)->subject('Admin Response');
     }
 }
