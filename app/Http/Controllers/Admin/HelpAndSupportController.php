@@ -41,7 +41,7 @@ class HelpAndSupportController extends Controller
             } else {
                 Mail::to($user_email)->send(new SendResponseToUser($data));
             }
-            return redirect()->back()->with(['status' => true, 'message' => 'Email sent to that user successfully.']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Email Sent To That User Successfully.']);
         } else {
             return redirect()->back()->with(['status' => true, 'message' => 'No matching question found.']);
         }
