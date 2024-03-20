@@ -64,16 +64,16 @@ class WalletController extends Controller
         ];
         if ($data) {
             Mail::to($driver_email)->send(new PaymentProved($data));
-            return redirect()->back()->with(['status' => 'success', 'message' => 'Action is successfully taken.']);
+            return redirect()->back()->with(['status' => 'success', 'message' => 'Action Is Successfully Taken.']);
         } else {
-            return redirect()->back()->with(['status' => 'success', 'message' => 'Action is Unsuccessfully taken.']);
+            return redirect()->back()->with(['status' => 'success', 'message' => 'Action Is Unsuccessfully Taken.']);
         }
     }
     public function delete_request($id)
     {
         $approved_request = WithdrawalRequest::find($id);
         WithdrawalRequest::destroy($id);
-        return redirect()->back()->with(['status' => 'success', 'message' => 'Request deleted successfully.']);
+        return redirect()->back()->with(['status' => 'success', 'message' => 'Request Deleted Successfully.']);
     }
 
     public function show_receipts($id)

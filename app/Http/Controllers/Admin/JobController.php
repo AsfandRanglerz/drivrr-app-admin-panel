@@ -138,7 +138,7 @@ class JobController extends Controller
         $owner_job->description = $request->description;
         $owner_job->update();
         // return $data->id;
-        return redirect()->route('owner-job.index', $owner_job->user_id)->with(['status' => true, 'message' => 'Job updated successfully.']);
+        return redirect()->route('owner-job.index', $owner_job->user_id)->with(['status' => true, 'message' => 'Job Updated Successfully.']);
     }
 
     /**
@@ -150,7 +150,7 @@ class JobController extends Controller
     public function destroy($id)
     {
         Job::destroy($id);
-        return redirect()->back()->with(['status' => true, 'message' => 'Deleted Updated successfully']);
+        return redirect()->back()->with(['status' => true, 'message' => 'Deleted Updated Successfully']);
     }
 
 
@@ -163,7 +163,7 @@ class JobController extends Controller
         if ($status == 1) {
             $owner_email = $owner->email;
             Mail::to($owner_email)->send(new jobInactiveVerification($status));
-            return redirect()->back()->with(['status' => true, 'message' => 'Status Updated successfully']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Status Updated Successfully']);
         } else {
             return redirect()->back()->with(['status' => false, 'message' => 'Status Updated Unsuccessfully']);
         }

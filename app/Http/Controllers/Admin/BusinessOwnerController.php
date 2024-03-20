@@ -111,7 +111,7 @@ class BusinessOwnerController extends Controller
         // $admin->notify(new NewUser($owner));
 
         try {
-            return redirect()->route('businessOwner.index')->with(['status' => true, 'message' => 'Business Owner Created successfully.']);
+            return redirect()->route('businessOwner.index')->with(['status' => true, 'message' => 'Business Owner Created Successfully.']);
         } catch (\Throwable $th) {
             dd($th->getMessage());
             return back()
@@ -189,7 +189,7 @@ class BusinessOwnerController extends Controller
             // 'designation' => $request->designation,
         ] + ['image' => $image]);
 
-        return redirect()->route('businessOwner.index')->with(['status' => true, 'message' => 'Business Owner Updated successfully.']);
+        return redirect()->route('businessOwner.index')->with(['status' => true, 'message' => 'Business Owner Updated Successfully.']);
     }
 
     /**
@@ -208,7 +208,7 @@ class BusinessOwnerController extends Controller
         // Review::where('user_id', $id)->delete();
         // Question::where('user_id', $id)->delete();
         User::destroy($id);
-        return redirect()->back()->with(['status' => true, 'message' => 'Business Owner Deleted successfully.']);
+        return redirect()->back()->with(['status' => true, 'message' => 'Business Owner Deleted Successfully.']);
     }
 
     public function status($id)
@@ -220,6 +220,6 @@ class BusinessOwnerController extends Controller
         $data->update(['is_active' => $data->is_active == 0 ? '1' : '0']);
         $status = $data->is_active;
         Mail::to($data->email)->send(new VerifyUserEmail($status));
-        return redirect()->back()->with(['status' => true, 'message' => 'Status Updated successfully.']);
+        return redirect()->back()->with(['status' => true, 'message' => 'Status Updated Successfully.']);
     }
 }

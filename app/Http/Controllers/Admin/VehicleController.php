@@ -44,7 +44,7 @@ class VehicleController extends Controller
         ]);
 
 
-        return redirect()->back()->with(['status'=>true,'message'=>'vehicle added successfully.']);
+        return redirect()->back()->with(['status'=>true,'message'=>'Vehicle Added Successfully.']);
 
     }
 
@@ -87,7 +87,7 @@ class VehicleController extends Controller
         $vehicle->update([
             'name' => $request->name,
         ]);
-        return redirect()->route('vehicle.index')->with(['status'=>true,'message'=>'vehicle updated successfully.']);
+        return redirect()->route('vehicle.index')->with(['status'=>true,'message'=>'Vehicle Updated Successfully.']);
     }
 
     /**
@@ -99,6 +99,6 @@ class VehicleController extends Controller
     public function destroy($id)
     {
         Vehicle::destroy($id);
-        return redirect()->back()->with(['status'=>true,'message'=>'vehicle deleted successfully.']);
+        return redirect()->back()->with(['status'=>true,'message'=>'Vehicle Deleted Successfully.']);
     }
 }

@@ -103,7 +103,7 @@ class DriverController  extends Controller
         Mail::to($request->email)->send(new SignupPasswordSend($status));
         try {
             // Mail::to($request->email)->send(new UserLoginPassword($message));
-            return redirect()->route('driver.index')->with(['status' => true, 'message' => 'Driver   Created successfully.']);
+            return redirect()->route('driver.index')->with(['status' => true, 'message' => 'Driver Created Successfully.']);
         } catch (\Throwable $th) {
             dd($th->getMessage());
             return back()
@@ -172,7 +172,7 @@ class DriverController  extends Controller
             'phone' => $request->phone,
             'email' => $request->email,
         ] + ['image' => $image]);
-        return redirect()->route('driver.index')->with(['status' => true, 'message' => 'Driver Updated successfully']);
+        return redirect()->route('driver.index')->with(['status' => true, 'message' => 'Driver Updated Successfully']);
     }
 
     /**
@@ -193,7 +193,7 @@ class DriverController  extends Controller
         // Question::where('user_id', $id)->delete();
         // // Then delete the user
         User::destroy($id);
-        return redirect()->back()->with(['status' => true, 'message' => 'Driver Deleted successfully']);
+        return redirect()->back()->with(['status' => true, 'message' => 'Driver Deleted Successfully']);
     }
 
     public function status($id)
@@ -202,7 +202,7 @@ class DriverController  extends Controller
         $data->update(['is_active' => $data->is_active == 0 ? '1' : '0']);
         $status = $data->is_active;
         Mail::to($data->email)->send(new VerifyUserEmail($status));
-        return redirect()->back()->with(['status' => true, 'message' => 'Status Updated successfully']);
+        return redirect()->back()->with(['status' => true, 'message' => 'Status Updated Successfully']);
     }
 
 

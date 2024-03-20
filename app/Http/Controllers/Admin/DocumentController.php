@@ -67,7 +67,7 @@ class DocumentController extends Controller
             'name' => $request->name,
             'image' => $image,
         ]);
-        return redirect()->route('document.index', $id)->with(['status' => true, 'message' => 'Document Created successfully.']);
+        return redirect()->route('document.index', $id)->with(['status' => true, 'message' => 'Document Created Successfully.']);
     }
 
     /**
@@ -123,7 +123,7 @@ class DocumentController extends Controller
         $document->name = $request->name;
         $document->image = $image;
         $document->update();
-        return redirect()->route('document.index', $document->user_id)->with(['status' => true, 'message' => 'Document Updated successfully.']);
+        return redirect()->route('document.index', $document->user_id)->with(['status' => true, 'message' => 'Document Updated Successfully.']);
     }
 
     /**
@@ -135,7 +135,7 @@ class DocumentController extends Controller
     public function destroy($id)
     {
         Document::destroy($id);
-        return redirect()->back()->with(['status' => true, 'message' => 'Document deleted Successfully.']);
+        return redirect()->back()->with(['status' => true, 'message' => 'Document Deleted Successfully.']);
     }
 
 
@@ -152,24 +152,24 @@ class DocumentController extends Controller
     //     return redirect()->back()->with(['status' => true, 'message' => 'Status Updated successfully.']);
     // }
 
-        public function status(Request $request, $id, $key)
-        {
-            $status=$request->check;
-            // return $status;
-            $data = Document::find($id);
-            $user = User::find($key);
-            $data->is_active=$status;
-            $data->save();
-            $verify['is_active'] = $data->is_active;
-            $verify['name'] = $data->name;
-            $reason = $request->reason;
-            if ($verify['is_active'] == 2) {
-                // return $reason;
-                Mail::to($user->email)->send(new RejectDocumentInfo($reason));
-                return redirect()->back()->with(['status' => true, 'message' => 'Document rejection reason is sended.']);
-            } else {
-                Mail::to($user->email)->send(new VerifyDocument($verify));
-                return redirect()->back()->with(['status' => true, 'message' => 'Document approved successfully.']);
-            }
+    public function status(Request $request, $id, $key)
+    {
+        $status = $request->check;
+        // return $status;
+        $data = Document::find($id);
+        $user = User::find($key);
+        $data->is_active = $status;
+        $data->save();
+        $verify['is_active'] = $data->is_active;
+        $verify['name'] = $data->name;
+        $reason = $request->reason;
+        if ($verify['is_active'] == 2) {
+            // return $reason;
+            Mail::to($user->email)->send(new RejectDocumentInfo($reason));
+            return redirect()->back()->with(['status' => true, 'message' => 'Document Rejection Reason is Sended.']);
+        } else {
+            Mail::to($user->email)->send(new VerifyDocument($verify));
+            return redirect()->back()->with(['status' => true, 'message' => 'Document Approved Successfully.']);
         }
+    }
 }

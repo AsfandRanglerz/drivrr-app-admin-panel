@@ -51,7 +51,7 @@ class DriverVehicleController extends Controller
         ]);
 
         // return $vehicle;
-        return redirect()->route('driver-vehicle.index', $id)->with(['status' => true, 'message' => 'Vehicle Added successfully.']);
+        return redirect()->route('driver-vehicle.index', $id)->with(['status' => true, 'message' => 'Vehicle Added Successfully.']);
     }
     public function edit($id)
     {
@@ -78,13 +78,13 @@ class DriverVehicleController extends Controller
         $vehicle->license_plate = $request->license_plate;
         $vehicle->color = $request->color;
         $vehicle->update();
-        return redirect()->route('driver-vehicle.index', $vehicle->user_id)->with(['status' => true, 'message' => 'Vehicle Updated successfully.']);
+        return redirect()->route('driver-vehicle.index', $vehicle->user_id)->with(['status' => true, 'message' => 'Vehicle Updated Successfully.']);
     }
 
     public function destroy($id)
     {
         DriverVehicle::destroy($id);
-        return redirect()->back()->with(['status' => true, 'message' => 'Vehicle deleted Successfully.']);
+        return redirect()->back()->with(['status' => true, 'message' => 'Vehicle Deleted Successfully.']);
     }
 
     public function status($id)
@@ -99,6 +99,6 @@ class DriverVehicleController extends Controller
         if ($newState === '1') {
             DriverVehicle::where('id', '!=', $id)->update(['is_active' => '0']);
         }
-        return redirect()->back()->with(['status' => true, 'message' => 'Status Updated successfully']);
+        return redirect()->back()->with(['status' => true, 'message' => 'Status Updated Successfully']);
     }
 }
