@@ -32,8 +32,8 @@ class AdminController extends Controller
         $data['drivers']  = RoleUser::where('role_id', 3)->count();
         $data['jobs']  = Job::where('is_active', 0)->count();
         $data['requests'] = WithdrawalRequest::where('status', 0)->count();
-            // $jobs_count=Job::where('is_active', 1)->get();
-            // dd($jobs_count);
+        // $jobs_count=Job::where('is_active', 1)->get();
+        // dd($jobs_count);
         // dd($data);
         // return [$users,$owners,$drivers,$admins];
         return view('admin.index', compact('data'));
@@ -46,8 +46,14 @@ class AdminController extends Controller
     // }
     public function getProfile()
     {
-        $data = Admin::find(Auth::guard('admin')->id());
-        return view('admin.auth.profile', compact('data'));
+        if (auth()->guard('web')->check()) {
+            $user = User::find(auth()->guard('web')->id());
+        } elseif (auth()->guard('admin')->check()) {
+            $user = Admin::find(auth()->guard('admin')->id());
+        } else {
+            return redirect()->route('/admin');
+        }
+        return view('admin.auth.profile', compact('user'));
         // dd($data);
     }
     public function update_profile(Request $request)
@@ -58,16 +64,33 @@ class AdminController extends Controller
             'phone' => 'required'
         ]);
         $data = $request->only(['name', 'email', 'phone']);
-        if ($request->hasfile('image')) {
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension(); // getting image extension
-            $filename = time() . '.' . $extension;
-            $file->move(public_path('/'), $filename);
-            $data['image'] = 'public/uploads/' . $filename;
+        if (auth()->guard('web')->check()) {
+            $user = User::find(auth()->guard('web')->id());
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+                $file->move(public_path('/'), $filename);
+                $data['image'] = 'public/admin/assets/images/users/' . $filename;
+            }
+            $user->update($data);
+        } elseif (auth()->guard('admin')->check()) {
+            $admin = Admin::find(auth()->guard('admin')->id());
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+                $file->move(public_path('/'), $filename);
+                $data['image'] = 'public/admin/assets/images/users/' . $filename;
+            }
+            $admin->update($data);
+        } else {
+            return redirect()->route('admin.login')->with(['status' => false, 'message' => 'Unauthorized']);
         }
-        Admin::find(Auth::guard('admin')->id())->update($data);
+
         return back()->with(['status' => true, 'message' => 'Profile Updated Successfully']);
     }
+
     public function forgetPassword()
     {
         return view('admin.auth.forgetPassword');
@@ -125,20 +148,26 @@ class AdminController extends Controller
     }
     public function logout()
     {
-        Auth::guard('admin')->logout();
-        return redirect('admin/login');
+        if (auth()->guard('web')->check()) {
+            Auth::guard('web')->logout();
+            return redirect('/admin');
+        } elseif (auth()->guard('admin')->check()) {
+            Auth::guard('admin')->logout();
+            return redirect('/admin');
+        } else {
+            return redirect('/admin');
+        }
     }
 
     public function seen_notification()
     {
         // return Carbon::now('Asia/Karachi');
-            $notifications = Notification::where('read_at',NULL)->get();
-            foreach($notifications as $notification)
-            {
-                $notification->update([
-                    'read_at'=>Carbon::now(),
-                ]);
-            }
-            return redirect()->back();
+        $notifications = Notification::where('read_at', NULL)->get();
+        foreach ($notifications as $notification) {
+            $notification->update([
+                'read_at' => Carbon::now(),
+            ]);
+        }
+        return redirect()->back();
     }
 }

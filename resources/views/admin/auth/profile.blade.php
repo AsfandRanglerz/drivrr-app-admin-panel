@@ -22,17 +22,21 @@
                                 <div class="tab-content tab-bordered" id="myTab3Content">
                                     <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="home-tab2">
                                         <div class="row">
-                                            @if (isset($data))
+                                            @if (isset($user))
                                                 <div class="col-md-3 col-6 b-r">
                                                     <strong>Full Name</strong>
                                                     <br>
-                                                    <p class="text-muted">{{ $data->name }}</p>
+                                                    @if (auth()->guard('web')->check())
+                                                        <p class="text-muted">{{ $user->fname }} {{ $user->lname }}</p>
+                                                    @elseif(auth()->guard('admin')->check())
+                                                        <p class="text-muted">{{ $user->name }}</p>
+                                                    @endif
                                                 </div>
                                                 <div class="col-md-3 col-6 b-r">
                                                     <strong>Mobile</strong>
                                                     <br>
-                                                    @if (isset($data->phone))
-                                                        <p class="text-muted">{{ $data->phone }}</p>
+                                                    @if (isset($user->phone))
+                                                        <p class="text-muted">{{ $user->phone }}</p>
                                                     @else
                                                         <p class="text-muted">Phone not provided.</p>
                                                     @endif
@@ -40,7 +44,7 @@
                                                 <div class="col-md-3 col-6 b-r">
                                                     <strong>Email</strong>
                                                     <br>
-                                                    <p class="text-muted">{{ $data->email }}</p>
+                                                    <p class="text-muted">{{ $user->email }}</p>
                                                 </div>
                                             @else
                                                 <div class="col-md-3 col-6 b-r">
@@ -70,14 +74,17 @@
                                         <div class="card-header">
                                             <h4>Edit Profile</h4>
                                         </div>
-                                        {{--                                        @if (\Illuminate\Support\Facades\Session::has('errors')) --}}
-                                        {{--                                            {{dd($errors)}} --}}
-                                        {{--                                            @endif --}}
+
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="form-group col-md-6 col-12">
                                                     <label>Name</label>
-                                                    <input type="text" name="name" value="{{ $data->name }}"
+                                                    <input type="text" name="name"
+                                                        value="
+                                                        @if (auth()->guard('web')->check()) {{ $user->fname }} {{ $user->lname }}
+                                                        @elseif(auth()->guard('admin')->check())
+                                                            {{ $user->name }} @endif
+                                                    "
                                                         class="form-control">
                                                     @error('name')
                                                         <div class="text-danger">
@@ -87,7 +94,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6 col-12">
                                                     <label>Email</label>
-                                                    <input type="email" name="email" value="{{ $data->email }}"
+                                                    <input type="email" name="email" value="{{ $user->email }}"
                                                         class="form-control">
                                                     @error('email')
                                                         <div class="text-danger">
@@ -112,7 +119,7 @@
                                                 </div>
                                                 <div class="form-group col-md-5 col-12">
                                                     <label>Phone</label>
-                                                    <input type="tel" name="phone" value="{{ $data->phone }}"
+                                                    <input type="tel" name="phone" value="{{ $user->phone }}"
                                                         class="form-control" value="">
                                                     @error('phone')
                                                         <div class="text-danger">

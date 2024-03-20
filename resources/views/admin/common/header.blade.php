@@ -87,7 +87,13 @@
                     ->where('seen_by', 0)
                     ->leftJoin('users', 'push_notifications.user_name', '=', 'users.id')
                     ->leftJoin('role_user', 'push_notifications.user_name', '=', 'role_user.user_id')
-                    ->select('push_notifications.*', 'users.image as user_image', 'users.fname as user_fname', 'users.lname as user_lname', 'role_user.role_id')
+                    ->select(
+                        'push_notifications.*',
+                        'users.image as user_image',
+                        'users.fname as user_fname',
+                        'users.lname as user_lname',
+                        'role_user.role_id',
+                    )
                     ->get();
 
                 $counter = $updatedNotifications->count();
@@ -120,25 +126,47 @@
             </div>
         </li>
 
+        @auth('admin')
+            <li class="dropdown">
+                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                    <img alt="User Image"
+                        src="{{ Auth::guard('admin')->user()->image ? asset(Auth::guard('admin')->user()->image) : asset('admin/assets/img/user.png') }}"
+                        class="user-img-radious-style">
+                    <span class="d-sm-none d-lg-inline-block"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right pullDown">
+                    <div class="dropdown-title">{{ Auth::guard('admin')->user()->name }}</div>
+                    <a href="{{ url('admin/profile') }}" class="dropdown-item has-icon">
+                        <i class="far fa-user"></i>Profile
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ url('admin/logout') }}" class="dropdown-item has-icon text-danger">
+                        <i class="fas fa-sign-out-alt"></i>Logout
+                    </a>
+                </div>
+            </li>
+        @endauth
 
-        <li class="dropdown"><a href="#" data-toggle="dropdown"
-                class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image"
-                    src="{{ asset('public/admin/assets/img/user.png') }}" class="user-img-radious-style"> <span
-                    class="d-sm-none d-lg-inline-block"></span></a>
-            <div class="dropdown-menu dropdown-menu-right pullDown">
-                <div class="dropdown-title"></div>
-                <a href="{{ url('admin/profile') }}" class="dropdown-item has-icon"> <i class="far fa-user"></i> Profile
-                </a> <a href="timeline.html" class="dropdown-item has-icon"> <i class="fas fa-bolt"></i>
-                    Activities
-                </a> <a href="#" class="dropdown-item has-icon"> <i class="fas fa-cog"></i>
-                    Settings
+        @auth('web')
+            <li class="dropdown">
+                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                    <!-- Use web user's image if available, otherwise use default -->
+                    <img alt="image"
+                        src="{{ Auth::user()->image ? asset(Auth::user()->image) : asset('web/assets/images/default-user.png') }}"
+                        class="user-img-radious-style">
+                    <span class="d-sm-none d-lg-inline-block"></span>
                 </a>
-                <div class="dropdown-divider"></div>
-                <a href="{{ url('admin/logout') }}" class="dropdown-item has-icon text-danger"> <i
-                        class="fas fa-sign-out-alt"></i>
-                    Logout
-                </a>
-            </div>
-        </li>
+                <div class="dropdown-menu dropdown-menu-right pullDown">
+                    <div class="dropdown-title">{{ Auth::user()->fname }}</div>
+                    <a href="{{ url('admin/profile') }}" class="dropdown-item has-icon">
+                        <i class="far fa-user"></i>Profile
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ url('admin/logout') }}" class="dropdown-item has-icon text-danger">
+                        <i class="fas fa-sign-out-alt"></i>Logout
+                    </a>
+                </div>
+            </li>
+        @endauth
     </ul>
 </nav>
