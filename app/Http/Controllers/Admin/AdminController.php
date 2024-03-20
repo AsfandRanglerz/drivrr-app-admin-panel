@@ -70,7 +70,7 @@ class AdminController extends Controller
                 $file = $request->file('image');
                 $extension = $file->getClientOriginalExtension();
                 $filename = time() . '.' . $extension;
-                $file->move(public_path('/'), $filename);
+                $file->move(public_path('admin/assets/images/users/'), $filename);
                 $data['image'] = 'public/admin/assets/images/users/' . $filename;
             }
             $user->update($data);
@@ -80,7 +80,7 @@ class AdminController extends Controller
                 $file = $request->file('image');
                 $extension = $file->getClientOriginalExtension();
                 $filename = time() . '.' . $extension;
-                $file->move(public_path('/'), $filename);
+                $file->move(public_path('admin/assets/images/users/'), $filename);
                 $data['image'] = 'public/admin/assets/images/users/' . $filename;
             }
             $admin->update($data);

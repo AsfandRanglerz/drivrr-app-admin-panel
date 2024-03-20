@@ -131,7 +131,7 @@
                 <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                     <img alt="User Image"
                         src="{{ Auth::guard('admin')->user()->image ? asset(Auth::guard('admin')->user()->image) : asset('admin/assets/img/user.png') }}"
-                        class="user-img-radious-style">
+                        class="user-img-radious-style mt-2">
                     <span class="d-sm-none d-lg-inline-block"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right pullDown">
@@ -153,7 +153,7 @@
                     <!-- Use web user's image if available, otherwise use default -->
                     <img alt="image"
                         src="{{ Auth::user()->image ? asset(Auth::user()->image) : asset('web/assets/images/default-user.png') }}"
-                        class="user-img-radious-style">
+                        class="user-img-radious-style mt-2">
                     <span class="d-sm-none d-lg-inline-block"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right pullDown">
