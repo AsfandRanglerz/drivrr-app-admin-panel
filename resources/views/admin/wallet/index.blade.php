@@ -35,9 +35,9 @@
 
                                                 <td>
                                                     @if ($drivers->driverWallet)
-                                                        {{ $drivers->driverWallet->total_earning }}
+                                                        ${{ $drivers->driverWallet->total_earning }}
                                                     @else
-                                                        <span>0</span>
+                                                        <span>$0</span>
                                                     @endif
                                                 </td>
                                                 <td style="justify-content: center">
