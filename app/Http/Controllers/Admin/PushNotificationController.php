@@ -26,27 +26,6 @@ class PushNotificationController extends Controller
     {
         return view('admin.notifications.create');
     }
-    // public function notificationStore(Request $request)
-    // {
-    //     $request->validate([
-    //         'title' => 'required|string',
-    //         'user_name' => 'required|array',
-    //         'user_name.*' => 'exists:roles,id',
-    //         'description' => 'required|string',
-    //     ]);
-    //     $userRoles = $request->input('user_name');
-    //     $users = RoleUser::whereIn('role_id', $userRoles)->get();
-    //     foreach ($users as $user) {
-    //         Notification::send($user->user, new AdminNotification($request->input('title'), $request->input('description')));
-    //         PushNotification::create([
-    //             'title' => $request->input('title'),
-    //             'description' => $request->input('description'),
-    //             'user_name' => $user->role->id,
-    //             'user_id' => $user->user->id,
-    //         ]);
-    //     }
-    //     return redirect()->back()->with('message', 'Notification Send Successfully');
-    // }
     public function notificationStore(Request $request)
     {
         $request->validate([
@@ -69,7 +48,7 @@ class PushNotificationController extends Controller
                 'admin' => 'Admin'
             ]);
         }
-        return redirect()->back()->with('message', 'Notification Sent Successfully');
+        return back()->with(['status' => true, 'message' => 'Notification Sent Successfully']);
     }
 
     // public function notificationStore(Request $request)

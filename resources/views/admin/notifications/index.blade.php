@@ -175,10 +175,11 @@
                     contentType: false,
                     processData: false,
                     success: function(response) {
-                        toastr.success(response.message);
+                        toastr.success('Notification Sent Successfully');
                         $('.loading-spinner').hide();
                         $('#submit').prop('disabled', false);
                         $('#notificationModal').modal('hide');
+                        location.reload();
                     },
                     error: function(error) {
                         $('.loading-spinner').hide();
