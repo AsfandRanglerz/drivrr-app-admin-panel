@@ -41,8 +41,11 @@
                                                 <td>{{ $owner->email }}</td>
 
                                                 <td>
-                                                    <img src="{{ asset($owner->image) }}" alt="" height="50"
-                                                        width="50" class="image">
+                                                    @if($owner->image)
+                                                        <img src="{{ asset($owner->image) }}" alt="" height="50" width="50" class="image">
+                                                    @else
+                                                        <img src="{{ asset('public/admin/assets/images/approve/owner.jpg') }}" alt="Default Image" height="50" width="50" class="image">
+                                                    @endif
                                                 </td>
 
                                                 <td>{{ $owner->company_name ?? '--' }}</td>

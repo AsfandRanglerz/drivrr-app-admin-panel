@@ -38,9 +38,14 @@
                                                 <td>{{ $driver->phone ?? '--' }}</td>
                                                 <td>{{ $driver->email }}</td>
                                                 <td>
-                                                    <img src="{{ asset($driver->image) }}" alt="" height="50"
-                                                        width="50" class="image">
+                                                    @if($driver->image)
+                                                        <img src="{{ asset($driver->image) }}" alt="" height="50" width="50" class="image">
+                                                    @else
+                                                        <!-- Show default image if no image is available -->
+                                                        <img src="{{ asset('public/admin/assets/images/approve/owner.jpg') }}" alt="Default Image" height="50" width="50" class="image">
+                                                    @endif
                                                 </td>
+
 
                                                 <td>
                                                     <a href="{{ route('document.index', $driver->id) }}">View</a>
