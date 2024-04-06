@@ -21,7 +21,7 @@ class admin
         if (auth()->guard('admin')->check() || auth()->guard('web')->check()) {
             return $next($request);
         } else {
-            return redirect('admin/login'); // Modify the redirect URL as needed
+            return redirect('/admin'); // Modify the redirect URL as needed
         }
     }
 }
