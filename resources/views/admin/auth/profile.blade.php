@@ -22,6 +22,7 @@
                                 <div class="tab-content tab-bordered" id="myTab3Content">
                                     <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="home-tab2">
                                         <div class="row">
+
                                             @if (isset($user))
                                                 <div class="col-md-3 col-6 b-r">
                                                     <strong>Full Name</strong>
@@ -74,61 +75,109 @@
                                         <div class="card-header">
                                             <h4>Edit Profile</h4>
                                         </div>
-
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="form-group col-md-6 col-12">
-                                                    <label>Name</label>
-                                                    <input type="text" name="name"
-                                                        value="
-                                                        @if (auth()->guard('web')->check()) {{ $user->fname }} {{ $user->lname }}
-                                                        @elseif(auth()->guard('admin')->check())
-                                                            {{ $user->name }} @endif
-                                                    "
-                                                        class="form-control">
-                                                    @error('name')
-                                                        <div class="text-danger">
-                                                            Please fill in the Name
-                                                        </div>
-                                                    @enderror
-                                                </div>
-                                                <div class="form-group col-md-6 col-12">
-                                                    <label>Email</label>
-                                                    <input type="email" name="email" value="{{ $user->email }}"
-                                                        class="form-control">
-                                                    @error('email')
-                                                        <div class="text-danger">
-                                                            Please fill in the email
-                                                        </div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="form-group col-md-7 col-12">
-                                                    <label>Profile Image</label>
-                                                    <div class="custom-file">
-                                                        <input type="file" name="image" class="custom-file-input"
-                                                            id="customFile">
-                                                        <label class="custom-file-label" for="customFile">Choose
-                                                            file</label>
+                                        @auth('web')
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="form-group col-md-6 col-12">
+                                                        <label>Name</label>
+                                                        <input type="text" name="name"
+                                                            value="{{ $user->fname }} {{ $user->lname }}"
+                                                            class="form-control">
+                                                        @error('name')
+                                                            <div class="text-danger">
+                                                                Please fill in the Name
+                                                            </div>
+                                                        @enderror
                                                     </div>
-
-                                                    <div class="invalid-feedback">
-
+                                                    <div class="form-group col-md-6 col-12">
+                                                        <label>Email</label>
+                                                        <input type="email" name="email" value="{{ $user->email }}"
+                                                            class="form-control">
+                                                        @error('email')
+                                                            <div class="text-danger">
+                                                                Please fill in the email
+                                                            </div>
+                                                        @enderror
                                                     </div>
                                                 </div>
-                                                <div class="form-group col-md-5 col-12">
-                                                    <label>Phone</label>
-                                                    <input type="tel" name="phone" value="{{ $user->phone }}"
-                                                        class="form-control" value="">
-                                                    @error('phone')
-                                                        <div class="text-danger">
-                                                            Please fill in the email
+                                                <div class="row">
+                                                    <div class="form-group col-md-7 col-12">
+                                                        <label>Profile Image</label>
+                                                        <div class="custom-file">
+                                                            <input type="file" name="image" class="custom-file-input"
+                                                                id="customFile">
+                                                            <label class="custom-file-label" for="customFile">Choose
+                                                                file</label>
                                                         </div>
-                                                    @enderror
+
+                                                        <div class="invalid-feedback">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-5 col-12">
+                                                        <label>Phone</label>
+                                                        <input type="tel" name="phone" value="{{ $user->phone }}"
+                                                            class="form-control" value="">
+                                                        @error('phone')
+                                                            <div class="text-danger">
+                                                                Please fill in the email
+                                                            </div>
+                                                        @enderror
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endauth
+                                        @auth('admin')
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="form-group col-md-6 col-12">
+                                                        <label>Name</label>
+                                                        <input type="text" name="name" value="{{ $user->name }}"
+                                                            class="form-control">
+                                                        @error('name')
+                                                            <div class="text-danger">
+                                                                Please fill in the Name
+                                                            </div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="form-group col-md-6 col-12">
+                                                        <label>Email</label>
+                                                        <input type="email" name="email" value="{{ $user->email }}"
+                                                            class="form-control">
+                                                        @error('email')
+                                                            <div class="text-danger">
+                                                                Please fill in the email
+                                                            </div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-md-7 col-12">
+                                                        <label>Profile Image</label>
+                                                        <div class="custom-file">
+                                                            <input type="file" name="image"
+                                                                class="custom-file-input" id="customFile">
+                                                            <label class="custom-file-label" for="customFile">Choose
+                                                                file</label>
+                                                        </div>
+
+                                                        <div class="invalid-feedback">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-5 col-12">
+                                                        <label>Phone</label>
+                                                        <input type="tel" name="phone" value="{{ $user->phone }}"
+                                                            class="form-control" value="">
+                                                        @error('phone')
+                                                            <div class="text-danger">
+                                                                Please fill in the email
+                                                            </div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endauth
                                         <div class="card-footer text-right">
                                             <button type="submit" class="btn btn-primary">Save Changes</button>
                                         </div>
