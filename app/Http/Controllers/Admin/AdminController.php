@@ -143,9 +143,9 @@ class AdminController extends Controller
         if ($token) {
             $data['url'] = url('change_password', $token);
             Mail::to($request->email)->send(new PasswordResetMail($data));
-            return back()->with(['alert' => 'success', 'message' => 'Reset Password Link Sent Successfully']);
+            return back()->with(['status' => true, 'message' => 'Password Reset Link Set Succcessfully!']);
         } else {
-            return back()->with(['alert' => 'error', 'message' => 'Reset Password Link Not Sent']);
+            return back()->with(['status' => false,  'error' => 'Reset Password Link Not Sent']);
         }
     }
     public function change_password($id)
@@ -160,24 +160,27 @@ class AdminController extends Controller
 
     public function resetPassword(Request $request)
     {
-
         $request->validate([
             'password' => 'required|min:8',
-            'confirmed' => 'required',
-
+            'confirmed' => 'required|same:password',
         ]);
-        if ($request->password != $request->confirmed) {
 
-            return back()->with(['error_message' => 'Password not matched']);
-        }
         $password = bcrypt($request->password);
-        $tags_data = [
-            'password' => bcrypt($request->password)
-        ];
-        if (Admin::where('email', $request->email)->update($tags_data)) {
+
+        $user = User::where('email', $request->email)->first();
+        $admin = Admin::where('email', $request->email)->first();
+
+        if ($user) {
+            $user->update(['password' => $password]);
             DB::table('password_resets')->where('email', $request->email)->delete();
-            return redirect('admin');
+            return redirect('admin-login')->with(['message' => 'Password reset successfully']);
+        } elseif ($admin) {
+            $admin->update(['password' => $password]);
+            DB::table('password_resets')->where('email', $request->email)->delete();
+            return redirect('admin-login')->with([ 'message' => 'Password reset successfully']);
         }
+
+        return back()->with(['error' => 'Invalid email or user not found']);
     }
     public function logout()
     {

@@ -41,10 +41,16 @@
         </div>
     </section>
 @endsection
-@section('js')
-    @if(\Illuminate\Support\Facades\Session::has('message'))
+@section('script')
+    @if (\Illuminate\Support\Facades\Session::has('message'))
         <script>
-            toastr.success('{{\Illuminate\Support\Facades\Session::get('message')}}');
+            toastr.success('{{ \Illuminate\Support\Facades\Session::get('message') }}');
+        </script>
+    @endif
+
+    @if (\Illuminate\Support\Facades\Session::has('error'))
+        <script>
+            toastr.error('{{ \Illuminate\Support\Facades\Session::get('error') }}');
         </script>
     @endif
 @endsection
