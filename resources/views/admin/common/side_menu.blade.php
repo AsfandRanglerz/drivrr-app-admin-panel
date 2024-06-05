@@ -8,18 +8,11 @@
         <ul class="sidebar-menu">
             <li class="menu-header">Main</li>
             {{-- Dashboard --}}
-            @if (auth()->guard('web')->check() &&
-                    auth()->guard('web')->user()->can('Dashboard'))
+
                 <li class="dropdown {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                     <a href="{{ url('/admin/dashboard') }}" class="nav-link"><i
                             class="fas fa-th-large"></i><span>Dashboard</span></a>
                 </li>
-            @elseif (auth()->guard('admin')->check())
-                <li class="dropdown {{ request()->is('admin/dashboard') ? 'active' : '' }}">
-                    <a href="{{ url('/admin/dashboard') }}" class="nav-link"><i
-                            class="fas fa-th-large"></i><span>Dashboard</span></a>
-                </li>
-            @endif
             {{-- User Mangement --}}
             @if (
                 (auth()->guard('web')->check() &&

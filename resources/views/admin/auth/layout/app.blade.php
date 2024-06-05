@@ -14,6 +14,7 @@
     <!-- Custom style CSS -->
     <link rel="stylesheet" href="{{ asset('public/admin/assets/css/custom.css') }}">
     <link rel='shortcut icon' type='image/x-icon' href='assets/img/favicon.ico' />
+    <link rel="stylesheet" href="{{ asset('public/admin/assets/toastr/css/toastr.css') }}">
     @yield('style')
 </head>
 
@@ -30,50 +31,33 @@
 <script src="{{ asset('public/admin/assets/js/custom.js') }}"></script>
 <!-- Sweet Alert -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('public/admin/assets/toastr/js/toastr.min.js') }}"></script>
 </body>
 <!-- auth-login.html  21 Nov 2019 03:49:32 GMT -->
 @yield('script')
 <script>
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        width: '27rem',
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
+    /*toastr popup function*/
+    function toastrPopUp() {
+        toastr.options = {
+            "closeButton": true,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "3000",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
         }
-    })
-        @if (Session()->has('message'))
-    var type = "{{ Session::get('alert') }}";
-    switch (type) {
-        case'info':
-            Toast.fire({
-                icon: 'info',
-                title: '{{ Session::get("message") }}'
-            })
-            break;
-        case 'success':
-            Toast.fire({
-                icon: 'success',
-                title: '{{ Session::get("message") }}'
-            })
-            break;
-        case 'warning':
-            Toast.fire({
-                icon: 'warning',
-                title: '{{ Session::get("message") }}'
-            })
-            break;
-        case'error':
-            Toast.fire({
-                icon: 'error',
-                title: '{{ Session::get("message") }}'
-            })
-            break;
     }
-    @endif
+
+    /*toastr popup function*/
+    toastrPopUp();
 </script>
+
 </html>

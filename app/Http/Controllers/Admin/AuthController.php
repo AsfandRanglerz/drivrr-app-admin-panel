@@ -13,24 +13,6 @@ class AuthController extends Controller
 
         return view('admin.auth.login');
     }
-    // public function Login(Request $request)
-    // {
-    //     $request->validate([
-    //         'email' => 'required',
-    //         'password' => 'required',
-    //     ]);
-
-    //     if (auth()->guard('web')->attempt(['email' => $request->email, 'password' => $request->password])) {
-    //         return redirect('admin/dashboard')->with(['status' => true, 'message' => 'Login Successfully']);
-    //     }
-
-    //     if (auth()->guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
-    //         return redirect('admin/dashboard')->with(['status' => true, 'message' => 'Login Successfully']);
-    //     }
-
-    //     return back()->with('err_message', 'Invalid email or password');
-    // }
-
 
     public function login(Request $request)
     {
@@ -50,12 +32,12 @@ class AuthController extends Controller
 
             if ($user->role_id !== 1) {
                 Auth::logout();
-                return redirect('/admin-login')->with(['status' => false, 'message' => 'Only Subadmins Can LogIn.']);
+                return redirect('/admin-login')->with(['status' => false,'error' => 'Only Sub Admins Can Log In.']);
             }
 
             return redirect('admin/dashboard')->with(['status' => true, 'message' => 'Login Successfully!']);
         }
 
-        return redirect('/admin/login')->with(['status' => false, 'message' => 'Invalid Email and Password!']);
+        return redirect('/admin/login')->with([ 'status' => false,'error' => 'Invalid Email and Password!']);
     }
 }

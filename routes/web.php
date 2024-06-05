@@ -44,7 +44,7 @@ Route::get('/about-us-drivrr', [SecurityController::class, 'webViewAboutUs']);
 Route::get('/terms-conditions-drivrr', [SecurityController::class, 'webViewTermCondition']);
 
 Route::prefix('admin')->middleware('admin')->group(function () {
-    Route::get('dashboard', [AdminController::class, 'getdashboard'])->middleware('permission:Dashboard');
+    Route::get('dashboard', [AdminController::class, 'getdashboard']);
     Route::get('profile', [AdminController::class, 'getProfile']);
     Route::post('update-profile', [AdminController::class, 'update_profile']);
     Route::get('Privacy-policy', [SecurityController::class, 'PrivacyPolicy'])->middleware('permission:Privacy policies');
@@ -77,14 +77,14 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/role-permission', [RoleController::class, 'index'])->name('roles-permission.index')->middleware('permission:Roles & Permissions');
     #######SubAdmin#######
     Route::controller(SubadminController::class)->group(function () {
-        Route::get('/subadmin',  'subadminIndex')->name('subadmin.index')->middleware('permission:subadmins');
-        Route::post('/subadmin-create',  'subadminCreate')->name('subadmin.create')->middleware('permission:subadmins');
-        Route::get('/subadminData',  'subadminData')->name('subadmin.get')->middleware('permission:subadmins');
-        Route::get('/subadmin/{id}',  'showSubAdmin')->name('subadmin.show')->middleware('permission:subadmins');
-        Route::post('/subadminUpdate/{id}',  'updateAdmin')->name('subadmin.update')->middleware('permission:subadmins');
-        Route::get('/subadmin/delete/{id}',  'deleteSubadmin')->name('subadmin.delete')->middleware('permission:subadmins');
-        Route::get('/get-permissions/{user}',  'fetchUserPermissions')->name('get.permissions')->middleware('permission:subadmins');
-        Route::post('/update-permissions/{user}',  'updatePermissions')->name('update.user.permissions')->middleware('permission:subadmins');
+        Route::get('/subadmin',  'subadminIndex')->name('subadmin.index')->middleware('permission:SubAdmin');
+        Route::post('/subadmin-create',  'subadminCreate')->name('subadmin.create')->middleware('permission:SubAdmin');
+        Route::get('/subadminData',  'subadminData')->name('subadmin.get')->middleware('permission:SubAdmin');
+        Route::get('/subadmin/{id}',  'showSubAdmin')->name('subadmin.show')->middleware('permission:SubAdmin');
+        Route::post('/subadminUpdate/{id}',  'updateAdmin')->name('subadmin.update')->middleware('permission:SubAdmin');
+        Route::get('/subadmin/delete/{id}',  'deleteSubadmin')->name('subadmin.delete')->middleware('permission:SubAdmin');
+        Route::get('/get-permissions/{user}',  'fetchUserPermissions')->name('get.permissions')->middleware('permission:SubAdmin');
+        Route::post('/update-permissions/{user}',  'updatePermissions')->name('update.user.permissions')->middleware('permission:SubAdmin');
     });
 
     Route::resource('vehicle', VehicleController::class)->middleware('permission:Vehicles');
