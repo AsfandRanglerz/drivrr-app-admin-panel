@@ -7,20 +7,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class subAdminRegistration extends Mailable
+class PasswordResetMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $data;
     /**
      * Create a new message instance.
      *
      * @return void
      */
+    protected $data;
     public function __construct($data)
     {
-        $this->data = $data;
-        //
+        $this->data=$data;
     }
 
     /**
@@ -30,7 +29,6 @@ class subAdminRegistration extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.subAdminRegistration')->subject('SubAdmin Registration Successfully')
-            ->with(['data' => $this->data]);
+        return $this->markdown('emails.PasswordResetMail')->with('detail',$this->data);
     }
 }

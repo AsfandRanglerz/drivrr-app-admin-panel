@@ -200,10 +200,10 @@ class SubadminController extends Controller
             $subadmin->save();
             if ($subadmin) {
                 $subadmin->roles()->sync(1);
-                // $data['subadminname'] = $subadmin->fname . ' ' . $subadmin->lname;
-                // $data['subadminemail'] = $subadmin->email;
-                // $data['password'] = $request->password;
-                // Mail::to($subadmin->email)->send(new subAdminRegistration($data));
+                $data['subadminname'] = $subadmin->fname . ' ' . $subadmin->lname;
+                $data['subadminemail'] = $subadmin->email;
+                $data['password'] = $request->password;
+                Mail::to($subadmin->email)->send(new subAdminRegistration($data));
                 return response()->json(['alert' => 'success', 'message' => 'SubAdmin Created Successfully!']);
             } else {
                 return response()->json(['alert' => 'error', 'message' => 'SubAdmin Not Created!']);

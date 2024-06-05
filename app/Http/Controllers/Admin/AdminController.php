@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\Controller;
-use App\Mail\ResetPasswordMail;
+use Carbon\Carbon;
+use App\Models\Job;
+use App\Models\User;
 use App\Models\admin;
 use App\Models\Document;
 use App\Models\RoleUser;
-use App\Models\User;
-use App\Models\Job;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use App\Models\WithdrawalRequest;
-use App\Notifications\NewUser;
 use App\Models\Notification;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
+use App\Notifications\NewUser;
+use App\Mail\PasswordResetMail;
+use App\Mail\ResetPasswordMail;
+use App\Models\WithdrawalRequest;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use App\Notifications\TestingNotification;
 
 class AdminController extends Controller
@@ -95,24 +97,55 @@ class AdminController extends Controller
     {
         return view('admin.auth.forgetPassword');
     }
+    // public function adminResetPasswordLink(Request $request)
+    // {
+    //     $request->validate([
+    //         'email' => 'required|exists:admins,email',
+    //     ]);
+    //     $exists = DB::table('password_resets')->where('email', $request->email)->first();
+    //     if ($exists) {
+    //         return back()->with('message', 'Reset Password link has been already sent');
+    //     } else {
+    //         $token = Str::random(30);
+    //         DB::table('password_resets')->insert([
+    //             'email' => $request->email,
+    //             'token' => $token,
+    //         ]);
+
+    //         $data['url'] = url('change_password', $token);
+    //         Mail::to($request->email)->send(new ResetPasswordMail($data));
+    //         return back()->with('message', 'Reset Password Link Send Successfully');
+    //     }
+    // }
     public function adminResetPasswordLink(Request $request)
     {
-        $request->validate([
-            'email' => 'required|exists:admins,email',
+        // Validate the email
+        $validator = Validator::make($request->all(), [
+            'email' => [
+                'required',
+                'email',
+                'exists_in_users_or_admins' // Custom validation rule
+            ],
+        ], [
+            'email.exists_in_users_or_admins' => 'This email does not exist.',
         ]);
-        $exists = DB::table('password_resets')->where('email', $request->email)->first();
-        if ($exists) {
-            return back()->with('message', 'Reset Password link has been already sent');
-        } else {
-            $token = Str::random(30);
-            DB::table('password_resets')->insert([
-                'email' => $request->email,
-                'token' => $token,
-            ]);
 
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // If validation passes, continue with sending the reset link
+        $token = Str::random(30);
+        DB::table('password_resets')->insert([
+            'email' => $request->email,
+            'token' => $token,
+        ]);
+        if ($token) {
             $data['url'] = url('change_password', $token);
-            Mail::to($request->email)->send(new ResetPasswordMail($data));
-            return back()->with('message', 'Reset Password Link Send Successfully');
+            Mail::to($request->email)->send(new PasswordResetMail($data));
+            return back()->with(['alert' => 'success', 'message' => 'Reset Password Link Sent Successfully']);
+        } else {
+            return back()->with(['alert' => 'error', 'message' => 'Reset Password Link Not Sent']);
         }
     }
     public function change_password($id)
@@ -150,10 +183,10 @@ class AdminController extends Controller
     {
         if (auth()->guard('web')->check()) {
             Auth::guard('web')->logout();
-            return redirect('/admin/login')->with(['status'=>true,'message'=> 'Log Out Successfully']);
+            return redirect('/admin/login')->with(['status' => true, 'message' => 'Log Out Successfully']);
         } elseif (auth()->guard('admin')->check()) {
             Auth::guard('admin')->logout();
-            return redirect('/admin/login')->with(['status'=>true,'message'=> 'Log Out Successfully']);
+            return redirect('/admin/login')->with(['status' => true, 'message' => 'Log Out Successfully']);
         } else {
             return redirect('/admin/login');
         }
