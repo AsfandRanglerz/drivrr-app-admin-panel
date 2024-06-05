@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\SubadminController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\RoleController;
@@ -20,6 +19,7 @@ use App\Http\Controllers\Admin\DriverVehicleController;
 use App\Http\Controllers\Admin\HelpAndSupportController;
 use App\Http\Controllers\Admin\PushNotificationController;
 use App\Http\Controllers\Admin\HandelBusinessOwnerPayments;
+use App\Http\Controllers\Admin\SubadminController;
 
 /*
 |--------------------------------------------------------------------------
