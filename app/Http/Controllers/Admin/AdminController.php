@@ -150,12 +150,12 @@ class AdminController extends Controller
     {
         if (auth()->guard('web')->check()) {
             Auth::guard('web')->logout();
-            return redirect('/admin')->with(['status'=>true,'message'=> 'Log Out Successfully']);
+            return redirect('/admin/login')->with(['status'=>true,'message'=> 'Log Out Successfully']);
         } elseif (auth()->guard('admin')->check()) {
             Auth::guard('admin')->logout();
-            return redirect('/admin')->with(['status'=>true,'message'=> 'Log Out Successfully']);
+            return redirect('/admin/login')->with(['status'=>true,'message'=> 'Log Out Successfully']);
         } else {
-            return redirect('/admin');
+            return redirect('/admin/login');
         }
     }
 
