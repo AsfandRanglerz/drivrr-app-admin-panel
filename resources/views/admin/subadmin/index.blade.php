@@ -269,7 +269,7 @@
                     {
                         "data": null,
                         "render": function(data, type, row) {
-                            return '<button class="btn btn-info mb-3 text-white updatePermissionBtn" data-id="' +
+                            return '<button class="btn btn-dark mb-3 text-white updatePermissionBtn" data-id="' +
                                 row.id + '"><i class="fas fa-user"></i></button>';
                         }
                     },
