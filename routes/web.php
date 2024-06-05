@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\SubadminController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\AuthController;
@@ -8,17 +9,17 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\TeamAController;
 use App\Http\Controllers\Admin\DriverController;
+use App\Http\Controllers\Admin\ReviewController;
+use App\Http\Controllers\Admin\TwilioController;
+use App\Http\Controllers\Admin\WalletController;
 use App\Http\Controllers\Admin\VehicleController;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\SecurityController;
 use App\Http\Controllers\Admin\BusinessOwnerController;
 use App\Http\Controllers\Admin\DriverVehicleController;
 use App\Http\Controllers\Admin\HelpAndSupportController;
-use App\Http\Controllers\Admin\WalletController;
-use App\Http\Controllers\Admin\HandelBusinessOwnerPayments;
 use App\Http\Controllers\Admin\PushNotificationController;
-use App\Http\Controllers\Admin\ReviewController;
-use App\Http\Controllers\Admin\TwilioController;
+use App\Http\Controllers\Admin\HandelBusinessOwnerPayments;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +33,14 @@ use App\Http\Controllers\Admin\TwilioController;
 */
 /*Admin routes
  * */
-
+Route::get('/cache_clear', function () {
+    Artisan::call('config:cache');
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('optimize:clear');
+    Artisan::call('route:clear');
+    return 'Application cache cleared!';
+});
 Route::get('/admin/login', [AuthController::class, 'getLoginPage']);
 Route::post('/login', [AuthController::class, 'Login']);
 Route::get('/admin-forgot-password', [AdminController::class, 'forgetPassword']);
