@@ -29,15 +29,14 @@ class AuthController extends Controller
 
         if (Auth::guard('web')->attempt($credentials)) {
             $user = Auth::user();
-
-            if ($user->role_id !== 1) {
+            if ($user->role_id == 1) {
+                return redirect('admin/dashboard')->with(['status' => true, 'message' => 'Login Successfully!']);
+            } else {
                 Auth::logout();
-                return redirect('/admin/login')->with(['status' => false,'error' => 'Only Sub Admins Can Log In.']);
+                return redirect('/admin/login')->with(['status' => false, 'error' => 'Only Sub Admins Can Log In.']);
             }
-
-            return redirect('admin/dashboard')->with(['status' => true, 'message' => 'Login Successfully!']);
         }
 
-        return redirect('/admin/login')->with([ 'status' => false,'error' => 'Invalid Email and Password!']);
+        return redirect('/admin/login')->with(['status' => false, 'error' => 'Invalid Email and Password!']);
     }
 }
