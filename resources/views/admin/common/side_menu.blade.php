@@ -10,7 +10,7 @@
             {{-- Dashboard --}}
 
             <li class="dropdown {{ request()->is('admin/dashboard') ? 'active' : '' }}">
-                <a href="{{ url('/admin/dashboard') }}" class="nav-link"><i
+                <a href="{{ url('/admin/dashboard') }}" class="nav-link {{ request()->is('admin/dashboard*') ? 'text-white' : '' }}"><i
                         class="fas fa-th-large"></i><span>Dashboard</span></a>
             </li>
             {{-- User Mangement --}}
