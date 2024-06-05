@@ -189,7 +189,7 @@ class AuthController extends Controller
                 if ($find_user->role_id == 2 || $find_user->role_id == 3) {
                     $wallet = null;
                     if ($find_user->role_id == 3) {
-                        Mail::to($find_user->email)->send(new ActiveUserStatus($find_user->role_id));
+                        // Mail::to($find_user->email)->send(new ActiveUserStatus($find_user->role_id));
                         $wallet = DriverWallet::firstOrNew(['driver_id' => $find_user->id]);
                         $wallet->total_earning = $wallet->total_earning ?? 0;
                         $wallet->save();

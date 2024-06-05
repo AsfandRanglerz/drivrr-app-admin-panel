@@ -92,7 +92,7 @@
                             <div class="col-sm-12 pl-sm-0 pr-sm-3 col-md-12 col-lg-12">
                                 <div class="form-group mb-2">
                                     <label>Send To</label>
-                                    <select name="user_name[]" id="user_name" class="form-control selectric" multiple="">
+                                    <select name="user_name[]" id="user_name" class="form-control select2" multiple="">
                                         <option value="">Select Option</option>
                                         <option value="1">Subadmin</option>
                                         <option value="2">Business Owner</option>
