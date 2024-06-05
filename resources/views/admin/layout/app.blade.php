@@ -56,7 +56,7 @@
     <script src="{{ asset('public/admin/assets/bundles/jquery-selectric/jquery.selectric.min.js') }}"></script>
     <script src="{{ asset('public/admin/assets/bundles/select2/dist/js/select2.full.min.js') }}"></script>
 
-
+    @yield('js')
     <script>
         /*toastr popup function*/
         function toastrPopUp() {
@@ -81,7 +81,7 @@
         /*toastr popup function*/
         toastrPopUp();
     </script>
-    @yield('js')
+
 </body>
 
 

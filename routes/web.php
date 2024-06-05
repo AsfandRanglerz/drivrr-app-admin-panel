@@ -76,15 +76,16 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     #######Roles&Permission#####
     Route::get('/role-permission', [RoleController::class, 'index'])->name('roles-permission.index')->middleware('permission:Roles & Permissions');
     #######SubAdmin#######
-    Route::get('/sub-admin', [SubadminController::class, 'index'])->name('subadmin.index')->middleware('permission:SubAdmin');
-    Route::get('/sub-admin/create', [SubadminController::class, 'create'])->name('subAdmin.create');
-    Route::post('/sub-admin/store', [SubadminController::class, 'store'])->name('subAdmin.store');
-    Route::get('/sub-admin/edit/{id}', [SubadminController::class, 'edit'])->name('subAdmin.edit');
-    Route::post('/sub-admin/update/{id}', [SubadminController::class, 'update'])->name('subAdmin.update');
-    Route::delete('/sub-admin/destroy/{id}', [SubadminController::class, 'destroy'])->name('subAdmin.destroy');
-    Route::get('/sub-admin/status/{id}', [SubadminController::class, 'status'])->name('subAdmin.status');
-    Route::post('/assign-permissions/{user}', [SubadminController::class, 'storePermissions'])->name('user.assign.permissions');
-    Route::put('/update-permissions/{user}', [SubadminController::class, 'updatePermissions'])->name('user.update.permissions');
+    Route::controller(SubadminController::class)->group(function () {
+        Route::get('/subadmin',  'subadminIndex')->name('subadmin.index')->middleware('permission:subadmins');
+        Route::post('/subadmin-create',  'subadminCreate')->name('subadmin.create')->middleware('permission:subadmins');
+        Route::get('/subadminData',  'subadminData')->name('subadmin.get')->middleware('permission:subadmins');
+        Route::get('/subadmin/{id}',  'showSubAdmin')->name('subadmin.show')->middleware('permission:subadmins');
+        Route::post('/subadminUpdate/{id}',  'updateAdmin')->name('subadmin.update')->middleware('permission:subadmins');
+        Route::get('/subadmin/delete/{id}',  'deleteSubadmin')->name('subadmin.delete')->middleware('permission:subadmins');
+        Route::get('/get-permissions/{user}',  'fetchUserPermissions')->name('get.permissions')->middleware('permission:subadmins');
+        Route::post('/update-permissions/{user}',  'updatePermissions')->name('update.user.permissions')->middleware('permission:subadmins');
+    });
 
     Route::resource('vehicle', VehicleController::class)->middleware('permission:Vehicles');
     Route::resource('businessOwner', BusinessOwnerController::class)->middleware('permission:Business Owner');
