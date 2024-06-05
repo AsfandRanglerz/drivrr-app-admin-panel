@@ -74,7 +74,7 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-danger" onclick="submitSubadminForm()">Create</button>
+                    <button type="button" class="btn btn-dark" onclick="submitSubadminForm()">Create</button>
                 </div>
             </div>
         </div>
@@ -136,7 +136,7 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-danger" onclick="submitEditSubadminForm()">Update</button>
+                    <button type="button" class="btn btn-dark" onclick="submitEditSubadminForm()">Update</button>
                 </div>
             </div>
         </div>
@@ -188,7 +188,7 @@
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button class="btn btn-danger btn-sm" onclick="updatePermission()">Update</button>
+                    <button class="btn btn-dark btn-sm" onclick="updatePermission()">Update</button>
                 </div>
             </div>
         </div>
@@ -276,7 +276,7 @@
                     {
                         "data": null,
                         "render": function(data, type, row) {
-                            return '<button class="btn btn-success mb-3 mr-3 text-white editSubadminBtn" data-id="' +
+                            return '<button class="btn btn-primary mb-3 mr-3 text-white editSubadminBtn" data-id="' +
                                 row.id + '"><i class="fas fa-edit"></i></button>' +
                                 '<button class="btn btn-danger mb-3 mr-3 text-white deleteSubadminBtn" data-id="' +
                                 row.id + '"><i class="fas fa-trash-alt"></i></button>';
@@ -317,9 +317,10 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                     toastr.success('Sub Admin Created Successfully!');
+                    toastr.success('Sub Admin Created Successfully!');
                     $('#createSubadminModal').modal('hide');
                     reloadDataTable();
+                    $('#createSubadminForm').reset();
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);
@@ -374,12 +375,12 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                     toastr.success('Sub Admin Updated Successfully!');
+                    toastr.success('Sub Admin Updated Successfully!');
                     $('#editSubadminModal').modal('hide');
                     reloadDataTable();
                 },
                 error: function(xhr, status, error) {
-                     toastr.success('');
+                    toastr.success('');
                     $('#editSubadminModal').modal('hide');
                     console.log(xhr.responseText);
                     var errors = xhr.responseJSON.errors;
@@ -407,7 +408,7 @@
                 url: "{{ route('subadmin.delete', ['id' => ':subadminId']) }}".replace(':subadminId', subadminId),
                 type: 'GET',
                 success: function(response) {
-                     toastr.success('Sub Admin Delete Successfully!');
+                    toastr.success('Sub Admin Delete Successfully!');
                     $('#deleteSubadminModal').modal('hide');
                     reloadDataTable();
                 },
@@ -434,7 +435,7 @@
                     $('#updatePermissionSubadminModal').modal('show'); // Open the modal
                 },
                 error: function(xhr, status, error) {
-                     toastr.success('');
+                    toastr.success('');
                     console.error(xhr.responseText);
                 }
             });
@@ -455,7 +456,7 @@
                     permissions: permissions
                 },
                 success: function(response) {
-                     toastr.success('Permissison Assign Successfully!');
+                    toastr.success('Permissison Assign Successfully!');
                     $('#updatePermissionSubadminModal').modal('hide');
                     reloadDataTable();
                 },
