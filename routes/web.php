@@ -107,23 +107,17 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         Route::post('/driversUpdate/{id}',  'updateDrivers')->name('drivers.update')->middleware('permission:Driver');
         Route::get('/drivers/delete/{id}',  'deleteDrivers')->name('drivers.delete')->middleware('permission:Driver');
         //   User Blocking status
-        Route::post('/update-driver-status/{id}',  'updateBlockStatus')->name('driversBlock.update')->middleware('permission:users');
+        Route::post('/update-driver-status/{id}',  'updateBlockStatus')->name('driversBlock.update')->middleware('permission:Driver');
     });
     // Route::resource('document', DocumentController::class);
     // ############## Documents ############
     Route::controller(DocumentController::class)->group(function () {
-        Route::get('/document/{id}', 'documentIndex')->name('document.index');
-        Route::post('/document-create', 'documentCreate')->name('document.create');
-        Route::get('/documentData/{id}', 'documentData')->name('document.get');
-        Route::get('/document/{id}', 'showDocument')->name('document.show');
-        Route::post('/documentUpdate/{id}', 'updateDocument')->name('document.update');
-        Route::get('/document/delete/{id}', 'deleteDocument')->name('document.delete');
-        // Route::get('document/{id}',  'index')->name('document.index');
-        // Route::get('document-create/{id}',  'create')->name('document.create');
-        // Route::post('document-store/{id}',  'store')->name('document.store');
-        // Route::get('document-edit/{id}',  'edit')->name('document.edit');
-        // Route::post('document-update/{id}',  'update')->name('document.update');
-        // Route::delete('document-destroy/{id}',  'destroy')->name('document.destroy');
+        Route::get('document/{id}',  'index')->name('document.index');
+        Route::get('document-create/{id}',  'create')->name('document.create');
+        Route::post('document-store/{id}',  'store')->name('document.store');
+        Route::get('document-edit/{id}',  'edit')->name('document.edit');
+        Route::post('document-update/{id}',  'update')->name('document.update');
+        Route::delete('document-destroy/{id}',  'destroy')->name('document.destroy');
     });
     // ############## Drivers Vehicles ############
     Route::controller(DriverVehicleController::class)->group(function () {

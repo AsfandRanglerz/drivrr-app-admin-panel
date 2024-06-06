@@ -49,6 +49,7 @@
                                         data-feather="users"></i><span>Driver</span></a>
                             </li>
                         @endif
+                     
                         {{-- Sub Admin --}}
                         @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('SubAdmin'))
                             <li class="dropdown {{ request()->is('admin/subadmin*') ? 'active' : '' }}">

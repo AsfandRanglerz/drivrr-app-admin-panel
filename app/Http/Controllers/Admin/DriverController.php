@@ -160,4 +160,6 @@ class DriverController  extends Controller
             return response()->json(['alert' => 'error', 'message' => 'An error occurred while updating Driver status: ' . $e->getMessage()], 500);
         }
     }
+
+    
 }
