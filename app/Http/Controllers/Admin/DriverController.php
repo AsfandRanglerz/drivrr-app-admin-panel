@@ -112,6 +112,7 @@ class DriverController  extends Controller
         try {
             $driver = User::findOrFail($id);
             $driver->fill($request->only(['fname', 'lname', 'email', 'phone']));
+
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $filename = time() . '.' . $image->getClientOriginalExtension();
@@ -119,7 +120,7 @@ class DriverController  extends Controller
                 $driver->image = 'public/admin/assets/images/users/' . $filename;
             }
             $driver->save();
-            return response()->json(['alert' => 'success', 'message' => 'User Updated Successfully!']);
+            return response()->json(['alert' => 'success', 'message' => 'Driver Updated Successfully!']);
         } catch (\Exception $e) {
             return response()->json(['alert' => 'error', 'message' => 'An error occurred while updating User'], 500);
         }
