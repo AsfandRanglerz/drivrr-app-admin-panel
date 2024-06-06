@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
+use App\Models\Document;
+use App\Mail\VerifyDocument;
+use Illuminate\Http\Request;
+use App\Mail\RejectDocumentInfo;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
-use Illuminate\Http\Request;
-use App\Models\User;
-use App\Mail\VerifyDocument;
-use App\Mail\RejectDocumentInfo;
-use App\Models\Document;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 
 class DocumentController extends Controller
@@ -172,4 +173,72 @@ class DocumentController extends Controller
     //         return redirect()->back()->with(['status' => true, 'message' => 'Document Approved Successfully.']);
     //     }
     // }
+    public function documentData($id)
+    {
+        $documents = Document::where('user_id', $id)->latest()->get();
+        $json_data["data"] = $documents;
+        return json_encode($json_data);
+    }
+
+    public function documentIndex($id)
+    {
+        $documents = Document::where('user_id', $id)->latest()->get();
+        return view('admin.driver.document.index', compact('documents'));
+    }
+    public function documentCreate(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'image' => 'required|image|mimes:jpeg,jpg,png|max:1048'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+            $document = new Document($request->only(['name']));
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('admin/assets/images/DocumDocument'), $filename);
+                $document->image = 'public/admin/assets/images/DocumDocument/' . $filename;
+            }
+            $document->save();
+            return response()->json(['alert' => 'success', 'message' => 'DocumDocument Created Successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['alert' => 'error', 'message' => 'An error occurred while CreatingDocument!' . $e->getMessage()], 500);
+        }
+    }
+
+    public function showDocument($id)
+    {
+        $document = Document::find($id);
+        if (!$document) {
+            return response()->json(['alert' => 'error', 'message' => 'DocumDocument Not Found'], 500);
+        }
+        return response()->json($document);
+    }
+    public function updateDocument(Request $request, $id)
+    {
+        try {
+            $document = Document::findOrFail($id);
+            $document->fill($request->only(['name']));
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('public/admin/assets/images/users'), $filename);
+                $document->image = 'public/admin/assets/images/users/' . $filename;
+            }
+            $document->save();
+            return response()->json(['alert' => 'success', 'message' => 'DocumDocument Updated Successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['alert' => 'error', 'message' => 'An error occurred while updating Sub Admin' . $e->getMessage()], 500);
+        }
+    }
+
+    public function deleteDocument($id)
+    {
+        $document = Document::findOrFail($id);
+        $document->delete();
+        return response()->json(['alert' => 'success', 'message' => 'DocumDocument Deleted SuccessFully!']);
+    }
 }
