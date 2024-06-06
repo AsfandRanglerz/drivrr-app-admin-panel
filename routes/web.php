@@ -33,6 +33,7 @@ use App\Http\Controllers\Admin\SubadminController;
 */
 /*Admin routes
  * */
+
 Route::get('/cache_clear', function () {
     Artisan::call('config:cache');
     Artisan::call('config:clear');
@@ -97,23 +98,37 @@ Route::prefix('admin')->middleware('admin')->group(function () {
 
     Route::resource('vehicle', VehicleController::class)->middleware('permission:Vehicles');
     Route::resource('businessOwner', BusinessOwnerController::class)->middleware('permission:Business Owner');
-    Route::resource('driver', DriverController::class)->middleware('permission:Driver');
+    // ############## Drivers ############
+    Route::controller(DriverController::class)->group(function () {
+        Route::get('/drivers',  'driversIndex')->name('drivers.index')->middleware('permission:Driver');
+        Route::post('/drivers-create',  'driversCreate')->name('drivers.create')->middleware('permission:Driver');
+        Route::post('/driversData',  'driversData')->name('drivers.get')->middleware('permission:Driver');
+        Route::get('/drivers/{id}',  'showDrivers')->name('drivers.show')->middleware('permission:Driver');
+        Route::post('/driversUpdate/{id}',  'updateDrivers')->name('drivers.update')->middleware('permission:Driver');
+        Route::get('/drivers/delete/{id}',  'deleteDrivers')->name('drivers.delete')->middleware('permission:Driver');
+        //   User Blocking status
+        Route::post('/update-driver-status/{id}',  'updateBlockStatus')->name('driversBlock.update')->middleware('permission:users');
+    });
     // Route::resource('document', DocumentController::class);
-    //Document Controller
-    Route::get('document/{id}', [DocumentController::class, 'index'])->name('document.index');
-    Route::get('document-create/{id}', [DocumentController::class, 'create'])->name('document.create');
-    Route::post('document-store/{id}', [DocumentController::class, 'store'])->name('document.store');
-    Route::get('document-edit/{id}', [DocumentController::class, 'edit'])->name('document.edit');
-    Route::post('document-update/{id}', [DocumentController::class, 'update'])->name('document.update');
-    Route::delete('document-destroy/{id}', [DocumentController::class, 'destroy'])->name('document.destroy');
-    //Vehicles Controller
-    Route::get('driver-vehicle/{id}', [DriverVehicleController::class, 'index'])->name('driver-vehicle.index');
-    Route::get('driver-vehicle-create/{id}', [DriverVehicleController::class, 'create'])->name('driver-vehicle.create');
-    Route::post('driver-vehicle-store/{id}', [DriverVehicleController::class, 'store'])->name('driver-vehicle.store');
-    Route::get('driver-vehicle-edit/{id}', [DriverVehicleController::class, 'edit'])->name('driver-vehicle.edit');
-    Route::post('driver-vehicle-update/{id}', [DriverVehicleController::class, 'update'])->name('driver-vehicle.update');
-    Route::delete('driver-vehicle-destroy/{id}', [DriverVehicleController::class, 'destroy'])->name('driver-vehicle.destroy');
-    // Route::delete('driver-vehicle-show/{id}', [DriverVehicleController::class, 'show'])->name('driver-vehicle.show');
+    // ############## Documents ############
+    Route::controller(DocumentController::class)->group(function () {
+        Route::get('document/{id}',  'index')->name('document.index');
+        Route::get('document-create/{id}',  'create')->name('document.create');
+        Route::post('document-store/{id}',  'store')->name('document.store');
+        Route::get('document-edit/{id}',  'edit')->name('document.edit');
+        Route::post('document-update/{id}',  'update')->name('document.update');
+        Route::delete('document-destroy/{id}',  'destroy')->name('document.destroy');
+    });
+    // ############## Drivers Vehicles ############
+    Route::controller(DriverVehicleController::class)->group(function () {
+        Route::get('driver-vehicle/{id}',  'index')->name('driver-vehicle.index');
+        Route::get('driver-vehicle-create/{id}',  'create')->name('driver-vehicle.create');
+        Route::post('driver-vehicle-store/{id}',  'store')->name('driver-vehicle.store');
+        Route::get('driver-vehicle-edit/{id}',  'edit')->name('driver-vehicle.edit');
+        Route::post('driver-vehicle-update/{id}',  'update')->name('driver-vehicle.update');
+        Route::delete('driver-vehicle-destroy/{id}',  'destroy')->name('driver-vehicle.destroy');
+        // Route::delete('driver-vehicle-show/{id}',  'show')->name('driver-vehicle.show');
+    });
 
     //owner-jobs
     Route::get('owner-job/{id}', [JobController::class, 'index'])->name('owner-job.index');

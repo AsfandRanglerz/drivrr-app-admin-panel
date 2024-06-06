@@ -24,7 +24,7 @@
                     <a href="#" class="menu-toggle nav-link has-dropdown"><i class="fa fa-users"></i>
                         <span>UserManagement</span></a>
                     <ul
-                        class="dropdown-menu {{ request()->is('admin/businessOwner*') || request()->is('admin/driver*') || request()->is('admin/subadmin*') ? 'show' : '' }}">
+                        class="dropdown-menu {{ request()->is('admin/businessOwner*') || request()->is('admin/drivers*') || request()->is('admin/subadmin*') ? 'show' : '' }}">
                         {{-- Business Owner --}}
                         @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Business Owner'))
                             <li class="dropdown {{ request()->is('admin/businessOwner*') ? 'active' : '' }}">
@@ -39,13 +39,13 @@
                         @endif
                         {{-- Driver --}}
                         @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Driver'))
-                            <li class="dropdown {{ request()->is('admin/driver*') ? 'active' : '' }}">
-                                <a href="{{ route('driver.index') }}" class="nav-link {{ request()->is('admin/driver*') ? 'text-white' : '' }}"><i
+                            <li class="dropdown {{ request()->is('admin/drivers*') ? 'active' : '' }}">
+                                <a href="{{ route('drivers.index') }}" class="nav-link {{ request()->is('admin/driver*') ? 'text-white' : '' }}"><i
                                         data-feather="users"></i><span>Driver</span></a>
                             </li>
                         @elseif (auth()->guard('admin')->check())
-                            <li class="dropdown {{ request()->is('admin/driver*') ? 'active' : '' }}">
-                                <a href="{{ route('driver.index') }}" class="nav-link {{ request()->is('admin/driver*') ? 'text-white' : '' }}"><i
+                            <li class="dropdown {{ request()->is('admin/drivers*') ? 'active' : '' }}">
+                                <a href="{{ route('drivers.index') }}" class="nav-link {{ request()->is('admin/driver*') ? 'text-white' : '' }}"><i
                                         data-feather="users"></i><span>Driver</span></a>
                             </li>
                         @endif
