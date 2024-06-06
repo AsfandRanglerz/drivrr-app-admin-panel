@@ -98,6 +98,17 @@ Route::prefix('admin')->middleware('admin')->group(function () {
 
     Route::resource('vehicle', VehicleController::class)->middleware('permission:Vehicles');
     Route::resource('businessOwner', BusinessOwnerController::class)->middleware('permission:Business Owner');
+        // ############## Busniess Owner ############
+        Route::controller(BusinessOwnerController::class)->group(function () {
+            Route::get('/busniessOwner',  'busniessOwnerIndex')->name('busniessOwner.index')->middleware('permission:Business Owner');
+            Route::post('/busniessOwner-create',  'busniessOwnerCreate')->name('busniessOwner.create')->middleware('permission:Business Owner');
+            Route::post('/busniessOwnerData',  'busniessOwnerData')->name('busniessOwner.get')->middleware('permission:Business Owner');
+            Route::get('/busniessOwner/{id}',  'showBusniessOwner')->name('busniessOwner.show')->middleware('permission:Business Owner');
+            Route::post('/busniessOwnerUpdate/{id}',  'updateBusniessOwner')->name('busniessOwner.update')->middleware('permission:Business Owner');
+            Route::get('/busniessOwner/delete/{id}',  'deleteBusniessOwner')->name('busniessOwner.delete')->middleware('permission:Business Owner');
+            //   User Blocking status
+            Route::post('/update-owner-status/{id}',  'updateBlockStatus')->name('busniessOwner.update')->middleware('permission:Business Owner');
+        });
     // ############## Drivers ############
     Route::controller(DriverController::class)->group(function () {
         Route::get('/drivers',  'driversIndex')->name('drivers.index')->middleware('permission:Driver');

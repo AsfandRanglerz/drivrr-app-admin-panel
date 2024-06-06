@@ -24,16 +24,16 @@
                     <a href="#" class="menu-toggle nav-link has-dropdown"><i class="fa fa-users"></i>
                         <span>UserManagement</span></a>
                     <ul
-                        class="dropdown-menu {{ request()->is('admin/businessOwner*') || request()->is('admin/drivers*') || request()->is('admin/subadmin*') ? 'show' : '' }}">
+                        class="dropdown-menu {{ request()->is('admin/busniessOwner*') || request()->is('admin/drivers*') || request()->is('admin/subadmin*') ? 'show' : '' }}">
                         {{-- Business Owner --}}
                         @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Business Owner'))
-                            <li class="dropdown {{ request()->is('admin/businessOwner*') ? 'active' : '' }}">
-                                <a href="{{ route('businessOwner.index') }}" class="nav-link {{ request()->is('admin/businessOwner*') ? 'text-white' : '' }}"><i
+                            <li class="dropdown {{ request()->is('admin/busniessOwner*') ? 'active' : '' }}">
+                                <a href="{{ route('busniessOwner.index') }}" class="nav-link {{ request()->is('admin/busniessOwner*') ? 'text-white' : '' }}"><i
                                         data-feather="users"></i><span>Business Owner</span></a>
                             </li>
                         @elseif (auth()->guard('admin')->check())
-                            <li class="dropdown {{ request()->is('admin/businessOwner*') ? 'active' : '' }}">
-                                <a href="{{ route('businessOwner.index') }}" class="nav-link {{ request()->is('admin/businessOwner*') ? 'text-white' : '' }}"><i
+                            <li class="dropdown {{ request()->is('admin/busniessOwner*') ? 'active' : '' }}">
+                                <a href="{{ route('busniessOwner.index') }}" class="nav-link {{ request()->is('admin/busniessOwner*') ? 'text-white' : '' }}"><i
                                         data-feather="users"></i><span>Business Owner</span></a>
                             </li>
                         @endif
@@ -49,7 +49,7 @@
                                         data-feather="users"></i><span>Driver</span></a>
                             </li>
                         @endif
-                     
+
                         {{-- Sub Admin --}}
                         @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('SubAdmin'))
                             <li class="dropdown {{ request()->is('admin/subadmin*') ? 'active' : '' }}">
