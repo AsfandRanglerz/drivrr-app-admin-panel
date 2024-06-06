@@ -4,12 +4,12 @@
             style="vertical-align: middle;margin-bottom: -3px;height: 50px;margin-bottom: 35px">
         <h3>Welcome to Drivrr</h3>
     </div>
-    Dear {{ $data['username'] }},
+    Dear {{ $data['drivername'] }},
     You have been Unblocked by the Admin.
     <div>
         Concerning this account,:
         <ul style="padding-left: 16px">
-            <li><strong>The Associated Email is:</strong> {{ $data['useremail'] }}</li>
+            <li><strong>The Associated Email is:</strong> {{ $data['driveremail'] }}</li>
         </ul>
     </div>
     <div>

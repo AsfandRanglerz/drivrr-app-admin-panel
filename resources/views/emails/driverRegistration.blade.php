@@ -4,12 +4,12 @@
             style="vertical-align: middle;margin-bottom: -3px;height: 50px;margin-bottom: 35px">
         <h3>Welcome to Drivrr</h3>
     </div>
-    Dear {{ $data['subadminname'] }},
+    Dear {{ $data['drivername'] }},
     Welcome to Drivrr! Your account has been created successfully by the Admin.
     <div>
         Here are your account details:
         <ul style="padding-left: 16px">
-            <li><strong>Email:</strong> {{ $data['subadminemail'] }}</li>
+            <li><strong>Email:</strong> {{ $data['driveremail'] }}</li>
             <li><strong>Password:</strong> {{ $data['password'] }}</li>
         </ul>
     </div>
