@@ -162,25 +162,7 @@
             </div>
         </div>
     </div>
-    {{-- Account Info --}}
-    <div class="modal fade" id="DriverBankInfoModal" tabindex="-1" role="dialog"
-        aria-labelledby="DriverBankInfoModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="DriverBankInfoModalLabel">Driver Bank Account Information</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div id="bankAccountsInfo">
-                        <!-- Bank account information will be dynamically inserted here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
     {{-- #############Main Content Body#################  --}}
     <div class="main-content" style="min-height: 562px;">
         <section class="section">

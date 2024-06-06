@@ -1,6 +1,5 @@
-
 @extends('admin.layout.app')
-@section('title', 'index')
+@section('title', 'Documents')
 @section('content')
 
     <head>
@@ -67,7 +66,8 @@
 
                                                     <td>
                                                         @if ($document->is_active == 0)
-                                                            <div class="badge  badge-shadow btn-warning text-black">Pending</div>
+                                                            <div class="badge  badge-shadow btn-warning text-black">Pending
+                                                            </div>
                                                         @elseif ($document->is_active == 1)
                                                             <div class="badge badge-success badge-shadow">Accepted</div>
                                                         @else
@@ -77,37 +77,33 @@
 
                                                     <td
                                                         style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
-                                                    @if ($document->is_active == 0)
+                                                        @if ($document->is_active == 0)
+                                                            <a href="{{ route('document.status', ['id' => $document->id, 'key' => $data->id, 'check' => 1]) }}"
+                                                                class="btn btn-success text-white">
+                                                                &#x2713
+                                                            </a>
 
-                                                        <a href="{{route('document.status',['id' => $document->id , 'key' => $data->id,'check'=>1])}}"
-                                                        class="btn btn-success text-white">
-                                                        &#x2713
-                                                        </a>
-
-                                                        <a href="{{route('document.status',['id' => $document->id , 'key' => $data->id,'check'=>2])}}"
-                                                           data-bs-toggle="modal"
-                                                           data-bs-target="#exampleModal"
-                                                        class="btn btn-danger">
-                                                        &#10005
-                                                        </a>
-
-                                                    @elseif ($document->is_active == 1)
-
-                                                        <a href="{{ route('document.status', ['id' => $document->id, $data->id , 'check'=>2]) }}"
-                                                            class="btn btn-success" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModal">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="28"
-                                                                height="23" viewBox="0 0 24 24" fill="none"
-                                                                stroke="currentColor"
-                                                                stroke-width="2"stroke-linecap="round"
-                                                                stroke-linejoin="round"class="feather feather-toggle-left">
-                                                                <rect x="1" y="5" width="22" height="14"
-                                                                    rx="7" ry="7"></rect>
-                                                                <circle cx="16" cy="12" r="3">
-                                                                </circle>
-                                                            </svg></a>
-                                                     @else
-                                                         <a href="{{ route('document.status', ['id' => $document->id, $data->id , 'check'=>1]) }}"
+                                                            <a href="{{ route('document.status', ['id' => $document->id, 'key' => $data->id, 'check' => 2]) }}"
+                                                                data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                                class="btn btn-danger">
+                                                                &#10005
+                                                            </a>
+                                                        @elseif ($document->is_active == 1)
+                                                            <a href="{{ route('document.status', ['id' => $document->id, $data->id, 'check' => 2]) }}"
+                                                                class="btn btn-success" data-bs-toggle="modal"
+                                                                data-bs-target="#exampleModal">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="28"
+                                                                    height="23" viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor"
+                                                                    stroke-width="2"stroke-linecap="round"
+                                                                    stroke-linejoin="round"class="feather feather-toggle-left">
+                                                                    <rect x="1" y="5" width="22" height="14"
+                                                                        rx="7" ry="7"></rect>
+                                                                    <circle cx="16" cy="12" r="3">
+                                                                    </circle>
+                                                                </svg></a>
+                                                        @else
+                                                            <a href="{{ route('document.status', ['id' => $document->id, $data->id, 'check' => 1]) }}"
                                                                 class="btn btn-danger"><svg
                                                                     xmlns="http://www.w3.org/2000/svg" width="28"
                                                                     height="23" viewBox="0 0 24 24" fill="none"
@@ -120,35 +116,6 @@
                                                                     </circle>
                                                                 </svg></a>
                                                         @endif
-
-                                                        {{-- @if ($document->is_active == 1)
-                                                        <a href="{{ route('document.status', ['id' => $document->id, $data->id]) }}"
-                                                            class="btn btn-success" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModal">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                height="24" viewBox="0 0 24 24" fill="none"
-                                                                stroke="currentColor"
-                                                                stroke-width="2"stroke-linecap="round"
-                                                                stroke-linejoin="round"class="feather feather-toggle-left">
-                                                                <rect x="1" y="5" width="22" height="14"
-                                                                    rx="7" ry="7"></rect>
-                                                                <circle cx="16" cy="12" r="3">
-                                                                </circle>
-                                                            </svg></a>
-                                                        @else
-                                                        <a href="{{ route('document.status', ['id' => $document->id, $data->id]) }}"
-                                                            class="btn btn-danger"><svg
-                                                                xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                height="24" viewBox="0 0 24 24" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round"
-                                                                class="feather feather-toggle-right">
-                                                                <rect x="1" y="5" width="22" height="14"
-                                                                    rx="7" ry="7"></rect>
-                                                                <circle cx="8" cy="12" r="3">
-                                                                </circle>
-                                                            </svg></a>
-                                                        @endif --}}
                                                         <a class="btn text-white btn-info"
                                                             href="{{ route('document.edit', $document->id) }}">Edit</a>
                                                         <form method="post"
@@ -183,23 +150,10 @@
                     <div class="modal-header pb-1 border-0">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    {{-- <div class="modal-body">
-                        <div class="mb-2">
-                            <form action="{{route('document.status',['id' => $document->id, $data->id])}}">
-                                @csrf
-                                <h5>Reason</h5>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" required name="reason"></textarea>
-                        </div>
-                        <div class="text-end mt-1">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                        </form>
-                    </div> --}}
                     <div class="modal-body">
                         <div class="mb-2">
                             @if (isset($document) && isset($data))
-                                <form
-                                    action="{{ route('document.status', ['id' => $document->id, 'key' => $data->id]) }}">
+                                <form action="{{ route('document.status', ['id' => $document->id, 'key' => $data->id]) }}">
                                     @csrf
 
                                     <input type="hidden" name="check" value="2">
@@ -218,20 +172,24 @@
                 </div>
             </div>
         </div>
-
-
-{{-- modal --}}
-        <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        {{-- modal --}}
+        <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header pb-1 border-0">
                         <div class="modal-body">
                             <div class="mb-2">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                                 <div class="text-center mt-3">
                                     <div class="d-flex justify-content-center">
-                                        <a href="{{ route('document.status', ['id' => 1 , 'key' => $data->id]) }}" type="submit" class="btn btn-success mx-2" data-bs-dismiss="modal" aria-label="Close">Approved</a>
-                                        <a href="{{ route('document.status', ['id' => 2 , 'key' => $data->id]) }}" type="submit" class="btn btn-danger mx-2" data-bs-dismiss="modal" aria-label="Close">Rejected</a>
+                                        <a href="{{ route('document.status', ['id' => 1, 'key' => $data->id]) }}"
+                                            type="submit" class="btn btn-success mx-2" data-bs-dismiss="modal"
+                                            aria-label="Close">Approved</a>
+                                        <a href="{{ route('document.status', ['id' => 2, 'key' => $data->id]) }}"
+                                            type="submit" class="btn btn-danger mx-2" data-bs-dismiss="modal"
+                                            aria-label="Close">Rejected</a>
                                     </div>
                                 </div>
 

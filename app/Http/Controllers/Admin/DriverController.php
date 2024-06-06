@@ -161,5 +161,4 @@ class DriverController  extends Controller
         }
     }
 
-    
 }
