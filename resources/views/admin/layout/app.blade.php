@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ asset('public/admin/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('public/admin/assets/css/components.css') }}">
     <!-- Custom style CSS -->
-    <link rel="stylesheet" href="{{ asset('public/admin/assets/toastr/css/toastr.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('public/admin/assets/toastr/css/toastr.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('public/admin/assets/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('public/admin/assets/bundles/prism/prism.css') }}">
     <link rel='shortcut icon' type='image/x-icon' href='{{ asset('public/admin/assets/img/favicon.ico') }}' />
@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{ asset('public/admin/assets/bundles/select2/dist/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/admin/assets/bundles/jquery-selectric/selectric.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="{{ asset('public/toastr/toastr.css') }}">
 </head>
 
 <body>
@@ -45,7 +46,8 @@
     <script src="{{ asset('public/admin/assets/js/scripts.js') }}"></script>
     <!-- Custom JS File -->
     <script src="{{ asset('public/admin/assets/js/custom.js') }}"></script>
-    <script src="{{ asset('public/admin/assets/toastr/js/toastr.min.js') }}"></script>
+    <script src="{{ asset('public/toastr/toastr.js') }}"></script>
+    {{-- <script src="{{ asset('public/admin/assets/toastr/js/toastr.min.js') }}"></script> --}}
     {{-- DataTbales --}}
     <script src="{{ asset('public/admin/assets/bundles/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('publicadmin/assets/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js') }}">
@@ -58,28 +60,29 @@
 
     @yield('js')
     <script>
-        /*toastr popup function*/
-        function toastrPopUp() {
-            toastr.options = {
-                "closeButton": true,
-                "newestOnTop": false,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "3000",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
-        }
+        toastr.options = {
+            "closeButton": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000"
+        };
 
-        /*toastr popup function*/
-        toastrPopUp();
+        @if (session('message'))
+            toastr.success("{{ session('message') }}");
+        @endif
+
+        @if (session('error'))
+            toastr.error("{{ session('error') }}");
+        @endif
+
+        @if (session('info'))
+            toastr.info("{{ session('info') }}");
+        @endif
+
+        @if (session('warning'))
+            toastr.warning("{{ session('warning') }}");
+        @endif
     </script>
 
 </body>

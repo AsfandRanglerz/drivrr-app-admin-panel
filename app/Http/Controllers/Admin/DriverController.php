@@ -140,15 +140,15 @@ class DriverController  extends Controller
             if ($driver->is_active == '0') {
                 $driver->is_active = '1';
                 $message = 'Driver Activate Successfully';
-                $data['drivername'] =  $driver->fname . ' ' .  $driver->lname;
-                $data['driveremail'] =  $driver->email;
-                Mail::to($driver->email)->send(new driverUnBlock($data));
+                // $data['drivername'] =  $driver->fname . ' ' .  $driver->lname;
+                // $data['driveremail'] =  $driver->email;
+                // Mail::to($driver->email)->send(new driverUnBlock($data));
             } else if ($driver->is_active == '1') {
                 $driver->is_active = '0';
                 $message = 'Driver Blocked Successfully';
-                $data['drivername'] =  $driver->fname . ' ' .  $driver->lname;
-                $data['driveremail'] =  $driver->email;
-                Mail::to($driver->email)->send(new driverBlock($data));
+                // $data['drivername'] =  $driver->fname . ' ' .  $driver->lname;
+                // $data['driveremail'] =  $driver->email;
+                // Mail::to($driver->email)->send(new driverBlock($data));
             } else {
                 return response()->json(['alert' => 'info', 'message' => 'Driver status is already updated or cannot be updated.']);
             }
