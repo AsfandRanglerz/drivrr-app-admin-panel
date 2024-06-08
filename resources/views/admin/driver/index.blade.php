@@ -14,63 +14,57 @@
                 </div>
                 <div class="modal-body">
                     <form id="createDriverForm" enctype="multipart/form-data">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">First Name</label>
-                                    <input type="text" class="form-control" id="fname" name="fname" required>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">Last Name</label>
-                                    <input type="text" class="form-control" id="lname" name="lname" required>
-                                    <div class="invalid-feedback"></div>
-                                </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="name">First Name</label>
+                                <input type="text" class="form-control fname" id="fname" name="fname" required>
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="phone">Phone Number</label>
-                                    <input type="number" class="form-control" id="phone" name="phone">
-                                    <div class="invalid-feedback"></div>
-                                </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="name">Last Name</label>
+                                <input type="text" class="form-control lname" name="lname" required>
+                                <div class="invalid-feedback"></div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                    <div class="invalid-feedback"></div>
-                                </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="number" class="form-control phone" name="phone">
+                                <div class="invalid-feedback"></div>
                             </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control email" name="email" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control password" id="password" name="password"
+                                    required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="confirmpassword">Confirm Password</label>
+                                <input type="password" class="form-control confirmpassword" name="confirmpassword" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="image">Image</label>
+                                <input type="file" class="form-control image" name="image">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
 
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control" id="password" name="password" required>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="confirmpassword">Confirm Password</label>
-                                    <input type="password" class="form-control" id="confirmpassword" name="confirmpassword"
-                                        required>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="image">Image</label>
-                                    <input type="file" class="form-control" id="image" name="image">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center">
@@ -92,47 +86,43 @@
                 </div>
                 <div class="modal-body">
                     <form id="editDriverForm" enctype="multipart/form-data">
-                        <div class="row">
-                            <div class="col-md-6">
+
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="name">First Name</label>
                                     <input type="text" class="form-control" id="fname" name="fname" required>
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="name">Last Name</label>
                                     <input type="text" class="form-control" id="lname" name="lname" required>
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="email">Email</label>
                                     <input type="email" class="form-control" id="email" name="email" required>
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="phone">Phone Number</label>
                                     <input type="number" class="form-control" id="phone" name="phone">
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="image">Image</label>
                                     <input type="file" class="form-control" id="image" name="image">
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
-                        </div>
+
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center">
@@ -366,7 +356,7 @@
                     console.log(xhr.responseText);
                     var errors = xhr.responseJSON.errors;
                     $.each(errors, function(key, value) {
-                        $('#' + key).addClass('is-invalid').siblings('.invalid-feedback').html(value[
+                        $('.' + key).addClass('is-invalid').siblings('.invalid-feedback').html(value[
                             0]);
                     });
                 },
