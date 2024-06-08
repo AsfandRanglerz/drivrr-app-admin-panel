@@ -103,10 +103,4 @@
         </section>
     </div>
 @endsection
-@section('js')
-    @if (\Illuminate\Support\Facades\Session::has('message'))
-        <script>
-            toastr.success('{{ \Illuminate\Support\Facades\Session::get('message') }}');
-        </script>
-    @endif
-@endsection
+
