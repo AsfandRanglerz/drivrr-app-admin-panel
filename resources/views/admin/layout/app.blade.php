@@ -59,6 +59,7 @@
     <script src="{{ asset('public/admin/assets/bundles/jquery-selectric/jquery.selectric.min.js') }}"></script>
     <script src="{{ asset('public/admin/assets/bundles/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('public/admin/assets/bundles/lightgallery/dist/js/lightgallery-all.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/page/light-gallery.js') }}"></script>
     @yield('js')
     <script>
         toastr.options = {
@@ -85,7 +86,25 @@
             toastr.warning("{{ session('warning') }}");
         @endif
     </script>
-
+    {{-- License Approval  Counter Code --}}
+    <script>
+        $(document).ready(function() {
+            function updatelisenceApprovel() {
+                $.ajax({
+                    url: "{{ route('lisenceApprovel.count') }}",
+                    type: 'GET',
+                    success: function(response) {
+                        $('#lisenceApprovel').text(response.lisenceApprovel);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr);
+                    }
+                });
+            }
+            updatelisenceApprovel();
+            setInterval(updatelisenceApprovel, 1000);
+        });
+    </script>
 </body>
 
 

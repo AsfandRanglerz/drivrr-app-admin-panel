@@ -145,9 +145,9 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         Route::get('/lisenceApprovel',  'lisenceApprovelIndex')->name('lisenceApprovel.index');
         Route::post('/lisenceApprovel-create',  'lisenceApprovelCreate')->name('lisenceApprovel.create');
         Route::post('/lisenceApprovelData',  'lisenceApprovelData')->name('lisenceApprovel.get');
-        Route::get('/lisenceApprovel/{id}',  'showlisenceApprovel')->name('lisenceApprovel.show');
-        Route::post('/lisenceApprovelUpdate/{id}',  'updatelisenceApprovel')->name('lisenceApprovel.update');
-        Route::get('/lisenceApprovel/delete/{id}',  'deletelisenceApprovel')->name('lisenceApprovel.delete');
+        Route::get('/lisenceApprovel/{id}/status',  'getStatus')->name('lisenceApprovel.status');
+        Route::post('/lisenceApprovel/{id}/update-is_active',  'updateStatus')->name('orders.update-is_active');
+        Route::get('/lisenceApprovel/counter',  'getlisenceApprovelCount')->name('lisenceApprovel.count');
         // Route::delete('driver-vehicle-show/{id}',  'show')->name('driver-vehicle.show');
     });
 
