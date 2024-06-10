@@ -5,7 +5,7 @@
         <h3>Welcome to Drivrr</h3>
     </div>
     Dear {{ $data['drivername'] }},
-    Welcome to Drivrr! Your account has been created successfully by the Admin.
+    Welcome to Drivrr! Your account has been created successfully by the Admin as a Driver.
     <div>
         Here are your account details:
         <ul style="padding-left: 16px">

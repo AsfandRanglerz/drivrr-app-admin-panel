@@ -11,13 +11,15 @@ class ownerRegistration extends Mailable
 {
     use Queueable, SerializesModels;
 
+    protected $data;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
+        $this->data = $data;
         //
     }
 
@@ -28,6 +30,7 @@ class ownerRegistration extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.ownerRegistration');
+        return $this->markdown('emails.ownerRegistration')->subject('Busniess Owner Registration Successfully')
+        ->with(['data' => $this->data]);
     }
 }

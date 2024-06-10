@@ -11,13 +11,15 @@ class ownerUnBlock extends Mailable
 {
     use Queueable, SerializesModels;
 
+    protected $data;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
+        $this->data = $data;
         //
     }
 
@@ -28,6 +30,7 @@ class ownerUnBlock extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.ownerUnBlock');
+        return $this->markdown('emails.ownerUnBlock')->subject('Busniess Owner Activation Status')
+            ->with(['data' => $this->data]);
     }
 }

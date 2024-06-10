@@ -260,7 +260,7 @@ class BusinessOwnerController extends Controller
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
-            $busniessOwner = new User($request->only(['fname', 'lname', 'email', 'phone']));
+            $busniessOwner = new User($request->only(['fname', 'lname', 'email', 'phone','company_info','company_name']));
             $busniessOwner->password = bcrypt($request->input('password'));
             $busniessOwner->role_id = 3;
             if ($request->hasFile('image')) {
@@ -307,7 +307,7 @@ class BusinessOwnerController extends Controller
         }
         try {
             $busniessOwner = User::findOrFail($id);
-            $busniessOwner->fill($request->only(['fname', 'lname', 'email', 'phone']));
+            $busniessOwner->fill($request->only(['fname', 'lname', 'email', 'phone','company_info','company_name']));
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
@@ -335,15 +335,15 @@ class BusinessOwnerController extends Controller
 
             if ($busniessOwner->is_active == '0') {
                 $busniessOwner->is_active = '1';
-                $message = 'Driver Activate Successfully';
-                $data['drivername'] =  $busniessOwner->fname . ' ' .  $busniessOwner->lname;
-                $data['driveremail'] =  $busniessOwner->email;
+                $message = 'Busniess Owner Activate Successfully';
+                $data['ownername'] =  $busniessOwner->fname . ' ' .  $busniessOwner->lname;
+                $data['owneremail'] =  $busniessOwner->email;
                 Mail::to($busniessOwner->email)->send(new ownerUnBlock($data));
             } else if ($busniessOwner->is_active == '1') {
                 $busniessOwner->is_active = '0';
-                $message = 'Driver Blocked Successfully';
-                $data['drivername'] =  $busniessOwner->fname . ' ' .  $busniessOwner->lname;
-                $data['driveremail'] =  $busniessOwner->email;
+                $message = 'Busniess Owner Blocked Successfully';
+                $data['ownername'] =  $busniessOwner->fname . ' ' .  $busniessOwner->lname;
+                $data['owneremail'] =  $busniessOwner->email;
                 Mail::to($busniessOwner->email)->send(new ownerBlock($data));
             } else {
                 return response()->json(['alert' => 'info', 'message' => 'Busniess Owner status is already updated or cannot be updated.']);
