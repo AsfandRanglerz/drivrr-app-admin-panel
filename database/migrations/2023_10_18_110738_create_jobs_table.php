@@ -19,13 +19,10 @@ class CreateJobsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('vehicle_id');
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
-            $table->string('pickup');
-            $table->string('destination');
             $table->date('date');
             $table->time('time');
-            $table->string('duration');
-            $table->string('service_type');
-            $table->string('price');
+            $table->string('hours');
+            $table->string('days');
             $table->string('description');
             $table->timestamps();
         });
