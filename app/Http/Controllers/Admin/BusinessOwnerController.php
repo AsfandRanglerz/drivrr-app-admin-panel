@@ -260,9 +260,9 @@ class BusinessOwnerController extends Controller
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
-            $busniessOwner = new User($request->only(['fname', 'lname', 'email', 'phone','company_info','company_name']));
+            $busniessOwner = new User($request->only(['fname', 'lname', 'email', 'phone', 'company_info', 'company_name']));
             $busniessOwner->password = bcrypt($request->input('password'));
-            $busniessOwner->role_id = 3;
+            $busniessOwner->role_id = 2;
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $filename = time() . '.' . $image->getClientOriginalExtension();
@@ -307,7 +307,7 @@ class BusinessOwnerController extends Controller
         }
         try {
             $busniessOwner = User::findOrFail($id);
-            $busniessOwner->fill($request->only(['fname', 'lname', 'email', 'phone','company_info','company_name']));
+            $busniessOwner->fill($request->only(['fname', 'lname', 'email', 'phone', 'company_info', 'company_name']));
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');

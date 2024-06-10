@@ -437,7 +437,7 @@
                 url: "{{ route('drivers.delete', ['id' => ':driverId']) }}".replace(':driverId', driverId),
                 type: 'GET',
                 success: function(response) {
-                    toastr.success('Driver Created Successfully!')
+                    toastr.success('Driver Deleted Successfully!')
                     $('#deleteDriverModal').modal('hide');
                     reloadDataTable();
                 },

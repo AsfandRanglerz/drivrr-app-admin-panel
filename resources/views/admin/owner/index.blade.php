@@ -297,23 +297,6 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control" id="password" name="password" required>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="confirmpassword">Confirm Password</label>
-                                    <input type="password" class="form-control" id="confirmpassword"
-                                        name="confirmpassword" required>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
                                     <label for="image">Image</label>
                                     <input type="file" class="form-control" id="image" name="image">
                                     <div class="invalid-feedback"></div>
@@ -606,6 +589,8 @@
                     $('#editBusniessOwnerForm #lname').val(response.lname);
                     $('#editBusniessOwnerForm #email').val(response.email);
                     $('#editBusniessOwnerForm #phone').val(response.phone);
+                    $('#editBusniessOwnerForm #company_name').val(response.company_name);
+                    $('#editBusniessOwnerForm #company_info').val(response.company_info);
                     $('#editBusniessOwnerModal').modal('show');
                     $('#editBusniessOwnerModal').data('BusniessOwnerId', BusniessOwnerId);
                 },
@@ -662,7 +647,7 @@
                     BusniessOwnerId),
                 type: 'GET',
                 success: function(response) {
-                    toastr.success('BusniessOwner Created Successfully!')
+                    toastr.success('BusniessOwner Deleted Successfully!')
                     $('#deleteBusniessOwnerModal').modal('hide');
                     reloadDataTable();
                 },
