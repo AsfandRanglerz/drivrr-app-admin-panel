@@ -150,11 +150,11 @@
             {{-- Lisence Approvel Request --}}
             <li class="dropdown {{ request()->is('admin/lisenceApprovel*') ? 'active' : '' }}">
                 <a href="{{ route('lisenceApprovel.index') }}" class="nav-link"><i
-                        class="fas fa-receipt"></i><span>Lisence Approvel Requests</span>
-                        <div id="lisenceApprovel"
+                        class="fas fa-receipt"></i><span>License Approvals</span>
+                    <div id="lisenceApprovel"
                         class="badge {{ request()->is('admin/lisenceApprovel*') ? 'bg-white text-dark' : 'bg-dark text-white' }} rounded-circle ">
                     </div>
-                    </a>
+                </a>
             </li>
             {{-- Owner Recipits --}}
             @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Payments'))
