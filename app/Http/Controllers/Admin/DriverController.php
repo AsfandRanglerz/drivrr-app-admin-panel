@@ -76,8 +76,8 @@ class DriverController  extends Controller
                 $wallet->driver_id = $driver->id;
                 $wallet->total_earning = 0;
                 $wallet->save();
-                $data['username'] =  $driver->fname . ' ' .  $driver->lname;
-                $data['useremail'] =  $driver->email;
+                $data['drivername'] =  $driver->fname . ' ' .  $driver->lname;
+                $data['driveremail'] =  $driver->email;
                 $data['password'] = $request->password;
                 Mail::to($driver->email)->send(new driverRegistration($data));
                 return response()->json(['alert' => 'success', 'message' => 'Driver Created Successfully!']);
@@ -86,7 +86,7 @@ class DriverController  extends Controller
             }
             return response()->json(['alert' => 'success', 'message' => 'Driver Created Successfully!']);
         } catch (\Exception $e) {
-            return response()->json(['alert' => 'error', 'message' => 'An error occurred while Creating Driver!'], 500);
+            return response()->json(['alert' => 'error', 'message' => 'An error occurred while Creating Driver!' . $e->getMessage()], 500);
         }
     }
 
@@ -160,5 +160,4 @@ class DriverController  extends Controller
             return response()->json(['alert' => 'error', 'message' => 'An error occurred while updating Driver status: ' . $e->getMessage()], 500);
         }
     }
-
 }
