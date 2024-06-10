@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Job;
-use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Stripe\Stripe;
+use App\Models\Job;
+use App\Models\User;
+use Stripe\StripeClient;
+use Illuminate\Http\Request;
+use App\Models\PaymentRequest;
+use Illuminate\Support\Facades\Log;
+use Stripe\Exception\CardException;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class JobController extends Controller
 {
@@ -30,33 +36,198 @@ class JobController extends Controller
             ], 500);
         }
     }
+    // ############# Stripe Code For Job Payment ############
+    // public function jobPayment(Request $request, $id)
+    // {
+    //     try {
+    //         $owner = User::find($id);
+    //         $stripe = new StripeClient('sk_test_51OZ9CNH4pKZw8NygRAES6G6JbKVPxg1q96ViQV5PCKWPizBNIWSbUWW56TjAVFrAycu8nMCJ7TtSZe0B2Q9JdiOm00NZ6ir3uP');
+    //         Stripe::setApiKey('sk_test_51OZ9CNH4pKZw8NygRAES6G6JbKVPxg1q96ViQV5PCKWPizBNIWSbUWW56TjAVFrAycu8nMCJ7TtSZe0B2Q9JdiOm00NZ6ir3uP');
+    //         $amountToUse = $this->getAmountToUse($request);
+    //         $customer = $this->createCustomer($stripe, $owner->email);
+    //         $ephemeralKey = $this->createEphemeralKey($stripe, $customer->id);
+    //         $paymentIntent = $this->createPaymentIntent($stripe, $amountToUse, $owner->email, $customer->id);
 
+    //         if ($paymentIntent) {
+    //             return response()->json([
+    //                 'message' => 'Payment submitted successfully.',
+    //                 'status' => 'success',
+    //                 'client_secret' => $paymentIntent->client_secret,
+    //             ], 200);
+    //         }
+    //     } catch (\Exception $e) {
+    //         Log::error('Payment failed: ' . $e->getMessage());
+    //         return response()->json([
+    //             'message' => 'Payment failed.',
+    //             'status' => 'failed',
+    //             'error' => $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
 
+    // private function getAmountToUse($request)
+    // {
+    //     $amountToUse = $request->payment_amount ?? 0;
+    //     return $amountToUse * 100;
+    // }
+
+    // private function createCustomer($stripe, $email)
+    // {
+    //     return $stripe->customers->create([
+    //         'email' => $email,
+    //     ]);
+    // }
+
+    // private function createEphemeralKey($stripe, $customerId)
+    // {
+    //     return $stripe->ephemeralKeys->create(
+    //         ['customer' => $customerId],
+    //         ['stripe_version' => '2023-10-16']
+    //     );
+    // }
+
+    // private function createPaymentIntent($stripe, $amount, $email, $customerId)
+    // {
+    //     return $stripe->paymentIntents->create([
+    //         'amount' => $amount,
+    //         'currency' => 'gbp',
+    //         'payment_method_types' => ['card'],
+    //         'customer' => $customerId,
+    //         'receipt_email' => $email,
+    //     ]);
+    // }
+    public function jobPayment(Request $request, $id)
+    {
+        try {
+            // Validate request
+            $request->validate([
+                'card_number' => 'required',
+                'expiry_month' => 'required',
+                'expiry_year' => 'required',
+                'cvc' => 'required',
+            ]);
+            $owner = User::findOrFail($id);
+            $stripe = new StripeClient('sk_test_51OZ9CNH4pKZw8NygRAES6G6JbKVPxg1q96ViQV5PCKWPizBNIWSbUWW56TjAVFrAycu8nMCJ7TtSZe0B2Q9JdiOm00NZ6ir3uP');
+            Stripe::setApiKey('sk_test_51OZ9CNH4pKZw8NygRAES6G6JbKVPxg1q96ViQV5PCKWPizBNIWSbUWW56TjAVFrAycu8nMCJ7TtSZe0B2Q9JdiOm00NZ6ir3uP');
+            $amountToUse = $this->getAmountToUse($request);
+            $customer = $this->createCustomer($stripe, $owner->email);
+            $ephemeralKey = $this->createEphemeralKey($stripe, $customer->id);
+            $paymentMethod = $this->createPaymentMethod($stripe, $request);
+
+            // Attach payment method to customer
+            $stripe->paymentMethods->attach(
+                $paymentMethod->id,
+                ['customer' => $customer->id]
+            );
+
+            $paymentIntent = $this->createPaymentIntent($stripe, $amountToUse, $owner->email, $customer->id, $paymentMethod->id);
+
+            if ($paymentIntent) {
+                return response()->json([
+                    'message' => 'Payment submitted successfully.',
+                    'status' => 'success',
+                    'client_secret' => $paymentIntent->client_secret,
+                ], 200);
+            }
+        } catch (CardException $e) {
+            $errorCode = $e->getError()->code;
+            $errorMessage = $e->getError()->message;
+            Log::error('Payment failed: ' . $errorMessage);
+
+            $responseMessage = 'Payment failed. Please try again.';
+            if ($errorCode === 'card_declined' && strpos($errorMessage, 'insufficient_funds') !== false) {
+                $responseMessage = 'Insufficient balance. Please use another card.';
+            }
+
+            return response()->json([
+                'message' => $responseMessage,
+                'status' => 'failed',
+                'error' => $errorMessage,
+            ], 500);
+        } catch (\Exception $e) {
+            Log::error('Payment failed: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Payment failed.',
+                'status' => 'failed',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    private function getAmountToUse($request)
+    {
+        $amountToUse = $request->payment_amount ?? 0;
+        return $amountToUse * 100; // Convert to smallest currency unit
+    }
+
+    private function createCustomer($stripe, $email)
+    {
+        return $stripe->customers->create([
+            'email' => $email,
+        ]);
+    }
+
+    private function createEphemeralKey($stripe, $customerId)
+    {
+        return $stripe->ephemeralKeys->create(
+            ['customer' => $customerId],
+            ['stripe_version' => '2023-10-16']
+        );
+    }
+
+    private function createPaymentMethod($stripe, $request)
+    {
+        return $stripe->paymentMethods->create([
+            'type' => 'card',
+            'card' => [
+                'number' => $request->card_number,
+                'exp_month' => $request->expiry_month,
+                'exp_year' => $request->expiry_year,
+                'cvc' => $request->cvc,
+            ],
+        ]);
+    }
+
+    private function createPaymentIntent($stripe, $amount, $email, $customerId, $paymentMethodId)
+    {
+        return $stripe->paymentIntents->create([
+            'amount' => $amount,
+            'currency' => 'gbp',
+            'payment_method_types' => ['card'],
+            'customer' => $customerId,
+            'receipt_email' => $email,
+            'payment_method' => $paymentMethodId,
+            'off_session' => true,
+            'confirm' => true,
+        ]);
+    }
+    // ############ Create Job End ##################
     public function jobStore(Request $request, $id)
     {
         try {
             $formattedDate = Carbon::createFromFormat('d-m-Y', $request->date)->format('d-m-Y');
-            $job = Job::create([
+            Job::create([
                 'user_id' => $id,
                 'vehicle_id' => $request->vehicle_id,
-                'location' => $request->location,
+                'pick_up_location' => $request->pick_up_location,
+                'drop_off_location' => $request->drop_off_location,
                 'date' => $formattedDate,
-                'time' =>   $request->time,
+                'time' => $request->time,
                 'hours' => $request->hours,
                 'days' => $request->days,
-                'price' => $request->price,
+                'price_per_hour' => $request->price_per_hour,
+                'job_price' => $request->job_price,
                 'description' => $request->description,
-                'on_vehicle' => $request->on_vehicle
+                'on_vehicle' => $request->on_vehicle,
+                'payment_request' => $request->payment_request,
             ]);
-
             return response()->json([
-                'message' => 'Job created successfully.',
-                'status' => 'Success',
-                'job' => $job,
+                'status' => 'success',
+                'message' => 'Job Created successfully.',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error creating job.',
+                'message' => 'Error updating job.',
                 'status' => 'Error',
                 'error' => $e->getMessage(),
             ], 500);

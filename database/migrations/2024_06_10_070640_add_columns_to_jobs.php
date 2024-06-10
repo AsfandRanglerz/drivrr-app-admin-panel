@@ -19,6 +19,7 @@ class AddColumnsToJobs extends Migration
             $table->text('drop_off_location')->nullable();
             $table->string('job_price')->nullable();
             $table->string('price_per_hour')->nullable();
+            $table->string('payment_request')->nullable();
         });
     }
 
@@ -35,6 +36,7 @@ class AddColumnsToJobs extends Migration
             Schema::dropIfExists('drop_off_location');
             Schema::dropIfExists('job_price');
             Schema::dropIfExists('price_per_hour');
+            Schema::dropIfExists('payment_request');
         });
     }
 }
