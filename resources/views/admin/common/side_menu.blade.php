@@ -2,7 +2,7 @@
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
             <a href="#"> <img alt="image" src="{{ asset('public/admin/assets/img/blacklogo.png') }}"
-                    class="header-logo w-75"  />
+                    class="header-logo w-75" />
             </a>
         </div>
         <ul class="sidebar-menu">
@@ -10,7 +10,8 @@
             {{-- Dashboard --}}
 
             <li class="dropdown {{ request()->is('admin/dashboard') ? 'active' : '' }}">
-                <a href="{{ url('/admin/dashboard') }}" class="nav-link {{ request()->is('admin/dashboard*') ? 'text-white' : '' }}"><i
+                <a href="{{ url('/admin/dashboard') }}"
+                    class="nav-link {{ request()->is('admin/dashboard*') ? 'text-white' : '' }}"><i
                         class="fas fa-th-large"></i><span>Dashboard</span></a>
             </li>
             {{-- User Mangement --}}
@@ -28,24 +29,28 @@
                         {{-- Business Owner --}}
                         @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Business Owner'))
                             <li class="dropdown {{ request()->is('admin/busniessOwner*') ? 'active' : '' }}">
-                                <a href="{{ route('usniessOwner.index') }}" class="nav-link {{ request()->is('admin/busniessOwner*') ? 'text-white' : '' }}"><i
+                                <a href="{{ route('usniessOwner.index') }}"
+                                    class="nav-link {{ request()->is('admin/busniessOwner*') ? 'text-white' : '' }}"><i
                                         data-feather="users"></i><span>Business Owner</span></a>
                             </li>
                         @elseif (auth()->guard('admin')->check())
                             <li class="dropdown {{ request()->is('admin/busniessOwner*') ? 'active' : '' }}">
-                                <a href="{{ route('busniessOwner.index') }}" class="nav-link {{ request()->is('admin/busniessOwner*') ? 'text-white' : '' }}"><i
+                                <a href="{{ route('busniessOwner.index') }}"
+                                    class="nav-link {{ request()->is('admin/busniessOwner*') ? 'text-white' : '' }}"><i
                                         data-feather="users"></i><span>Business Owner</span></a>
                             </li>
                         @endif
                         {{-- Driver --}}
                         @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Driver'))
                             <li class="dropdown {{ request()->is('admin/drivers*') ? 'active' : '' }}">
-                                <a href="{{ route('drivers.index') }}" class="nav-link {{ request()->is('admin/driver*') ? 'text-white' : '' }}"><i
+                                <a href="{{ route('drivers.index') }}"
+                                    class="nav-link {{ request()->is('admin/driver*') ? 'text-white' : '' }}"><i
                                         data-feather="users"></i><span>Driver</span></a>
                             </li>
                         @elseif (auth()->guard('admin')->check())
                             <li class="dropdown {{ request()->is('admin/drivers*') ? 'active' : '' }}">
-                                <a href="{{ route('drivers.index') }}" class="nav-link {{ request()->is('admin/driver*') ? 'text-white' : '' }}"><i
+                                <a href="{{ route('drivers.index') }}"
+                                    class="nav-link {{ request()->is('admin/driver*') ? 'text-white' : '' }}"><i
                                         data-feather="users"></i><span>Driver</span></a>
                             </li>
                         @endif
@@ -142,6 +147,11 @@
                     </ul>
                 </li>
             @endif
+            {{-- Lisence Approvel Request --}}
+            <li class="dropdown {{ request()->is('admin/lisenceApprovel*') ? 'active' : '' }}">
+                <a href="{{ route('lisenceApprovel.index') }}" class="nav-link"><i
+                        class="fas fa-receipt"></i><span>Lisence Approvel Requests</span></a>
+            </li>
             {{-- Owner Recipits --}}
             @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Payments'))
                 <li class="dropdown {{ request()->is('admin/payments*') ? 'active' : '' }}">

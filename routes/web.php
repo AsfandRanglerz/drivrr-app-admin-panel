@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\DriverVehicleController;
 use App\Http\Controllers\Admin\HelpAndSupportController;
 use App\Http\Controllers\Admin\PushNotificationController;
 use App\Http\Controllers\Admin\HandelBusinessOwnerPayments;
+use App\Http\Controllers\Admin\LisenceApprovelController;
 use App\Http\Controllers\Admin\SubadminController;
 
 /*
@@ -137,6 +138,16 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         Route::get('driver-vehicle-edit/{id}',  'edit')->name('driver-vehicle.edit');
         Route::post('driver-vehicle-update/{id}',  'update')->name('driver-vehicle.update');
         Route::delete('driver-vehicle-destroy/{id}',  'destroy')->name('driver-vehicle.destroy');
+        // Route::delete('driver-vehicle-show/{id}',  'show')->name('driver-vehicle.show');
+    });
+    // ############## Lisence Approvel  ############
+    Route::controller(LisenceApprovelController::class)->group(function () {
+        Route::get('/lisenceApprovel',  'lisenceApprovelIndex')->name('lisenceApprovel.index');
+        Route::post('/lisenceApprovel-create',  'lisenceApprovelCreate')->name('lisenceApprovel.create');
+        Route::post('/lisenceApprovelData',  'lisenceApprovelData')->name('lisenceApprovel.get');
+        Route::get('/lisenceApprovel/{id}',  'showlisenceApprovel')->name('lisenceApprovel.show');
+        Route::post('/lisenceApprovelUpdate/{id}',  'updatelisenceApprovel')->name('lisenceApprovel.update');
+        Route::get('/lisenceApprovel/delete/{id}',  'deletelisenceApprovel')->name('lisenceApprovel.delete');
         // Route::delete('driver-vehicle-show/{id}',  'show')->name('driver-vehicle.show');
     });
 

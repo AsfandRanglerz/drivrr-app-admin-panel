@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{ asset('public/admin/assets/bundles/select2/dist/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/admin/assets/bundles/jquery-selectric/selectric.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="{{ asset('public/admin/assets/bundles/lightgallery/dist/css/lightgallery.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('public/toastr/toastr.css') }}">
 </head>
 
@@ -57,7 +58,7 @@
     <script src="{{ asset('public/admin/assets/bundles/prism/prism.js') }}"></script>
     <script src="{{ asset('public/admin/assets/bundles/jquery-selectric/jquery.selectric.min.js') }}"></script>
     <script src="{{ asset('public/admin/assets/bundles/select2/dist/js/select2.full.min.js') }}"></script>
-
+    <script src="{{ asset('public/admin/assets/bundles/lightgallery/dist/js/lightgallery-all.js') }}"></script>
     @yield('js')
     <script>
         toastr.options = {
