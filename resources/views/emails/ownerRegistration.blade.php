@@ -4,12 +4,12 @@
             style="vertical-align: middle;margin-bottom: -3px;height: 50px;margin-bottom: 35px">
         <h3>Welcome to Drivrr</h3>
     </div>
-    Dear {{ $data['username'] }},
+    Dear {{ $data['ownername'] }},
     Welcome to Drivrr! Your account has been created successfully by the Admin as a Busniess Owner.
     <div>
         Here are your account details:
         <ul style="padding-left: 16px">
-            <li><strong>Email:</strong> {{ $data['useremail'] }}</li>
+            <li><strong>Email:</strong> {{ $data['owneremail'] }}</li>
             <li><strong>Password:</strong> {{ $data['password'] }}</li>
         </ul>
     </div>

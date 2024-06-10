@@ -272,8 +272,8 @@ class BusinessOwnerController extends Controller
             $busniessOwner->save();
             if ($busniessOwner) {
                 $busniessOwner->roles()->sync(2);
-                $data['username'] =  $busniessOwner->fname . ' ' .  $busniessOwner->lname;
-                $data['useremail'] =  $busniessOwner->email;
+                $data['ownername'] =  $busniessOwner->fname . ' ' .  $busniessOwner->lname;
+                $data['owneremail'] =  $busniessOwner->email;
                 $data['password'] = $request->password;
                 Mail::to($busniessOwner->email)->send(new ownerRegistration($data));
                 return response()->json(['alert' => 'success', 'message' => 'Busniess Owner Created Successfully!']);
