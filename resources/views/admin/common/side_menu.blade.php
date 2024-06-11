@@ -169,7 +169,7 @@
                 </li>
             @endif
             {{-- Vehicles --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Vehicles'))
+            {{-- @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Vehicles'))
                 <li class="dropdown {{ request()->is('admin/vehicle*') ? 'active' : '' }}">
                     <a href="{{ route('vehicle.index') }}" class="nav-link"> <i
                             class="fas fa-bus"></i><span>Vehicles</span></a>
@@ -179,7 +179,7 @@
                     <a href="{{ route('vehicle.index') }}" class="nav-link"> <i
                             class="fas fa-bus"></i><span>Vehicles</span></a>
                 </li>
-            @endif
+            @endif --}}
             {{-- Roles & Permissions --}}
 
             {{-- @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Roles & Permissions'))
