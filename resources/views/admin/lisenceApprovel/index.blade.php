@@ -8,8 +8,31 @@
             /* Red color */
         }
     </style>
+    {{-- Reason of rejection modal  --}}
+    <div class="modal fade" id="rejectionReasonModal" tabindex="-1" role="dialog" aria-labelledby="rejectionReasonModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectionReasonModalLabel">Rejection Reason</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="rejectionReason" class="form-control" rows="3" placeholder="Enter the reason for rejection"></textarea>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-dark" id="saveRejectionReasonBtn">Save Reason</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Edit lisenceApprovel Modal -->
-    <div class="modal fade" id="editProduct" tabindex="-1" role="dialog" aria-labelledby="editProductLabel" aria-hidden="true">
+    <div class="modal fade" id="editProduct" tabindex="-1" role="dialog" aria-labelledby="editProductLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content ">
                 <div class="modal-header">
@@ -34,6 +57,7 @@
             </div>
         </div>
     </div>
+
 
 
 
@@ -170,9 +194,9 @@
                         id: orderId
                     },
                     success: function(response) {
-                        if (response.status == 1) {
+                        if (response.is_active == 1) {
                             $('#acceptedCheckbox').prop('checked', true);
-                        } else if (response.status == 2) {
+                        } else if (response.is_active == 2) {
                             $('#rejectedCheckbox').prop('checked', true);
                         }
                     },
@@ -196,7 +220,8 @@
             $('#rejectedCheckbox').change(function() {
                 if ($(this).prop('checked')) {
                     $('#acceptedCheckbox').prop('checked', false);
-                }
+                    $('#rejectionReasonModal').modal('show');
+                    $('#editProduct').modal('hide');                }
             });
 
             // Event handler for updating status
@@ -204,23 +229,28 @@
                 var is_active;
                 if ($('#acceptedCheckbox').prop('checked')) {
                     is_active = 1; // Adjusted from 'completed' to 1
+                    updateStatus(is_active, null); // No reason needed for acceptance
                 } else if ($('#rejectedCheckbox').prop('checked')) {
-                    is_active = 2; // Adjusted from 'inProcess' to 2
+                    $('#rejectionReasonModal').modal('show');
                 }
+            });
 
+            // Function to update status with or without rejection reason
+            function updateStatus(is_active, rejectionReason) {
                 var token = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
-                    url: "{{ route('orders.update-is_active', ['id' => ':id']) }}".replace(':id',
-                        orderId),
+                    url: "{{ route('orders.update-is_active', ['id' => ':id']) }}".replace(':id', orderId),
                     type: 'POST',
                     data: {
                         id: orderId,
                         is_active: is_active,
+                        rejection_reason: rejectionReason, // Include the rejection reason
                         _token: token
                     },
                     success: function(response) {
                         toastr.success(response.message);
                         $('#editProduct').modal('hide');
+                        $('#rejectionReasonModal').modal('hide'); // Hide the rejection reason modal
                         reloadDataTable();
                     },
                     error: function(jqXHR) {
@@ -231,9 +261,17 @@
                         });
                     }
                 });
+            }
+
+            // Event handler for saving rejection reason
+            $('#saveRejectionReasonBtn').click(function() {
+                var rejectionReason = $('#rejectionReason').val(); // Get the rejection reason
+                updateStatus(2, rejectionReason); // Update status with rejection reason
             });
         });
     </script>
+
+
 
 
 

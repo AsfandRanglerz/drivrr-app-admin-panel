@@ -42,6 +42,11 @@ class LisenceApprovelController extends Controller
         try {
             $lisenceApprovel = Document::with('user')->findOrFail($id);
             $lisenceApprovel->is_active = $request->is_active;
+            if ($request->is_active == 2) {
+                $lisenceApprovel->rejection_reason = $request->rejection_reason;
+            } else {
+                $lisenceApprovel->rejection_reason = null;
+            }
             $lisenceApprovel->save();
             return response()->json(['alert' => 'success', 'message' => 'Status updated successfully']);
         } catch (\Exception $e) {
