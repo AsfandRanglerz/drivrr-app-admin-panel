@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{{ asset('public/admin/assets/css/components.css') }}">
     <!-- Custom style CSS -->
     <link rel="stylesheet" href="{{ asset('public/admin/assets/css/custom.css') }}">
-    <link rel='shortcut icon' type='image/x-icon' href='assets/img/favicon.ico' />
+    <link rel='shortcut icon' type='image/x-icon' href='{{ asset('public/admin/assets/Fav Icon 2.png') }}' />
     {{-- <link rel="stylesheet" href="{{ asset('public/admin/assets/toastr/css/toastr.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('public/toastr/toastr.css') }}">
 
