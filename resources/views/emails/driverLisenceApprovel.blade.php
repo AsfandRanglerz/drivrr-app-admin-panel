@@ -8,7 +8,7 @@
         <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Document Activation Status</h2>
     </div>
     <div>
-        <p style="font-size: 18px;font-weight: bold;">Dear {{ $data['drivername'] }} your License has been approved.</p>
+        <p style="font-size: 16px;">Dear {{ $data['drivername'] }} your License has been approved.</p>
         <p style="font-size: 16px;">You can now enjoy the benefits of an activation on our platform.Thanks!
         </p>
     </div>
