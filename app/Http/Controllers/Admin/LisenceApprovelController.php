@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Mail\driverLisenceApprovel;
+use App\Mail\driverLisenceRejection;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class LisenceApprovelController extends Controller
@@ -44,8 +47,14 @@ class LisenceApprovelController extends Controller
             $lisenceApprovel->is_active = $request->is_active;
             if ($request->is_active == 2) {
                 $lisenceApprovel->rejection_reason = $request->rejection_reason;
+                $data['drivername'] =  $lisenceApprovel->user->fname . ' ' .  $lisenceApprovel->user->lname;
+                $data['driveremail'] =  $lisenceApprovel->user->email;
+                $data['rejection_reason'] =  $lisenceApprovel->rejection_reason;
+                Mail::to($lisenceApprovel->user->email)->send(new driverLisenceRejection($data));
             } else {
-                $lisenceApprovel->rejection_reason = null;
+                $data['drivername'] =  $lisenceApprovel->user->fname . ' ' .  $lisenceApprovel->user->lname;
+                $data['driveremail'] =  $lisenceApprovel->user->email;
+                Mail::to($lisenceApprovel->user->email)->send(new driverLisenceApprovel($data));
             }
             $lisenceApprovel->save();
             return response()->json(['alert' => 'success', 'message' => 'Status updated successfully']);
