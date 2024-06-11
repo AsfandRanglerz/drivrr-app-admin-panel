@@ -184,7 +184,10 @@
                 $('#editProduct').modal('show');
                 $('#acceptedCheckbox').prop('checked', false);
                 $('#rejectedCheckbox').prop('checked', false);
-
+                // Show loader with custom color
+                var loaderHtml =
+                    '<div class="spinner-border loader-custom-color" role="status"><span class="sr-only">Loading...</span></div>';
+                $('#editProduct .modal-footer').html(loaderHtml);
                 // Fetch current status
                 $.ajax({
                     url: "{{ route('lisenceApprovel.status', ['id' => ':id']) }}".replace(':id',
@@ -206,6 +209,12 @@
                             icon: response.alert,
                             title: response.message
                         });
+                    },
+                    complete: function() {
+                        // Restore button content
+                        var buttonHtml =
+                            '<button type="button" class="btn btn-dark" id="updateStatusBtn">Update</button>';
+                        $('#editProduct .modal-footer').html(buttonHtml);
                     }
                 });
             });
@@ -221,11 +230,12 @@
                 if ($(this).prop('checked')) {
                     $('#acceptedCheckbox').prop('checked', false);
                     $('#rejectionReasonModal').modal('show');
-                    $('#editProduct').modal('hide');                }
+                    $('#editProduct').modal('hide');
+                }
             });
 
             // Event handler for updating status
-            $('#updateStatusBtn').click(function() {
+            $(document).on('click', '#updateStatusBtn', function() {
                 var is_active;
                 if ($('#acceptedCheckbox').prop('checked')) {
                     is_active = 1; // Adjusted from 'completed' to 1
@@ -238,6 +248,9 @@
             // Function to update status with or without rejection reason
             function updateStatus(is_active, rejectionReason) {
                 var token = $('meta[name="csrf-token"]').attr('content');
+                var loaderHtml =
+                    '<div class="spinner-border loader-custom-color" role="status"><span class="sr-only">Loading...</span></div>';
+                $('#editProduct .modal-footer').html(loaderHtml);
                 $.ajax({
                     url: "{{ route('orders.update-is_active', ['id' => ':id']) }}".replace(':id', orderId),
                     type: 'POST',
@@ -259,6 +272,12 @@
                             icon: response.alert,
                             title: response.message
                         });
+                    },
+                    complete: function() {
+                        // Restore button content
+                        var buttonHtml =
+                            '<button type="button" class="btn btn-dark" id="updateStatusBtn">Update</button>';
+                        $('#editProduct .modal-footer').html(buttonHtml);
                     }
                 });
             }
@@ -266,10 +285,14 @@
             // Event handler for saving rejection reason
             $('#saveRejectionReasonBtn').click(function() {
                 var rejectionReason = $('#rejectionReason').val(); // Get the rejection reason
+                var loaderHtml =
+                    '<div class="spinner-border loader-custom-color" role="status"><span class="sr-only">Loading...</span></div>';
+                $('#rejectionReasonModal .modal-footer').html(loaderHtml);
                 updateStatus(2, rejectionReason); // Update status with rejection reason
             });
         });
     </script>
+
 
 
 
