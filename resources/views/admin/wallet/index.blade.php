@@ -24,6 +24,7 @@
                                             <th>Sr.</th>
                                             <th>Name</th>
                                             <th>Email</th>
+                                            <th>Total Amount</th>
                                             <th>Payment History</th>
                                         </tr>
                                     </thead>
@@ -73,7 +74,19 @@
                         "data": 'email',
 
                     },
+                    {
+                        "data": 'driver_wallet.total_earning',
+                        "render": function(data, type, row) {
+                            var amount = parseFloat(data);
+                            if (amount % 1 === 0) {
+                                return '£ ' + amount.toFixed(0);
+                            } else {
+                                return '£ ' + amount.toFixed(
+                                    2);
+                            }
+                        }
 
+                    },
                     {
                         "render": function(data, type, row) {
                             return '<a href="' +
