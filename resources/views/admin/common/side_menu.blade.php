@@ -74,19 +74,6 @@
                     </ul>
                 </li>
             @endif
-            {{-- Wallet Management --}}
-            {{-- Driver Wallet --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('DriverWallets'))
-                <li class="dropdown {{ request()->is('admin/paymentHistory*') ? 'active' : '' }}">
-                    <a href="{{ route('paymentHistory.index') }}" class="nav-link"><i
-                            class="fas fa-wallet"></i><span>Driver Wallets</span></a>
-                </li>
-            @elseif(auth()->guard('admin')->check())
-                <li class="dropdown {{ request()->is('admin/paymentHistory*') ? 'active' : '' }}">
-                    <a href="{{ route('paymentHistory.index') }}" class="nav-link"><i
-                            class="fas fa-wallet"></i><span>Driver Wallets</span></a>
-                </li>
-            @endif
             {{-- Withdrawal Requests --}}
             @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('WithdrawRequest'))
                 <li class="dropdown {{ request()->is('admin/paymentRequest*') ? 'active' : '' }}">
@@ -118,6 +105,18 @@
                     </div>
                 </a>
             </li>
+            {{-- Driver Wallet --}}
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('DriverWallets'))
+                <li class="dropdown {{ request()->is('admin/paymentHistory*') ? 'active' : '' }}">
+                    <a href="{{ route('paymentHistory.index') }}" class="nav-link"><i
+                            class="fas fa-wallet"></i><span>Driver Wallets</span></a>
+                </li>
+            @elseif(auth()->guard('admin')->check())
+                <li class="dropdown {{ request()->is('admin/paymentHistory*') ? 'active' : '' }}">
+                    <a href="{{ route('paymentHistory.index') }}" class="nav-link"><i
+                            class="fas fa-wallet"></i><span>Driver Wallets</span></a>
+                </li>
+            @endif
             {{-- Owner Recipits --}}
             @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Payments'))
                 <li class="dropdown {{ request()->is('admin/payments*') ? 'active' : '' }}">
