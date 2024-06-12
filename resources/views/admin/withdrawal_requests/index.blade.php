@@ -4,7 +4,7 @@
     <style>
         /* Define a custom color class */
         .loader-custom-color {
-            color: #0000;
+            color: black;
             /* Red color */
         }
     </style>
