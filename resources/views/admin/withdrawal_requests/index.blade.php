@@ -153,7 +153,7 @@
                             return '<a href="' +
                                 "{{ route('paymentAccount.index', ['userId' => ':id']) }}"
                                 .replace(':id', row.driver_id) +
-                                '" class="btn btn-danger mb-3 text-white"><i class="fas fa-user"></i></a>';
+                                '" class="btn btn-dark mb-3 text-white"><i class="fas fa-user"></i></a>';
                         }
                     },
                     {
