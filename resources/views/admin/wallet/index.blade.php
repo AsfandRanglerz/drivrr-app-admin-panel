@@ -18,7 +18,7 @@
                                     data-target="#createPaymentRequestModal">
                                     Create Payment Request
                                 </a> --}}
-                                <table class="responsive table table-striped table-bordered .example">
+                                <table class="responsive table table-striped table-bordered example">
                                     <thead>
                                         <tr>
                                             <th>Sr.</th>
@@ -79,7 +79,7 @@
                             return '<a href="' +
                                 "{{ route('userPaymentHistory.index', ['id' => ':id']) }}"
                                 .replace(':id', row.id) +
-                                '" class="btn btn-danger mb-3 text-white"><i class="fas fa-file-invoice-dollar"></i></a>';
+                                '" class="btn btn-dark mb-3 text-white"><i class="fas fa-file-invoice-dollar"></i></a>';
                         },
                     },
                 ]

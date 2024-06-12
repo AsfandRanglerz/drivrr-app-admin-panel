@@ -86,4 +86,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(PushNotification::class, 'user_name');
     }
+    public function paymentRequest()
+    {
+        return $this->hasMany(WithdrawalRequest::class);
+    }
 }

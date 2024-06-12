@@ -97,8 +97,7 @@ class WalletController extends Controller
     public function getPaymentHistory(Request $request, $id)
     {
         try {
-            $user = User::findOrFail($id);
-            $paymentRequests = $user->paymentRequest()->where('status', 1)->get();
+            $paymentRequests = WithdrawalRequest::where('driver_id', $id)->where('status', 1)->get();
             return view('admin.wallet.withdrawals.index', compact('paymentRequests'));
         } catch (\Exception $e) {
             return response()->json([
