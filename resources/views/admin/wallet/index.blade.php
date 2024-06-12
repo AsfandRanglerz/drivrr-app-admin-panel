@@ -10,14 +10,10 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="col-12">
-                                    <h4>Payment History</h4>
+                                    <h4>Drivers Wallet  History</h4>
                                 </div>
                             </div>
                             <div class="card-body table-responsive">
-                                {{-- <a class="btn btn-success mb-3 text-white" data-toggle="modal"
-                                    data-target="#createPaymentRequestModal">
-                                    Create Payment Request
-                                </a> --}}
                                 <table class="responsive table table-striped table-bordered example">
                                     <thead>
                                         <tr>
