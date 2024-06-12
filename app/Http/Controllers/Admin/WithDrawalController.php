@@ -75,29 +75,29 @@ class WithDrawalController extends Controller
             }
             $paymentRequest->status = 1;
             $paymentRequest->save();
-            // if ($paymentRequest) {
-            //     $data['username'] =  $paymentRequest->user->fname . ' ' .  $paymentRequest->user->lname;
-            //     $data['useremail'] =  $paymentRequest->user->email;
-            //     $data['amount'] =  $paymentRequest->amount;
-            //     $data['image'] =  $paymentRequest->image;
-            //     if ($data) {
-            //         Mail::to($paymentRequest->user->email)->send(new paymentProof($data));
-            //         return response()->json([
-            //             'alert' => 'success',
-            //             'message' => 'Payment Proof Sent Successfully.',
-            //         ], 200);
-            //     } else {
-            //         return response()->json([
-            //             'alert' => 'error',
-            //             'message' => 'Error In Sending Mail To User!',
-            //         ]);
-            //     }
-            // } else {
-            //     return response()->json([
-            //         'alert' => 'error',
-            //         'message' => 'Payment Proof Not Sent!.',
-            //     ]);
-            // }
+            if ($paymentRequest) {
+                $data['username'] =  $paymentRequest->user->fname . ' ' .  $paymentRequest->user->lname;
+                $data['useremail'] =  $paymentRequest->user->email;
+                $data['withdrawal_amount'] =  $paymentRequest->withdrawal_amount;
+                $data['image'] =  $paymentRequest->image;
+                if ($data) {
+                    Mail::to($paymentRequest->user->email)->send(new paymentProof($data));
+                    return response()->json([
+                        'alert' => 'success',
+                        'message' => 'Payment Proof Sent Successfully.',
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'alert' => 'error',
+                        'message' => 'Error In Sending Mail To User!',
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'alert' => 'error',
+                    'message' => 'Payment Proof Not Sent!.',
+                ]);
+            }
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
