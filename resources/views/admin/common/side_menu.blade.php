@@ -87,13 +87,13 @@
                         class="dropdown-menu {{ request()->is('admin/wallet*') || request()->is('admin/withdrawal_requests*') ? 'show' : '' }}">
                         {{-- Driver Wallet --}}
                         @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('DriverWallets'))
-                            <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
-                                <a href="{{ route('show-wallets') }}" class="nav-link"><i
+                            <li class="dropdown {{ request()->is('admin/paymentHistory*') ? 'active' : '' }}">
+                                <a href="{{ route('paymentHistory.index') }}" class="nav-link"><i
                                         class="fas fa-wallet"></i><span>Driver Wallets</span></a>
                             </li>
                         @elseif(auth()->guard('admin')->check())
-                            <li class="dropdown {{ request()->is('admin/wallet*') ? 'active' : '' }}">
-                                <a href="{{ route('show-wallets') }}" class="nav-link"><i
+                            <li class="dropdown {{ request()->is('admin/paymentHistory*') ? 'active' : '' }}">
+                                <a href="{{ route('paymentHistory.index') }}" class="nav-link"><i
                                         class="fas fa-wallet"></i><span>Driver Wallets</span></a>
                             </li>
                         @endif

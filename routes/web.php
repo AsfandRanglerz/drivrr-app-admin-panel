@@ -154,22 +154,31 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     // ############## With Drawal Request  ############
     Route::controller(WithDrawalController::class)->group(function () {
         Route::post('/paymentRequestData',  'paymentRequestData')->name('paymentRequest.get')->middleware('permission:WithDrawal Request');
-        Route::get('/paymentRequest',  'paymentRequestIndex')->name('paymentRequest.index')->middleware('permission:WithDrawal Request');
-        Route::post('/paymentRequest-create',  'paymentRequestCreate')->name('paymentRequest.create')->middleware('permission:WithDrawal Request');
-        Route::get('/paymentRequest/{id}',  'showPaymentRequest')->name('paymentRequest.show')->middleware('permission:WithDrawal Request');
-        Route::post('/paymentRequestUpdate/{id}',  'updatePaymentRequest')->name('paymentRequest.update')->middleware('permission:WithDrawal Request');
-        Route::get('/paymentRequest/delete/{id}',  'deletePaymentRequest')->name('paymentRequest.delete')->middleware('permission:WithDrawal Request');
-        Route::get('/paymentRequestCounter',  'getPaymentRequestCount')->name('paymentRequest.count')->middleware('permission:WithDrawal Request');
+        Route::get('/paymentRequest',  'paymentRequestIndex')->name('paymentRequest.index')->middleware('permission:WithdrawRequest');
+        Route::post('/paymentRequest-create',  'paymentRequestCreate')->name('paymentRequest.create')->middleware('permission:WithdrawRequest');
+        Route::get('/paymentRequest/{id}',  'showPaymentRequest')->name('paymentRequest.show')->middleware('permission:WithdrawRequest');
+        Route::post('/paymentRequestUpdate/{id}',  'updatePaymentRequest')->name('paymentRequest.update')->middleware('permission:WithdrawRequest');
+        Route::get('/paymentRequest/delete/{id}',  'deletePaymentRequest')->name('paymentRequest.delete')->middleware('permission:WithdrawRequest');
+        Route::get('/paymentRequestCounter',  'getPaymentRequestCount')->name('paymentRequest.count')->middleware('permission:WithdrawRequest');
         // User Account Details
-        Route::get('/paymentRequest/bankInfo/{userId}',  'getAccountDetails')->name('paymentAccount.index')->middleware('permission:WithDrawal Request');
+        Route::get('/paymentRequest/bankInfo/{userId}',  'getAccountDetails')->name('paymentAccount.index')->middleware('permission:WithdrawRequest');
     });
-    //owner-jobs
-    Route::get('owner-job/{id}', [JobController::class, 'index'])->name('owner-job.index');
-    Route::get('owner-job-edit/{id}', [JobController::class, 'edit'])->name('owner-job.edit');
-    // Route::get('owner-job-show/{id}', [JobController::class, 'show'])->name('owner-job.show');
-    Route::get('/active-job', [JobController::class, 'show']);
-    Route::post('owner-job-update/{id}', [JobController::class, 'update'])->name('owner-job.update');
-    Route::delete('owner-job-destroy/{id}', [JobController::class, 'destroy'])->name('owner-job.destroy');
+    // ############## With Drawal Request  ############
+    Route::controller(WalletController::class)->group(function () {
+        Route::post('/paymentHistoryData',  'paymentHistoryData')->name('paymentHistory.get')->middleware('permission:DriverWallets');
+        Route::get('/paymentHistory',  'paymentHistoryIndex')->name('paymentHistory.index')->middleware('permission:DriverWallets');
+        Route::get('/paymentHistory/history/{id}',  'getPaymentHistory')->name('userPaymentHistory.index')->middleware('permission:DriverWallets');
+
+    });
+    // ############## Owner Jobs  ############
+    Route::controller(JobController::class)->group(function () {
+        Route::get('owner-job/{id}',  'index')->name('owner-job.index');
+        Route::get('owner-job-edit/{id}',  'edit')->name('owner-job.edit');
+        // Route::get('owner-job-show/{id}',  'show')->name('owner-job.show');
+        Route::get('/active-job',  'show');
+        Route::post('owner-job-update/{id}',  'update')->name('owner-job.update');
+        Route::delete('owner-job-destroy/{id}',  'destroy')->name('owner-job.destroy');
+    });
     ######## Roles&Permission######
     Route::post('/add-role', [RoleController::class, 'store'])->name('addRole');
     Route::post('/roles/assign/permissions/{role}', [RoleController::class, 'assignPermissions'])->name('roles.assign.permissions');
@@ -177,14 +186,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     ######## Help And Sppurt Controler #####
     Route::get('help-and-support', [HelpAndSupportController::class, 'index'])->name('help-and-support.index')->middleware('permission:Help & Support');
     Route::get('send-response/{id}/{q_id}', [HelpAndSupportController::class, 'send'])->name('send-response.send');
-    //Wallet Controller
-    Route::get('show-wallets', [WalletController::class, 'index'])->name('show-wallets')->middleware('permission:DriverWallets');
-    // Route::get('request-counter', [WalletController::class, 'request_counter'])->name('request-counter');
-    Route::get('show-withdrawal-requests', [WalletController::class, 'show_withdrawal_requests'])->middleware('permission:WithdrawRequest')
-        ->name('show-withdrawal-requests');
-    Route::post('action-on-request/{id}/{amount}', [WalletController::class, 'send_money'])->name('action-on-request');
-    Route::delete('delete-approve-request/{id}', [WalletController::class, 'delete_request'])->name('delete-approve-request');
-    Route::get('show-withdrawals-receipts/{id}', [WalletController::class, 'show_receipts'])->name('show-withdrawals-receipts');
+
     // ############## Push Notification ##############
     Route::get('notification', [PushNotificationController::class, 'notificationIndex'])->name('notifications.index')->middleware('permission:Notification');
     Route::post('notifications/store', [PushNotificationController::class, 'notificationStore'])->name('notifications.store');

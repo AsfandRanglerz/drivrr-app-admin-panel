@@ -1,6 +1,7 @@
 @extends('admin.layout.app')
-@section('title', 'index')
+@section('title', 'PaymentHistory')
 @section('content')
+    {{-- #############Main Content Body#################  --}}
     <div class="main-content" style="min-height: 562px;">
         <section class="section">
             <div class="section-body">
@@ -9,53 +10,29 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="col-12">
-                                    <h4>Driver</h4>
+                                    <h4>Payment History</h4>
                                 </div>
                             </div>
-                            {{-- driver --}}
-                            {{-- <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"> --}}
-                            <div class="card-body  table-responsive">
-                                <table class="table table-striped table-bordered" id="table-1">
+                            <div class="card-body table-responsive">
+                                {{-- <a class="btn btn-success mb-3 text-white" data-toggle="modal"
+                                    data-target="#createPaymentRequestModal">
+                                    Create Payment Request
+                                </a> --}}
+                                <table class="responsive table table-striped table-bordered .example">
                                     <thead>
                                         <tr>
                                             <th>Sr.</th>
                                             <th>Name</th>
                                             <th>Email</th>
-                                            <th>Earnings</th>
-                                            <th>Withdrawals</th>
-
+                                            <th>Payment History</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            @foreach ($data as $drivers)
-                                                <td>{{ $loop->iteration }}</td> <!-- Parent loop index for owner -->
-                                                <td>{{ $drivers->fname . ' ' . $drivers->lname }}</td>
-                                                <td>{{ $drivers->email }}
-
-                                                <td>
-                                                    @if ($drivers->driverWallet)
-                                                        ${{ $drivers->driverWallet->total_earning }}
-                                                    @else
-                                                        <span>$0</span>
-                                                    @endif
-                                                </td>
-                                                <td style="justify-content: center">
-                                                    {{-- {{$drivers->id}} --}}
-                                                    <a
-                                                        href="{{ route('show-withdrawals-receipts', $drivers->id) }}">View</a>
-                                                </td>
-
-                                        </tr>
-                                        @endforeach
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
                     </div>
-                    {{-- </div> --}}
                 </div>
             </div>
         </section>
@@ -64,29 +41,50 @@
 @endsection
 
 @section('js')
-    @if (\Illuminate\Support\Facades\Session::has('message'))
-        <script>
-            toastr.success('{{ \Illuminate\Support\Facades\Session::get('message') }}');
-        </script>
-    @endif
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
-    <script type="text/javascript">
-        $('.show_confirm').click(function(event) {
-            var form = $(this).closest("form");
-            var name = $(this).data("name");
-            event.preventDefault();
-            swal({
-                    title: `Are you sure you want to delete this record?`,
-                    text: "If you delete this, it will be gone forever.",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        form.submit();
+    {{-- Data Table --}}
+    <script>
+        function reloadDataTable() {
+            var dataTable = $('.example').DataTable();
+            dataTable.ajax.reload();
+        }
+        $(document).ready(function() {
+            // Initialize DataTable with options
+            var dataTable = $('.example').DataTable({
+                "ajax": {
+                    "url": "{{ route('paymentHistory.get') }}",
+                    "type": "POST",
+                    "data": {
+                        "_token": "{{ csrf_token() }}"
                     }
-                });
+                },
+                "columns": [{
+                        "data": null,
+                        "render": function(data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function(data, type, row) {
+                            return row.fname + ' ' + row.lname;
+                        }
+                    },
+                    {
+                        "data": 'email',
+
+                    },
+
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="' +
+                                "{{ route('userPaymentHistory.index', ['id' => ':id']) }}"
+                                .replace(':id', row.id) +
+                                '" class="btn btn-danger mb-3 text-white"><i class="fas fa-file-invoice-dollar"></i></a>';
+                        },
+                    },
+                ]
+            });
         });
     </script>
+
 @endsection
