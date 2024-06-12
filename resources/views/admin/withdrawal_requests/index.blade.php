@@ -4,7 +4,7 @@
     <style>
         /* Define a custom color class */
         .loader-custom-color {
-            color: #ff0000;
+            color: #0000;
             /* Red color */
         }
     </style>
@@ -40,7 +40,7 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-danger" onclick="updatePaymentRequests()">Send</button>
+                    <button type="button" class="btn btn-dark" onclick="updatePaymentRequests()">Send</button>
                 </div>
             </div>
         </div>
@@ -192,7 +192,7 @@
                 url: showPaymentRequest.replace(':id', id),
                 type: 'GET',
                 success: function(response) {
-                    var fullName = response.users.fname + ' ' + response.users.lname;
+                    var fullName = response.user.fname + ' ' + response.user.lname;
                     $('#editPaymentRequest .name').val(fullName);
                     $('#editPaymentRequestModal').modal('show');
                     $('#editPaymentRequestModal').data('id', id);
@@ -224,14 +224,11 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                heade£ {
+                headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                    Toast.fire({
-                        icon: response.alert,
-                        title: response.message
-                    });
+                    toastr.success('Payment Proof Sent Successfully!');
                     $('#editPaymentRequestModal').modal('hide');
                     reloadDataTable();
                 },
@@ -249,7 +246,7 @@
 
                     // Restore button content
                     var buttonHtml =
-                        '<button type="button" class="btn btn-danger" onclick="updatePaymentRequests()">Update</button>';
+                        '<button type="button" class="btn btn-dark" onclick="updatePaymentRequests()">Update</button>';
                     $('#editPaymentRequestModal .modal-footer').html(buttonHtml);
                 }
             });
