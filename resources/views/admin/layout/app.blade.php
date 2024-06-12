@@ -105,6 +105,25 @@
             setInterval(updatelisenceApprovel, 1000);
         });
     </script>
+    {{-- WithDrawal Request   Counter Code --}}
+    <script>
+        $(document).ready(function() {
+            function updatePaymentRequest() {
+                $.ajax({
+                    url: "{{ route('paymentRequest.count') }}",
+                    type: 'GET',
+                    success: function(response) {
+                        $('#paymentRequest').text(response.paymentRequest);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr);
+                    }
+                });
+            }
+            updatePaymentRequest();
+            setInterval(updatePaymentRequest, 1000);
+        });
+    </script>
 </body>
 
 

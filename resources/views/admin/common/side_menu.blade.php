@@ -98,53 +98,30 @@
                             </li>
                         @endif
 
-                        {{-- Withdrawal Requests --}}
-                        @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('WithdrawRequest'))
-                            <li class="dropdown {{ request()->is('admin/withdrawal_requests*') ? 'active' : '' }}">
-                                @php
-                                    $requestCount = App\Models\WithdrawalRequest::where('status', '0')
-                                        ->where('seen', '0')
-                                        ->count();
-                                @endphp
-                                <a href="{{ route('show-withdrawal-requests') }}" class="nav-link">
-                                    <i class="fab fa-twitch"></i>
-                                    @if ($requestCount > 0)
-                                        <span class="danger">
-                                            Withdrawal Req.
-                                            <span class="px-1 py-0.5 rounded-circle text-white bg-danger"
-                                                style="border-radius: 50%; font-size:11px">
-                                                {{ $requestCount }}
-                                            </span>
-                                        </span>
-                                    @else
-                                        <span>Withdrawal Requests</span>
-                                    @endif
-                                </a>
-                            </li>
-                        @elseif(auth()->guard('admin')->check())
-                            <li class="dropdown {{ request()->is('admin/withdrawal_requests*') ? 'active' : '' }}">
-                                @php
-                                    $requestCount = App\Models\WithdrawalRequest::where('status', '0')
-                                        ->where('seen', '0')
-                                        ->count();
-                                @endphp
-                                <a href="{{ route('show-withdrawal-requests') }}" class="nav-link">
-                                    <i class="fab fa-twitch"></i>
-                                    @if ($requestCount > 0)
-                                        <span class="danger">
-                                            Withdrawal Req.
-                                            <span class="px-1 py-0.5 rounded-circle text-white bg-danger"
-                                                style="border-radius: 50%; font-size:11px">
-                                                {{ $requestCount }}
-                                            </span>
-                                        </span>
-                                    @else
-                                        <span>Withdrawal Requests</span>
-                                    @endif
-                                </a>
-                            </li>
-                        @endif
+
                     </ul>
+                </li>
+            @endif
+            {{-- Withdrawal Requests --}}
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('WithdrawRequest'))
+                <li class="dropdown {{ request()->is('admin/paymentRequest*') ? 'active' : '' }}">
+                    <a href="{{ route('paymentRequest.index') }}" class="nav-link">
+                        <i class="fab fa-twitch"></i>
+                        <span>Withdrawal Requests</span>
+                        <div id="paymentRequest"
+                            class="badge {{ request()->is('admin/paymentRequest*') ? 'bg-white text-dark' : 'bg-dark text-white' }} rounded-circle ">
+                        </div>
+                    </a>
+                </li>
+            @elseif(auth()->guard('admin')->check())
+                <li class="dropdown {{ request()->is('admin/paymentRequest*') ? 'active' : '' }}">
+                    <a href="{{ route('paymentRequest.index') }}" class="nav-link">
+                        <i class="fab fa-twitch"></i>
+                        <span>Withdrawal Requests</span>
+                        <div id="paymentRequest"
+                            class="badge {{ request()->is('admin/paymentRequest*') ? 'bg-white text-dark' : 'bg-dark text-white' }} rounded-circle ">
+                        </div>
+                    </a>
                 </li>
             @endif
             {{-- Lisence Approvel Request --}}

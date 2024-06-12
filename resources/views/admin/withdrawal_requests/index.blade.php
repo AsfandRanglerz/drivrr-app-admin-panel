@@ -1,6 +1,53 @@
 @extends('admin.layout.app')
-@section('title', 'index')
+@section('title', 'PaymentRequest')
 @section('content')
+    <style>
+        /* Define a custom color class */
+        .loader-custom-color {
+            color: #ff0000;
+            /* Red color */
+        }
+    </style>
+    <!-- Edit PaymentRequest Modal -->
+    <div class="modal fade" id="editPaymentRequestModal" tabindex="-1" role="dialog"
+        aria-labelledby="editPaymentRequestModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPaymentRequestModalLabel">Send Transaction Screen Short</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editPaymentRequest" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-lg-12">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control name text-center" name="name" required
+                                        disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-12 mt-4">
+                            <div class="form-group">
+                                <label for="image">Upload Transaction Screen Short</label>
+                                <input name="image" type="file" class="form-control image" id="image">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-danger" onclick="updatePaymentRequests()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {{-- #############Main Content Body#################  --}}
     <div class="main-content" style="min-height: 562px;">
         <section class="section">
             <div class="section-body">
@@ -9,143 +56,203 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="col-12">
-                                    <h4>Requests</h4>
+                                    <h4>Withdrawal Requests</h4>
                                 </div>
                             </div>
-                            {{-- driver --}}
-                            {{-- <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"> --}}
                             <div class="card-body table-responsive">
-                                <table class="table table-striped table-bordered" id="table-1">
+                                {{-- <a class="btn btn-success mb-3 text-white" data-toggle="modal"
+                                    data-target="#createPaymentRequestModal">
+                                    Create Payment Request
+                                </a> --}}
+                                <table class="responsive table table-striped table-bordered example">
                                     <thead>
                                         <tr>
                                             <th>Sr.</th>
-                                            <th>Driver Name</th>
-                                            <th>Bank Name</th>
-                                            <th>Account Number</th>
-                                            <th>Account Holder</th>
-                                            <th>Withdrawal Amount</th>
-                                            <th>Image</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Total Remaining Amount</th>
+                                            <th>Requested Amount</th>
+                                            <th>Account Details</th>
                                             <th>Status</th>
-                                            <th scope="col" class="text-center">Action</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($withdraw_requests as $data)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $data->user->fname . ' ' . $data->user->lname }}</td>
-                                                <td>{{ $data->bankAccount->bank_name }}</td>
-                                                <td>{{ $data->bankAccount->account_number }}</td>
-                                                <td>{{ $data->bankAccount->holder_name }}</td>
-                                                <td>${{ $data->withdrawal_amount }}</td>
-                                                <td>
-                                                    @if ($data->image)
-                                                        <a href="{{ asset($data->image) }}" target="_blank">
-                                                            <img src="{{ asset($data->image) }}" alt=""
-                                                                height="50" width="50" class="image">
-                                                        </a>
-                                                    @else
-                                                        Null
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($data->status == 0)
-                                                        <div class="badge  badge-shadow btn-warning text-black">Pending
-                                                        </div>
-                                                    @elseif ($data->status == 1)
-                                                        <div class="badge badge-success badge-shadow">Approved</div>
-                                                    @else
-                                                        <div class="badge badge-danger badge-shadow">Rejected</div>
-                                                    @endif
-                                                </td>
-                                                <td
-                                                    style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
-                                                    @if ($data->status == 0)
-                                                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                            data-target="#basicModal-{{ $data->id }}">
-                                                            <span class="fa fa-pen"></span>
-                                                        </button>
-                                                    @endif
-                                                    <form method="post"
-                                                        action="{{ route('delete-approve-request', $data->id) }}">
-                                                        @csrf
-                                                        <input name="_method" type="hidden" value="DELETE">
-                                                        <button type="submit" class="btn btn-danger btn-flat show_confirm"
-                                                            data-toggle="tooltip">Delete</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
                     </div>
-                    {{-- </div> --}}
                 </div>
             </div>
         </section>
-        <!-- basic modal -->
-        @foreach ($withdraw_requests as $data)
-            <div class="modal fade" id="basicModal-{{ $data->id }}" tabindex="-1" role="dialog"
-                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Send Money</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form
-                            action="{{ route('action-on-request', ['id' => $data->id, 'amount' => $data->withdrawal_amount]) }}"
-                            method="POST" enctype="multipart/form-data">
-
-                            @csrf
-                            <div class="modal-body">
-
-                                <input type="file" name="image">
-                            </div>
-                            <div class="modal-footer bg-whitesmoke br">
-                                <button type="submit" class="btn btn-primary">Send</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </form>
-
-
-                    </div>
-                </div>
-            </div>
-        @endforeach
     </div>
 
 @endsection
 
 @section('js')
-    @if (\Illuminate\Support\Facades\Session::has('message'))
-        <script>
-            toastr.success('{{ \Illuminate\Support\Facades\Session::get('message') }}');
-        </script>
-    @endif
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
-    <script type="text/javascript">
-        $('.show_confirm').click(function(event) {
-            var form = $(this).closest("form");
-            var name = $(this).data("name");
-            event.preventDefault();
-            swal({
-                    title: `Are you sure you want to delete this record?`,
-                    text: "If you delete this, it will be gone forever.",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        form.submit();
+    {{-- Data Table --}}
+    <script>
+        function reloadDataTable() {
+            var dataTable = $('.example').DataTable();
+            dataTable.ajax.reload();
+        }
+        $(document).ready(function() {
+            // Initialize DataTable with options
+            var dataTable = $('.example').DataTable({
+                "ajax": {
+                    "url": "{{ route('paymentRequest.get') }}",
+                    "type": "POST",
+                    "data": {
+                        "_token": "{{ csrf_token() }}"
                     }
-                });
+                },
+                "columns": [{
+                        "data": null,
+                        "render": function(data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function(data, type, row) {
+                            return data.user.fname + ' ' + data.user.lname;
+                        }
+                    },
+                    {
+                        "data": 'user.email',
+                    },
+                    {
+                        "data": 'user.driver_wallet.total_earning',
+                        "render": function(data, type, row) {
+                            var amount = parseFloat(data);
+                            if (amount % 1 === 0) {
+                                return '£ ' + amount.toFixed(0);
+                            } else {
+                                return '£ ' + amount.toFixed(
+                                    2);
+                            }
+                        }
+
+                    },
+                    {
+                        "data": 'withdrawal_amount',
+                        "render": function(data, type, row) {
+                            var amount = parseFloat(data);
+                            if (amount % 1 === 0) {
+                                return '£ ' + amount.toFixed(0);
+                            } else {
+                                return '£ ' + amount.toFixed(
+                                    2);
+                            }
+                        }
+                    },
+
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="' +
+                                "{{ route('paymentAccount.index', ['userId' => ':id']) }}"
+                                .replace(':id', row.driver_id) +
+                                '" class="btn btn-danger mb-3 text-white"><i class="fas fa-user"></i></a>';
+                        }
+                    },
+                    {
+                        "data": "status",
+                        "render": function(data, type, row) {
+                            if (data == 0) {
+                                return '<span class="text-danger">Pending</span>';
+                            } else {
+                                return '<span class="text-success">Paid</span>';
+                            }
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function(data, type, row) {
+                            return '<button class="btn btn-success mb-3 mr-3 text-white editSubadminBtn" data-id="' +
+                                row.id + '"><i class="fas fa-edit"></i></button>';
+                        }
+                    }
+                ]
+            });
+            $('.example').on('click', '.editSubadminBtn', function() {
+                var id = $(this).data('id');
+                editPaymentRequestModal(id);
+            });
         });
+    </script>
+
+    <script>
+        // ######Get & Update PaymentRequest#########
+        var showPaymentRequest = '{{ route('paymentRequest.show', ':id') }}';
+        var updatePaymentRequest = '{{ route('paymentRequest.update', ':id') }}';
+
+        function editPaymentRequestModal(id) {
+            $.ajax({
+                url: showPaymentRequest.replace(':id', id),
+                type: 'GET',
+                success: function(response) {
+                    var fullName = response.users.fname + ' ' + response.users.lname;
+                    $('#editPaymentRequest .name').val(fullName);
+                    $('#editPaymentRequestModal').modal('show');
+                    $('#editPaymentRequestModal').data('id', id);
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+        // #############Update subAdmin#############
+        function updatePaymentRequests() {
+            var id = $('#editPaymentRequestModal').data('id');
+            var formData = new FormData($('#editPaymentRequest')[0]);
+
+            // Disable the button
+            $('#editPaymentRequestModal button[type="button"]').prop('disabled', true);
+
+
+            // Show loader with custom color
+            var loaderHtml =
+                '<div class="spinner-border loader-custom-color" role="status"><span class="sr-only">Loading...</span></div>';
+
+            $('#editPaymentRequestModal .modal-footer').html(loaderHtml);
+
+            $.ajax({
+                url: updatePaymentRequest.replace(':id', id),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                heade£ {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    Toast.fire({
+                        icon: response.alert,
+                        title: response.message
+                    });
+                    $('#editPaymentRequestModal').modal('hide');
+                    reloadDataTable();
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                    var errors = xhr.responseJSON.errors;
+                    $.each(errors, function(key, value) {
+                        $('.' + key).addClass('is-invalid').siblings('.invalid-feedback').html(value[
+                            0]);
+                    });
+                },
+                complete: function() {
+                    // Enable the button
+                    $('#editPaymentRequestModal button[type="button"]').prop('disabled', false);
+
+                    // Restore button content
+                    var buttonHtml =
+                        '<button type="button" class="btn btn-danger" onclick="updatePaymentRequests()">Update</button>';
+                    $('#editPaymentRequestModal .modal-footer').html(buttonHtml);
+                }
+            });
+        }
     </script>
 @endsection

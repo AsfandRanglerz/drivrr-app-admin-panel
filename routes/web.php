@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\PushNotificationController;
 use App\Http\Controllers\Admin\HandelBusinessOwnerPayments;
 use App\Http\Controllers\Admin\LisenceApprovelController;
 use App\Http\Controllers\Admin\SubadminController;
+use App\Http\Controllers\Admin\WithDrawalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -150,7 +151,18 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         Route::get('/lisenceApprovel/counter',  'getlisenceApprovelCount')->name('lisenceApprovel.count');
         // Route::delete('driver-vehicle-show/{id}',  'show')->name('driver-vehicle.show');
     });
-
+    // ############## With Drawal Request  ############
+    Route::controller(WithDrawalController::class)->group(function () {
+        Route::post('/paymentRequestData',  'paymentRequestData')->name('paymentRequest.get')->middleware('permission:WithDrawal Request');
+        Route::get('/paymentRequest',  'paymentRequestIndex')->name('paymentRequest.index')->middleware('permission:WithDrawal Request');
+        Route::post('/paymentRequest-create',  'paymentRequestCreate')->name('paymentRequest.create')->middleware('permission:WithDrawal Request');
+        Route::get('/paymentRequest/{id}',  'showPaymentRequest')->name('paymentRequest.show')->middleware('permission:WithDrawal Request');
+        Route::post('/paymentRequestUpdate/{id}',  'updatePaymentRequest')->name('paymentRequest.update')->middleware('permission:WithDrawal Request');
+        Route::get('/paymentRequest/delete/{id}',  'deletePaymentRequest')->name('paymentRequest.delete')->middleware('permission:WithDrawal Request');
+        Route::get('/paymentRequestCounter',  'getPaymentRequestCount')->name('paymentRequest.count')->middleware('permission:WithDrawal Request');
+        // User Account Details
+        Route::get('/paymentRequest/bankInfo/{userId}',  'getAccountDetails')->name('paymentAccount.index')->middleware('permission:WithDrawal Request');
+    });
     //owner-jobs
     Route::get('owner-job/{id}', [JobController::class, 'index'])->name('owner-job.index');
     Route::get('owner-job-edit/{id}', [JobController::class, 'edit'])->name('owner-job.edit');
