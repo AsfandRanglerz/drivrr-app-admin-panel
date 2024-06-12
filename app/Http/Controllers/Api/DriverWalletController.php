@@ -31,6 +31,7 @@ class DriverWalletController extends Controller
                 'withdrawal_amount' => $request->withdrawal_amount,
                 'account_id' => $active_account->id,
             ]);
+            DriverWallet::where('driver_id', $id)->decrement('total_earning', $request->withdrawal_amount);
             return response()->json([
                 'message' => 'Request Send successfully.',
                 'status' => 'Success.',
