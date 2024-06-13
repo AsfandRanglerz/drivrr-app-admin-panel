@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Review;
 use App\Models\Document;
 use App\Models\RoleUser;
+use App\Models\DriverWallet;
 use Illuminate\Http\Request;
 use App\Models\PaymentRequest;
 use App\Models\PushNotification;
@@ -15,10 +16,12 @@ use Illuminate\Support\Facades\Http;
 use App\Helpers\FcmNotificationHelper;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
 class DriverJobRequestController extends Controller
 {
+    ############# Phase 2 Code integration ##############
 
     public function add_job_request_without_counter(Request $request, $owner_id, $driver_id, $job_id)
     {
@@ -34,12 +37,19 @@ class DriverJobRequestController extends Controller
                     'owner_id' => $owner_id,
                     'driver_id' => $driver_id,
                     'job_id' => $job_id,
-                    'payment_amount' => $job->price,
+                    'payment_amount' => $job->payment_request,
                     'location' => $location,
+                    'status' => 'Accepted'
                 ]);
+                $job->update([
+                    'active_job' => '1',
+                ]);
+                $driverWallet = DriverWallet::where('driver_id', $driver_id)->firstOrFail();
+                $driverWallet->increment('total_earning', $job->payment_request);
                 $driver_job_request->load('owner', 'driver', 'job');
+                // ########## Send Notification Code ######
                 $title = $driver->fname . ' ' . $driver->lname;
-                $description = 'Sent You a Job Request';
+                $description = 'Accepted Your Job Request';
                 $notificationData = [
                     'job_id' => $job->id,
                 ];
@@ -70,6 +80,7 @@ class DriverJobRequestController extends Controller
             ], 500);
         }
     }
+
 
 
     public function add_job_request_counter(Request $request, $owner_id, $driver_id, $job_id)
@@ -219,25 +230,30 @@ class DriverJobRequestController extends Controller
     public function cancelJob($id)
     {
         try {
-            $cancelRequest = PaymentRequest::where('id', $id)->delete();
-            if (!$cancelRequest) {
-                return response()->json([
-                    'message' => 'Job not found ',
-                    'status' => 'failed',
-                ], 404);
-            }
+            $cancelRequest = PaymentRequest::findOrFail($id);
+            $cancelRequest->job->update(['active_job' => '0']);
+            $driverWallet = DriverWallet::where('driver_id', $cancelRequest->driver_id)->firstOrFail();
+            $driverWallet->decrement('total_earning', $cancelRequest->payment_amount);
+            $cancelRequest->delete();
             return response()->json([
-                'message' => 'Job requests successfully deleted',
-                'status' => 'success',
+                'message' => 'Job request successfully deleted',
+                'status' => 'success'
             ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'Job not found',
+                'status' => 'failed'
+            ], 404);
+
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error deleting job requests.',
                 'status' => 'error',
-                'error' => $e->getMessage(),
+                'error' => $e->getMessage()
             ], 500);
         }
     }
+
     public function getDriverCompletedStatus(Request $request, $driverId)
     {
 
