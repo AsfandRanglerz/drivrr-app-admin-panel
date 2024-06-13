@@ -23,12 +23,15 @@
                                         <tr>
                                             <th>Sr.</th>
                                             <th>Vehicle</th>
-                                            <th>Location</th>
+                                            <th>Job Duration Type</th>
+                                            <th>Pick-Up Location</th>
+                                            <th>Drop-Off Location</th>
                                             <th>Date</th>
                                             <th>Time</th>
                                             <th>Hours</th>
                                             <th>Days</th>
-                                            <th>Price</th>
+                                            <th>Price Per Hours</th>
+                                            <th>Fixed Job Price</th>
                                             <th>Description</th>
                                             <th>Own Vehicle</th>
                                             <th>Order</th>
@@ -42,12 +45,67 @@
                                                 @if ($item)
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $item->vehicle->name }}</td>
-                                                    <td> {!! strlen($item->location) > 10 ? substr($item->location, 0, 10) . '...' : $item->location !!}</td>
-                                                    <td>{{ $item->date }}</td>
-                                                    <td>{{ $item->time }}</td>
-                                                    <td>{{ $item->hours }}</td>
-                                                    <td>{{ $item->days }}</td>
-                                                    <td>{{ $item->price }}</td>
+                                                    <td>{{ $item->job_type }}</td>
+                                                    <td>
+                                                        @if ($item->pick_up_location)
+                                                            {!! strlen($item->pick_up_location) > 10
+                                                                ? substr($item->pick_up_location, 0, 10) . '...'
+                                                                : $item->pick_up_location !!}
+                                                        @else
+                                                            <div class="text-danger">No Pick-Up Location Found!</div>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($item->drop_off_location)
+                                                            {!! strlen($item->drop_off_location) > 10
+                                                                ? substr($item->drop_off_location, 0, 10) . '...'
+                                                                : $item->pick_up_location !!}
+                                                        @else
+                                                            <div class="text-danger">No Drop-Off Location Found!</div>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($item->date)
+                                                            {{ $item->date }}
+                                                        @else
+                                                            <div class="text-danger"> No Date Found!</div>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($item->time)
+                                                            {{ $item->time }}
+                                                        @else
+                                                            <div class="text-danger"> No Time Found!</div>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($item->hours)
+                                                            {{ $item->hours }}
+                                                        @else
+                                                            <div class="text-danger"> No Hours Found!</div>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($item->days)
+                                                            {{ $item->days }}
+                                                        @else
+                                                            <div class="text-danger"> No Days Found!</div>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($item->price_per_hour)
+                                                            £ {{ $item->price_per_hour }}
+                                                        @else
+                                                            <div class="text-danger"> No Price Per Hour Found!</div>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($item->job_price)
+                                                            £ {{ $item->job_price }}
+                                                        @else
+                                                            <div class="text-danger"> No Fixed Job Price Found!</div>
+                                                        @endif
+                                                    </td>
                                                     <td> {!! strlen($item->description) > 10 ? substr($item->description, 0, 10) . '...' : $item->description !!}</td>
                                                     @if ($item->on_vehicle == 1)
                                                         <td>
@@ -70,9 +128,9 @@
                                                     <td>
                                                         <div class=""
                                                             style="display: flex;align-items: center;justify-content: center;column-gap: 8px">
-
+                                                            {{--
                                                             <button class="view text-info btn btn-secondary fa fa-eye"
-                                                                data-patient-id="{{ $item->id }}"></button>
+                                                                data-patient-id="{{ $item->id }}"></button> --}}
 
                                                             {{-- </form> --}}
 
@@ -103,7 +161,7 @@
                                                                         </circle>
                                                                     </svg></a>
                                                             @endif
-                                                            <a class="btn btn-info"
+                                                            {{-- <a class="btn btn-info"
                                                                 href="{{ route('owner-job.edit', $item->id) }}">Edit</a>
                                                             <form method="post"
                                                                 action="{{ route('owner-job.destroy', $item->id) }}">
@@ -112,7 +170,7 @@
                                                                 <button type="submit"
                                                                     class="btn btn-danger btn-flat show_confirm"
                                                                     data-toggle="tooltip">Delete</button>
-                                                            </form>
+                                                            </form> --}}
                                                         </div>
                                                     </td>
                                                 @endif
