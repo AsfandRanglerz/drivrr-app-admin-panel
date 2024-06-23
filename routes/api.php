@@ -139,8 +139,6 @@ Route::post('updatePermission', [PermissionController::class, 'update']);
 Route::get('getNotificationCount/{userId}', [ApiPushNotificationController::class, 'getNotificationCount']);
 Route::get('/readNotifications/{userId}', [ApiPushNotificationController::class, 'userRecevied']);
 
-
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
