@@ -459,20 +459,22 @@ class AuthController extends Controller
     }
     public function getLocations($id)
     {
-        $user = User::find($id);
-
-        if (!$user) {
+        try {
+            $user = User::findOrFail($id);
+    
+            $latitude = $user->latitude;
+            $longitude = $user->longitude;
+    
+            return response()->json([
+                'userId' => $user->id,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['error' => 'User not found'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Something went wrong: ' . $e->getMessage()], 500);
         }
-
-        $latitude = $user->latitude;
-        $longitude = $user->longitude;
-
-        return response()->json([
-            'userId' => $user->id,
-            'latitude' => $latitude,
-            'longitude' => $longitude,
-        ]);
     }
     // public function appleLogin(Request $request, $id)
     // {
