@@ -122,7 +122,7 @@ class JobController extends Controller
                 'payment_request' => $request->payment_request,
             ]);
             // ############ Send Notifcations to Drivers #########
-            $sendJobCreationNotifications = DriverVehicle::where('vehicle_id', $request->vehicle_id)
+            $sendJobCreationNotifications = DriverVehicle::where('vehicle_id', $request->vehicle_id)->where('is_active', '1')
                 ->get();
             $sendAdditionalNotifications = DriverVehicle::where('vehicle_id', '!=', $request->vehicle_id)
                 ->get();
@@ -138,7 +138,7 @@ class JobController extends Controller
                 foreach ($sendJobCreationNotifications as $sendJobCreationNotification) {
                     $fcmToken = $sendJobCreationNotification->user->fcm_token;
 
-                    FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description,$notificationData);
+                    FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description, $notificationData);
                     PushNotification::create([
                         'title' => $title,
                         'description' => $description,
@@ -147,11 +147,10 @@ class JobController extends Controller
                         'job_id' =>  $job->id,
                     ]);
                 }
-
             } else if ($sendAdditionalNotifications) {
                 foreach ($sendAdditionalNotifications as $sendAdditionalNotification) {
                     $fcmToken = $sendAdditionalNotification->user->fcm_token;
-                    FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description,$notificationData);
+                    FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description, $notificationData);
                     PushNotification::create([
                         'title' =>  $title,
                         'description' => $description,
