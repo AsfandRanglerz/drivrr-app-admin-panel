@@ -232,19 +232,32 @@ class DriverJobRequestController extends Controller
         try {
             $cancelRequest = PaymentRequest::findOrFail($id);
             $cancelRequest->job->update(['active_job' => '0']);
-            $driverWallet = DriverWallet::where('driver_id', $cancelRequest->driver_id)->firstOrFail();
-            $driverWallet->decrement('total_earning', $cancelRequest->payment_amount);
             $cancelRequest->delete();
-            return response()->json([
-                'message' => 'Job request successfully deleted',
-                'status' => 'success'
-            ], 200);
+            if ($cancelRequest) {
+                $title = $cancelRequest->driver->fname . ' ' . $cancelRequest->driver->lname;
+                $description = 'Cancel Your Job Request!';
+                $notificationData = [
+                    'job_idd' =>  $cancelRequest->job->id,
+                ];
+                $fcmToken = $cancelRequest->owner->fcm_token;
+                FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description, $notificationData);
+                PushNotification::create([
+                    'title' =>  $title,
+                    'description' => $description,
+                    'user_name' =>  $title,
+                    'user_id' => $cancelRequest->owner->id,
+                    'job_id' =>  $cancelRequest->job->id,
+                ]);
+                return response()->json([
+                    'message' => 'Job request successfully deleted',
+                    'status' => 'success'
+                ], 200);
+            }
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'message' => 'Job not found',
                 'status' => 'failed'
             ], 404);
-
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error deleting job requests.',
