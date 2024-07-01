@@ -44,8 +44,6 @@ class DriverJobRequestController extends Controller
                 $job->update([
                     'active_job' => '1',
                 ]);
-                $driverWallet = DriverWallet::where('driver_id', $driver_id)->firstOrFail();
-                $driverWallet->increment('total_earning', $job->payment_request);
                 $driver_job_request->load('owner', 'driver', 'job');
                 // ########## Send Notification Code ######
                 $title = $driver->fname . ' ' . $driver->lname;
