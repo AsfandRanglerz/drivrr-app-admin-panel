@@ -211,6 +211,8 @@ class OwnerGetJobREquests extends Controller
         $jobUpdated = PaymentRequest::where('id', $id)->update(['status' => 'Completed']);
         if ($jobUpdated) {
             $updateJobCompletion = PaymentRequest::find($id);
+            $driverWallet = DriverWallet::where('driver_id', $updateJobCompletion->driver_id)->firstOrFail();
+            $driverWallet->increment('total_earning', $updateJobCompletion->job->payment_request);
             if ($updateJobCompletion) {
                 $title = $updateJobCompletion->owner->fname . ' ' . $updateJobCompletion->owner->lname;
                 $description = 'Congratulation! Your Job Is Completed';

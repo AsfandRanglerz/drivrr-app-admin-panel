@@ -44,6 +44,7 @@ class DriverJobRequestController extends Controller
                 $job->update([
                     'active_job' => '1',
                 ]);
+            
                 $driver_job_request->load('owner', 'driver', 'job');
                 // ########## Send Notification Code ######
                 $title = $driver->fname . ' ' . $driver->lname;
