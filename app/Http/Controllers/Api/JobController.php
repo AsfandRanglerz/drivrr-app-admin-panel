@@ -101,10 +101,85 @@ class JobController extends Controller
     }
 
     // ############ Create Job End ##################
+    // public function jobStore(Request $request, $id)
+    // {
+    //     try {
+    //         $formattedDate = Carbon::createFromFormat('d-m-Y', $request->date)->format('d-m-Y');
+    //         $job = Job::create([
+    //             'user_id' => $id,
+    //             'vehicle_id' => $request->vehicle_id,
+    //             'pick_up_location' => $request->pick_up_location,
+    //             'drop_off_location' => $request->drop_off_location,
+    //             'date' => $formattedDate,
+    //             'time' => $request->time,
+    //             'hours' => $request->hours,
+    //             'days' => $request->days,
+    //             'job_type' => $request->job_type,
+    //             'price_per_hour' => $request->price_per_hour,
+    //             'job_price' => $request->job_price,
+    //             'description' => $request->description,
+    //             'on_vehicle' => $request->on_vehicle,
+    //             'payment_request' => $request->payment_request,
+    //         ]);
+    //         // ############ Send Notifcations to Drivers #########
+    //         $sendJobCreationNotifications = DriverVehicle::where('vehicle_id', $request->vehicle_id)->where('is_active', '1')
+    //             ->get();
+    //         $sendAdditionalNotifications = DriverVehicle::where('is_active', '0')
+    //             ->get();
+
+
+    //         $owner = User::find($id);
+    //         $title = $owner->fname . ' ' . $owner->lname;
+    //         $description = 'Posted A New Job. Check it out!';
+    //         $notificationData = [
+    //             'job_idd' =>  $job->id,
+    //         ];
+    //         if ($sendJobCreationNotifications && $job->on_vehicle == '0') {
+    //             foreach ($sendJobCreationNotifications as $sendJobCreationNotification) {
+    //                 $fcmToken = $sendJobCreationNotification->user->fcm_token;
+
+    //                 FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description, $notificationData);
+    //                 PushNotification::create([
+    //                     'title' => $title,
+    //                     'description' => $description,
+    //                     'user_name' =>  $title,
+    //                     'user_id' => $sendJobCreationNotification->user->id,
+    //                     'job_id' =>  $job->id,
+    //                 ]);
+    //             }
+    //         } else if ($sendAdditionalNotifications && $job->on_vehicle == '1') {
+    //             foreach ($sendAdditionalNotifications as $sendAdditionalNotification) {
+    //                 $fcmToken = $sendAdditionalNotification->user->fcm_token;
+    //                 FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description, $notificationData);
+    //                 PushNotification::create([
+    //                     'title' =>  $title,
+    //                     'description' => $description,
+    //                     'user_name' =>  $title,
+    //                     'user_id' => $sendAdditionalNotification->user->id,
+    //                     'job_id' =>  $job->id,
+    //                 ]);
+    //             }
+    //         }
+
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'message' => 'Job Created successfully.',
+    //         ], 200);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'message' => 'Error Creating job.',
+    //             'status' => 'Error',
+    //             'error' => $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
     public function jobStore(Request $request, $id)
     {
         try {
+            // Format the date
             $formattedDate = Carbon::createFromFormat('d-m-Y', $request->date)->format('d-m-Y');
+
+            // Create the Job
             $job = Job::create([
                 'user_id' => $id,
                 'vehicle_id' => $request->vehicle_id,
@@ -121,54 +196,45 @@ class JobController extends Controller
                 'on_vehicle' => $request->on_vehicle,
                 'payment_request' => $request->payment_request,
             ]);
-            // ############ Send Notifcations to Drivers #########
-            $sendJobCreationNotifications = DriverVehicle::where('vehicle_id', $request->vehicle_id)->where('is_active', '1')
-                ->get();
-            $sendAdditionalNotifications = DriverVehicle::where('vehicle_id', '!=', $request->vehicle_id)
-                ->get();
 
+            // Send Notifications to Drivers
+            $driversQuery = DriverVehicle::query()
+                ->where('vehicle_id', $request->vehicle_id)
+                ->where('is_active', $job->on_vehicle == '0' ? '1' : '0');
+
+            $drivers = $driversQuery->with('user')->get();
 
             $owner = User::find($id);
             $title = $owner->fname . ' ' . $owner->lname;
             $description = 'Posted A New Job. Check it out!';
             $notificationData = [
-                'job_idd' =>  $job->id,
+                'job_id' => $job->id,
             ];
-            if ($sendJobCreationNotifications) {
-                foreach ($sendJobCreationNotifications as $sendJobCreationNotification) {
-                    $fcmToken = $sendJobCreationNotification->user->fcm_token;
 
-                    FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description, $notificationData);
-                    PushNotification::create([
-                        'title' => $title,
-                        'description' => $description,
-                        'user_name' =>  $title,
-                        'user_id' => $sendJobCreationNotification->user->id,
-                        'job_id' =>  $job->id,
-                    ]);
-                }
-            } else if ($sendAdditionalNotifications) {
-                foreach ($sendAdditionalNotifications as $sendAdditionalNotification) {
-                    $fcmToken = $sendAdditionalNotification->user->fcm_token;
-                    FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description, $notificationData);
-                    PushNotification::create([
-                        'title' =>  $title,
-                        'description' => $description,
-                        'user_name' =>  $title,
-                        'user_id' => $sendAdditionalNotification->user->id,
-                        'job_id' =>  $job->id,
-                    ]);
-                }
+            foreach ($drivers as $driverVehicle) {
+                $fcmToken = $driverVehicle->user->fcm_token;
+
+                // Send FCM Notification
+                FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description, $notificationData);
+
+                // Save Notification to Database
+                PushNotification::create([
+                    'title' => $title,
+                    'description' => $description,
+                    'user_name' => $title,
+                    'user_id' => $driverVehicle->user->id,
+                    'job_id' => $job->id,
+                ]);
             }
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Job Created successfully.',
+                'message' => 'Job created successfully.',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error Creating job.',
-                'status' => 'Error',
+                'status' => 'error',
+                'message' => 'Error creating job.',
                 'error' => $e->getMessage(),
             ], 500);
         }
