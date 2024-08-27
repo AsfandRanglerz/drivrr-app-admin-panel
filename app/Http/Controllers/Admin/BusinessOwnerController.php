@@ -140,6 +140,8 @@ class BusinessOwnerController extends Controller
                 $message = 'Busniess Owner Blocked Successfully';
                 $data['ownername'] =  $busniessOwner->fname . ' ' .  $busniessOwner->lname;
                 $data['owneremail'] =  $busniessOwner->email;
+                $blockReason = request('block_reason', 'No reason provided');
+                $data['block_reason'] = $blockReason;
                 Mail::to($busniessOwner->email)->send(new ownerBlock($data));
             } else {
                 return response()->json(['alert' => 'info', 'message' => 'Busniess Owner status is already updated or cannot be updated.']);

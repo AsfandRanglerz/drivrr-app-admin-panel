@@ -168,7 +168,33 @@
             </div>
         </div>
     </div>
+    <!-- Block Reason Modal -->
+    <div class="modal fade" id="blockReasonModal" tabindex="-1" role="dialog" aria-labelledby="blockReasonModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="blockReasonModalLabel">Block Busniess Owner</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="blockReason">Please provide a reason for blocking this user:</label>
+                        <textarea class="form-control" name="block_reason" id="blockReason" rows="3"></textarea>
+                    </div>
+                </div>
 
+                <div class="modal-footer">
+                    <div class="col-12 text-center">
+                        <button type="button" id="confirmBlock" class="btn btn-danger">Send</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
     {{-- #############Main Content Body#################  --}}
     <div class="main-content" style="min-height: 562px;">
         <section class="section">
@@ -197,7 +223,6 @@
                                         <th>Company Name</th>
                                         <th>Company Info</th>
                                         <th>Image</th>
-                                        <th>Activation status </th>
                                         <th>Block & Active</th>
                                         <th>Jobs</th>
                                         <th>Action</th>
@@ -300,26 +325,12 @@
                             }
                         }
                     },
-                    {
-                        "data": "is_active",
-                        "render": function(data) {
-                            var statusText, statusClass;
-                            if (data == '1') {
-                                statusText = "Active";
-                                statusClass = "text-success";
-                            } else if (data == '0') {
-                                statusText = "Blocked";
-                                statusClass = "text-danger";
-                            }
-                            return '<span class="' + statusClass + '">' + statusText +
-                                '</span>';
-                        }
-                    },
+
                     {
                         "data": null,
                         "render": function(data, type, row) {
-                            var buttonClass = row.is_active == '1' ? 'btn-danger' : 'btn-success';
-                            var buttonText = row.is_active == '1' ? 'Block' : 'Active';
+                            var buttonClass = row.is_active == '0' ? 'btn-danger' : 'btn-success';
+                            var buttonText = row.is_active == '0' ? 'Blocked' : 'Active';
                             return '<button id="update-status" class="btn ' + buttonClass +
                                 '" data-userid="' + row
                                 .id + '">' + buttonText + '</button>';
@@ -482,18 +493,42 @@
             var button = $(this);
             var userId = button.data('userid');
             var currentStatus = button.text().trim().toLowerCase();
-            var newStatus = currentStatus === 'Blocked' ? '0' : '1';
-            button.prop('disabled', true);
+            var newStatus = currentStatus === 'active' ? '0' : '1'; // Update newStatus based on current status
 
+            if (newStatus == '0') { // Show the modal only if the new status is '0' (Blocked)
+                $('#blockReasonModal').data('button', button).data('userId', userId).modal('show');
+            } else {
+                // If not blocking, directly update the status without the modal
+                updateStatus(button, userId, '1', null); // No block reason needed when activating
+            }
+        });
+
+        // Handle the block confirmation
+        $('#confirmBlock').on('click', function() {
+            var button = $('#blockReasonModal').data('button');
+            var userId = $('#blockReasonModal').data('userId');
+            var blockReason = $('#blockReason').val();
+
+            if (blockReason === '') {
+                toastr.error('Please provide a reason for blocking this user.');
+                return;
+            } else {
+                updateStatus(button, userId, '0', blockReason);
+            }
+        });
+
+        function updateStatus(button, userId, newStatus, blockReason) {
+            button.prop('disabled', true);
             $.ajax({
-                url: '{{ route('busniessOwnerBlock.update', ['id' => ':userId']) }}'.replace(':userId',
-                    userId),
+                url: '{{ route('driversBlock.update', ['id' => ':userId']) }}'.replace(':userId', userId),
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',
-                    is_active: newStatus
+                    is_active: newStatus,
+                    block_reason: blockReason
                 },
                 success: function(response) {
+                    $('#blockReasonModal').modal('hide');
                     toastr.success(response.message);
                     // Update button text and class
                     var buttonText = newStatus == '1' ? 'Active' : 'Blocked';
@@ -502,7 +537,7 @@
                     // Update status cell content
                     var statusCell = button.closest('tr').find('td:eq(6)');
                     var statusText, statusClass;
-                    if (newStatus == 0) {
+                    if (newStatus == '0') {
                         statusText = "Blocked";
                         statusClass = "text-danger";
                     } else {
@@ -520,7 +555,7 @@
                     button.prop('disabled', false);
                 }
             });
-        });
+        }
     </script>
 
 @endsection

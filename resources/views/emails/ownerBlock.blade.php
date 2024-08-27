@@ -10,6 +10,7 @@
         Concerning this account,:
         <ul style="padding-left: 16px">
             <li><strong>The Associated Email is:</strong> {{ $data['owneremail'] }}</li>
+            <li><strong>Reason:</strong> {{ $data['block_reason'] }}</li>
         </ul>
     </div>
     <div>

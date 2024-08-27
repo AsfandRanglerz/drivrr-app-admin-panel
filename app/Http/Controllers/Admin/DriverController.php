@@ -133,7 +133,6 @@ class DriverController  extends Controller
     {
         try {
             $driver = User::findOrFail($id);
-
             if ($driver->is_active == '0') {
                 $driver->is_active = '1';
                 $message = 'Driver Activate Successfully';
@@ -141,10 +140,12 @@ class DriverController  extends Controller
                 $data['driveremail'] =  $driver->email;
                 Mail::to($driver->email)->send(new driverUnBlock($data));
             } else if ($driver->is_active == '1') {
+                $blockReason = request('block_reason', 'No reason provided');
                 $driver->is_active = '0';
                 $message = 'Driver Blocked Successfully';
                 $data['drivername'] =  $driver->fname . ' ' .  $driver->lname;
                 $data['driveremail'] =  $driver->email;
+                $data['block_reason'] = $blockReason;
                 Mail::to($driver->email)->send(new driverBlock($data));
             } else {
                 return response()->json(['alert' => 'info', 'message' => 'Driver status is already updated or cannot be updated.']);
