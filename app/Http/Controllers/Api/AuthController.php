@@ -160,11 +160,7 @@ class AuthController extends Controller
     {
         try {
             $loginType = $request->login_type;
-
-            // Find or create user by email
             $user = User::firstOrNew(['email' => $request->email]);
-
-            // Set user information if not exists
             if (!$user->exists) {
                 $user->fname = $request->fname;
                 $user->lname = $request->lname;
@@ -176,23 +172,13 @@ class AuthController extends Controller
                 if (empty($user->fname)) $user->fname = $request->fname;
                 if (empty($user->lname)) $user->lname = $request->lname;
             }
-
-            // Set social ID based on login type
             $socialIdField = "{$loginType}_social_id";
             $user->$socialIdField = $request->$socialIdField;
-
-            // Update image and FCM token if provided
             if ($request->has('image')) $user->image = $request->image;
             if ($request->has('fcm_token')) $user->fcm_token = $request->fcm_token;
-
-            // Save user and sync roles
             $user->save();
             $user->roles()->sync([$request->role_id]);
-
-            // Log the user in
             auth()->login($user);
-
-            // Handle role-specific actions
             $token = auth()->user()->createToken($request->email)->plainTextToken;
             $response = [
                 'status' => 'success',
@@ -200,7 +186,6 @@ class AuthController extends Controller
                 'token' => $token,
                 'data' => $user,
             ];
-
             if ($user->role_id == 3) {
                 // Create or update driver wallet
                 $wallet = DriverWallet::firstOrNew(['driver_id' => $user->id]);
