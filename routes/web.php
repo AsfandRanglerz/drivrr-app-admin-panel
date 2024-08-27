@@ -44,7 +44,7 @@ Route::get('/cache_clear', function () {
     Artisan::call('route:clear');
     return 'Application cache cleared!';
 });
-Route::get('/admin/login', [AuthController::class, 'getLoginPage']);
+Route::get('/admin-login', [AuthController::class, 'getLoginPage']);
 Route::post('/login', [AuthController::class, 'Login']);
 Route::get('/admin-forgot-password', [AdminController::class, 'forgetPassword']);
 Route::post('/admin-reset-password-link', [AdminController::class, 'adminResetPasswordLink']);

@@ -50,9 +50,7 @@ class DriverController  extends Controller
                 'fname' => 'required|string|max:255',
                 'lname' => 'required|string|max:255',
                 'email' => 'required|email|unique:users|max:255',
-                'password' => 'required|string|min:8|max:255',
                 'phone' => 'required|unique:users|min:11',
-                'confirmpassword' => 'required|same:password',
                 'image' => 'nullable|image|mimes:jpeg,jpg,png|max:1048'
             ]);
 
@@ -60,7 +58,6 @@ class DriverController  extends Controller
                 return response()->json(['errors' => $validator->errors()], 422);
             }
             $driver = new User($request->only(['fname', 'lname', 'email', 'phone']));
-            $driver->password = bcrypt($request->input('password'));
             $driver->role_id = 3;
             if ($request->hasFile('image')) {
                 $image = $request->file('image');

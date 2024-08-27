@@ -14,54 +14,53 @@
                 </div>
                 <div class="modal-body">
                     <form id="createBusniessOwnerForm" enctype="multipart/form-data">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">First Name</label>
-                                    <input type="text" class="form-control fname" name="fname" required>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">Last Name</label>
-                                    <input type="text" class="form-control lname" name="lname" required>
-                                    <div class="invalid-feedback"></div>
-                                </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="name">First Name</label>
+                                <input type="text" class="form-control fname" name="fname" required>
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="phone">Phone Number</label>
-                                    <input type="number" class="form-control phone" name="phone">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" class="form-control email" name="email" required>
-                                    <div class="invalid-feedback"></div>
-                                </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="name">Last Name</label>
+                                <input type="text" class="form-control lname" name="lname" required>
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="image">Image</label>
-                                    <input type="file" class="form-control image" name="image">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="image">Company Name</label>
-                                    <input type="text" class="form-control company_name" name="company_name">
-                                    <div class="invalid-feedback"></div>
-                                </div>
+
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="number" class="form-control phone" name="phone">
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control email" name="email" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="image">Image</label>
+                                <input type="file" class="form-control image" name="image">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="image">Company Name</label>
+                                <input type="text" class="form-control company_name" name="company_name">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="image">Company Info</label>
@@ -90,58 +89,53 @@
                 </div>
                 <div class="modal-body">
                     <form id="editBusniessOwnerForm" enctype="multipart/form-data">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">First Name</label>
-                                    <input type="text" class="form-control" id="fname" name="fname" required>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">Last Name</label>
-                                    <input type="text" class="form-control" id="lname" name="lname" required>
-                                    <div class="invalid-feedback"></div>
-                                </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="name">First Name</label>
+                                <input type="text" class="form-control" id="fname" name="fname" required>
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="phone">Phone Number</label>
-                                    <input type="number" class="form-control" id="phone" name="phone">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                    <div class="invalid-feedback"></div>
-                                </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="name">Last Name</label>
+                                <input type="text" class="form-control" id="lname" name="lname" required>
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="image">Image</label>
-                                    <input type="file" class="form-control" id="image" name="image">
-                                    <div class="invalid-feedback"></div>
-                                </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="number" class="form-control" id="phone" name="phone">
+                                <div class="invalid-feedback"></div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="image">Company Name</label>
-                                    <input type="text" class="form-control" id="company_name" name="company_name">
-                                    <div class="invalid-feedback"></div>
-                                </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="image">Image</label>
+                                <input type="file" class="form-control" id="image" name="image">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="image">Company Name</label>
+                                <input type="text" class="form-control" id="company_name" name="company_name">
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="image">Company Info</label>
-                                <textarea type="text" class="form-control" id="company_info" name="company_info"></textarea>
+                                <textarea type="text" class="form-control w-100" id="company_info" name="company_info"></textarea>
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -179,45 +173,45 @@
     <div class="main-content" style="min-height: 562px;">
         <section class="section">
             <div class="section-body">
-                <div class="row">
-                    <div class="col-12 col-md-12 col-lg-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="col-12">
-                                    <h4>BusniessOwners</h4>
-                                </div>
+
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="col-12">
+                                <h4>BusniessOwners</h4>
                             </div>
-                            <div class="card-body table-responsive">
-                                <a class="btn btn-success mb-3 text-white" data-toggle="modal"
-                                    data-target="#createBusniessOwnerModal">
-                                    Create BusniessOwners
-                                </a>
-                                <table class="responsive table table-striped table-bordered example">
-                                    <thead>
-                                        <tr>
-                                            <th>Sr.</th>
-                                            <th>First Name</th>
-                                            <th>Last Name</th>
-                                            <th>Email</th>
-                                            <th>Phone Number</th>
-                                            <th>Company Name</th>
-                                            <th>Company Info</th>
-                                            <th>Image</th>
-                                            <th>Activation status </th>
-                                            <th>Block & Active</th>
-                                            <th>Jobs</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <a class="btn btn-success mb-3 text-white" data-toggle="modal"
+                                data-target="#createBusniessOwnerModal">
+                                Create BusniessOwners
+                            </a>
+                            <table class="responsive table table-striped table-bordered example">
+                                <thead>
+                                    <tr>
+                                        <th>Sr.</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Email</th>
+                                        <th>Phone Number</th>
+                                        <th>Company Name</th>
+                                        <th>Company Info</th>
+                                        <th>Image</th>
+                                        <th>Activation status </th>
+                                        <th>Block & Active</th>
+                                        <th>Jobs</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+    </div>
+    </section>
     </div>
 @endsection
 
@@ -453,7 +447,6 @@
                         $('#' + key).addClass('is-invalid').siblings('.invalid-feedback').html(value[
                             0]);
                     });
-                    $('#editBusniessOwnerModal').modal('hide');
                 }
             });
         }
