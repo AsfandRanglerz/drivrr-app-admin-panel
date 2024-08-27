@@ -2,28 +2,6 @@
 @section('title', 'Documents')
 @section('content')
 
-    <head>
-        <!-- Bootstrap 5.1.3 CDN-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Bootstrap 5.1.3 CDN -->
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-    </head>
-    <style>
-        .btn-danger {
-            background-color: #fc544b;
-            border-color: #fc544b;
-        }
-
-        .badge {
-            vertical-align: middle;
-            padding: 7px 12px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            border-radius: 30px;
-            font-size: 12px;
-        }
-    </style>
     <div class="main-content" style="min-height: 562px;">
         <section class="section">
             <div class="section-body">
