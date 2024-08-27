@@ -50,41 +50,4 @@ class PushNotificationController extends Controller
         }
         return back()->with(['status' => true, 'message' => 'Notification Sent Successfully']);
     }
-
-    // public function notificationStore(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'title' => 'required',
-    //         'select' => 'required|array',
-    //         'description' => 'required',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return redirect()->back()->withErrors($validator)->withInput();
-    //     }
-    //     $data = $request->select;
-    //     $roles = [
-    //         1 => ['SubAdmin', 1],
-    //         2 => ['Business Owner', 2],
-    //         3 => ['Driver', 3],
-    //     ];
-    // $notification = new AdminNotification($request->input('title'), $request->input('description'));
-    // $user->user->notify($notification);
-    //     foreach ($data as $selectedRole) {
-    //         if (array_key_exists($selectedRole, $roles)) {
-    //             list($userName, $roleId) = $roles[$selectedRole];
-    //             $users = RoleUser::where('role_id', $roleId)->get();
-    //             PushNotification::create([
-    //                 'title' => $request->title,
-    //                 'description' => $request->description,
-    //                 'role_id' => $roleId,
-    //                 'user_name' => $userName,
-    //             ]);
-    //         } else {
-    //             return redirect()->back()->with(['status' => false, 'message' => 'You entered wrong data.']);
-    //         }
-    //     }
-
-    //     return redirect()->route('notifications.index')->with('success', 'Sent Successfully.');
-    // }
 }
