@@ -73,7 +73,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('notifications-seen', [AdminController::class, 'seen_notification'])->name('notifications-seen');
 
     // Owner Payments
-    Route::get('business-owner-payments', [HandelBusinessOwnerPayments::class, 'show_owner_payments'])->middleware('permission:Payments')->name('business-owner-payments');
+    Route::get('payments', [HandelBusinessOwnerPayments::class, 'show_owner_payments'])->middleware('permission:Payments')->name('business-owner-payments');
     /**driver */
     Route::get('driver/status/{id}', [DriverController::class, 'status'])->name('driver.status');
     /**owner */
