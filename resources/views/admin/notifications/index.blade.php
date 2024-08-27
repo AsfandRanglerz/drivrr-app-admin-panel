@@ -15,49 +15,6 @@
                             <div class="card-body  table-responsive">
                                 <button class="btn btn-success mb-3" data-toggle="modal"
                                     data-target="#notificationModal">Add Notification</button>
-                                <table class="table table-striped table-bordered text-center" id="table-1">
-                                    <thead>
-                                        <tr>
-                                            <th>Sr.</th>
-                                            <th>User Email</th>
-                                            <th>User Name</th>
-                                            <th>Title</th>
-                                            <th>Description</th>
-                                            <th>See Satatus</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($notifications as $notification)
-                                            @if ($notification->admin === 'Admin')
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>
-                                                        {{ $notification->user->email }}
-                                                    </td>
-                                                    <td>
-                                                        @if ($notification->user_name == 1)
-                                                            <div class="badge badge-dark badge-shadow">SubAdmin</div>
-                                                        @elseif($notification->user_name == 2)
-                                                            <div class="badge badge-dark badge-shadow">Business Owner</div>
-                                                        @else
-                                                            <div class="badge badge-dark badge-shadow">Driver</div>
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ $notification->title }}</td>
-                                                    <td>{{ $notification->description }}</td>
-                                                    <td>
-                                                        @if ($notification->seen_by == 0)
-                                                            <div class="badge badge-danger badge-shadow">Not Seen</div>
-                                                        @else
-                                                            <div class="badge badge-success badge-shadow">Seen</div>
-                                                        @endif
-
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        @endforeach
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
@@ -92,8 +49,8 @@
                             <div class="col-sm-12 pl-sm-0 pr-sm-3 col-md-12 col-lg-12">
                                 <div class="form-group mb-2">
                                     <label>Send To</label>
-                                    <select name="user_name[]" id="user_name" class="form-control select2" multiple="">
-                                        <option value="">Select Option</option>
+                                    <select name="user_name[]" id="user_name" class="form-control select2" multiple=""
+                                        style="width:100%">
                                         <option value="1">Subadmin</option>
                                         <option value="2">Business Owner</option>
                                         <option value="3">Driver</option>
