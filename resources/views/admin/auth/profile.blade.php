@@ -178,8 +178,8 @@
                                                 </div>
                                             </div>
                                         @endauth
-                                        <div class="card-footer text-right">
-                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        <div class="card-footer text-center">
+                                            <button type="submit" class="btn btn-dark">Save Changes</button>
                                         </div>
                                     </form>
                                 </div>
@@ -193,4 +193,3 @@
 </div>
 
 @endsection
-
