@@ -10,7 +10,6 @@
         Here are your account details:
         <ul style="padding-left: 16px">
             <li><strong>Email:</strong> {{ $data['driveremail'] }}</li>
-            <li><strong>Password:</strong> {{ $data['password'] }}</li>
         </ul>
     </div>
     <div>
