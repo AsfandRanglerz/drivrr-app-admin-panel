@@ -121,15 +121,15 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         //   User Blocking status
         Route::post('/update-driver-status/{id}',  'updateBlockStatus')->name('driversBlock.update')->middleware('permission:Driver');
     });
-    // Route::resource('document', DocumentController::class);
     // ############## Documents ############
     Route::controller(DocumentController::class)->group(function () {
-        Route::get('document/{id}',  'index')->name('document.index');
-        Route::get('document-create/{id}',  'create')->name('document.create');
-        Route::post('document-store/{id}',  'store')->name('document.store');
-        Route::get('document-edit/{id}',  'edit')->name('document.edit');
-        Route::post('document-update/{id}',  'update')->name('document.update');
-        Route::delete('document-destroy/{id}',  'destroy')->name('document.destroy');
+        Route::get('document/{id}',  'indexDocument')->name('document.index');
+        Route::get('documentData/{id}',  'getDocument')->name('document.get');
+        Route::post('document-create/{id}',  'createDocument')->name('document.create');
+        Route::get('document-show/{id}',  'showDocument')->name('document.show');
+        Route::post('document-update/{id}',  'updateDocument')->name('document.update');
+        Route::get('document-destroy/{id}',  'deleteDocument')->name('document.delete');
+
     });
     // ############## Drivers Vehicles ############
     Route::controller(DriverVehicleController::class)->group(function () {
@@ -168,7 +168,6 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         Route::post('/paymentHistoryData',  'paymentHistoryData')->name('paymentHistory.get')->middleware('permission:DriverWallets');
         Route::get('/paymentHistory',  'paymentHistoryIndex')->name('paymentHistory.index')->middleware('permission:DriverWallets');
         Route::get('/paymentHistory/history/{id}',  'getPaymentHistory')->name('userPaymentHistory.index')->middleware('permission:DriverWallets');
-
     });
     // ############## Owner Jobs  ############
     Route::controller(JobController::class)->group(function () {

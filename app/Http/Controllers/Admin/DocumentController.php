@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
+use App\Models\Document;
+use App\Mail\VerifyDocument;
+use Illuminate\Http\Request;
+use App\Mail\RejectDocumentInfo;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
-use Illuminate\Http\Request;
-use App\Models\User;
-use App\Mail\VerifyDocument;
-use App\Mail\RejectDocumentInfo;
-use App\Models\Document;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 
 class DocumentController extends Controller
@@ -19,12 +20,18 @@ class DocumentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function getDocument($id)
+    {
+        $document = Document::where('user_id', $id)->get();
+        $json_data["data"] = $document;
+        return json_encode($json_data);
+    }
+    public function indexDocument($id)
     {
         $data = User::with('document')->find($id);
         // $counter = Document::where('user_id',$id)->count();
         // return [$counter];
-        return view('admin.driver.document.index', compact(['data']));
+        return view('admin.driver.document.index', compact(['data', 'id']));
     }
 
     /**
@@ -44,132 +51,77 @@ class DocumentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $id)
+    public function createDocument(Request $request, $id)
     {
-        // return $request;
-        $request->validate([
-            'name' => 'required',
-            'image' => 'required',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'image' => 'required|image|mimes:jpeg,jpg,png|max:1048',
+                'is_active' => 'required'
+            ]);
 
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-            $file->move(public_path('admin/assets/images/users/'), $filename);
-            $image = 'public/admin/assets/images/users/' . $filename;
-        } else {
-            $image = 'public/admin/assets/images/users/1675332882.jpg';
-        }
-
-        $document = Document::create([
-            'user_id' => $id,
-            'name' => $request->name,
-            'image' => $image,
-        ]);
-        return redirect()->route('document.index', $id)->with(['status' => true, 'message' => 'Document Created Successfully.']);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $document = Document::find($id);
-        return view('admin.driver.document.edit', compact('document'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required',
-        ]);
-        $document = Document::find($id);
-        if ($request->hasfile('image')) {
-            $destination = 'public/admin/assets/images/users' . $document->image;
-            if (File::exists($destination) || File::exists($document->image)) {
-                File::delete($destination);
-                File::delete($document->image);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
             }
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-            $file->move('public/admin/assets/images/users', $filename);
-            $image = 'public/admin/assets/images/users/' . $filename;
-        } else {
-            $image = $document->image;
+            $document = new Document($request->only(['is_active']));
+            $document->user_id = $id;
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('admin/assets/images/users/'), $filename);
+                $document->image = 'public/admin/assets/images/users/' . $filename;
+            }
+            $document->save();
+            return response()->json(['alert' => 'success', 'message' => 'Document Created Successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['alert' => 'error', 'message' => 'An error occurred while Creating Document!' . $e->getMessage()], 500);
         }
-        $document->name = $request->name;
-        $document->image = $image;
-        $document->update();
-        return redirect()->route('document.index', $document->user_id)->with(['status' => true, 'message' => 'Document Updated Successfully.']);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function showDocument($id)
     {
-        Document::destroy($id);
-        return redirect()->back()->with(['status' => true, 'message' => 'Document Deleted Successfully.']);
+        $document = Document::find($id);
+        if (!$document) {
+            return response()->json(['alert' => 'error', 'message' => 'Document Not Found'], 500);
+        }
+        return response()->json($document);
     }
 
 
-
-    // public function status($id,$key)
-    // {
-    //     $data = Document::find($id);
-    //     $user = User::find($key);
-    //     $data->update(['is_active' => $data->is_active == 0 ? '1' : '0']);
-    //     $verify['is_active'] = $data->is_active;
-    //     $verify['name'] = $data->name;
-    //     // return $verify;
-    //     Mail::to($user->email)->send(new VerifyDocument($verify));
-    //     return redirect()->back()->with(['status' => true, 'message' => 'Status Updated successfully.']);
-    // }
-
-    public function status(Request $request, $id, $key)
+    public function updateDocument(Request $request, $id)
     {
-        $status = $request->check;
-        // return $status;
-        $data = Document::find($id);
-        $user = User::find($key);
-        $data->is_active = $status;
-        $data->save();
-        $verify['is_active'] = $data->is_active;
-        $verify['name'] = $data->name;
-        $reason = $request->reason;
-        if ($verify['is_active'] == 2) {
-            // return $reason;
-            Mail::to($user->email)->send(new RejectDocumentInfo($reason));
-            return redirect()->back()->with(['status' => true, 'message' => 'Document Rejection Reason is Sended.']);
-        } else {
-            Mail::to($user->email)->send(new VerifyDocument($verify));
-            return redirect()->back()->with(['status' => true, 'message' => 'Document Approved Successfully.']);
+        $validator = Validator::make($request->all(), [
+            'is_active' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
+        try {
+            $document = Document::findOrFail($id);
+            $document->fill($request->only(['is_active']));
+            if ($request->hasFile('image')) {
+                $oldImagePath = $document->image;
+                if ($document->image &&  File::exists($oldImagePath)) {
+                    File::delete($oldImagePath);
+                }
+                $image = $request->file('image');
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('admin/assets/images/users/'), $filename);
+                $document->image = 'public/admin/assets/images/users/' . $filename;
+            }
+            $document->save();
+            return response()->json(['alert' => 'success', 'message' => 'Document Updated Successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['alert' => 'error', 'message' => 'An error occurred while updating Sub Admin' . $e->getMessage()], 500);
+        }
+    }
+
+    public function deleteDocument($id)
+    {
+        $document = Document::findOrFail($id);
+        $imagePath =  $document->image;
+        if (File::exists($imagePath)) {
+            File::delete($imagePath);
+        }
+        $document->delete();
+        return response()->json(['alert' => 'success', 'message' => 'Document Deleted SuccessFully!']);
     }
 }
