@@ -186,7 +186,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('send-response/{id}/{q_id}', [HelpAndSupportController::class, 'send'])->name('send-response.send');
 
     // ############## Push Notification ##############
-    Route::get('notification', [PushNotificationController::class, 'notificationIndex'])->name('notifications.index')->middleware('permission:Notification');
+    Route::get('notifications', [PushNotificationController::class, 'notificationIndex'])->name('notifications.index')->middleware('permission:Notification');
     Route::post('notifications/store', [PushNotificationController::class, 'notificationStore'])->name('notifications.store');
     // ############# Driver Reviews#########
     Route::get('/driverReviews', [ReviewController::class, 'reviewIndex'])->name('driverreview.index');
@@ -194,5 +194,5 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/otp', [TwilioController::class, 'indexOtp'])->name('otp.index');
     Route::post('/sendOtp', [TwilioController::class, 'Otp'])->name('otp.store');
     // ############# Complete Job #####
-    Route::get('/completeJobs', [HandelBusinessOwnerPayments::class, 'completeJobs'])->name('completedjobs.index')->middleware('permission:CompleteJob');
+    Route::get('/completedjobs', [HandelBusinessOwnerPayments::class, 'completeJobs'])->name('completedjobs.index')->middleware('permission:CompleteJob');
 });

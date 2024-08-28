@@ -155,63 +155,6 @@
                 </li>
             @endif --}}
 
-            {{-- Privacy policies --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Privacy policies'))
-                <li class="dropdown {{ request()->is('admin/Privacy-policy') ? 'active' : '' }}">
-                    <a href="{{ url('/admin/Privacy-policy') }}" class="nav-link"> <i
-                            class="fa fa-lock"></i><span>Privacy Policy</span></a>
-                </li>
-            @elseif (auth()->guard('admin')->check())
-                <li class="dropdown {{ request()->is('admin/Privacy-policy') ? 'active' : '' }}">
-                    <a href="{{ url('/admin/Privacy-policy') }}" class="nav-link"> <i
-                            class="fa fa-lock"></i><span>Privacy Policy</span></a>
-                </li>
-            @endif
-            {{-- Term & Conditions --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Term&Conditions'))
-                <li class="dropdown {{ request()->is('admin/termCondition') ? 'active' : '' }}">
-                    <a href="{{ url('/admin/term-condition') }}" class="nav-link"> <i
-                            class="fas fa-globe"></i><span>Term
-                            & Conditions</span></a>
-                </li>
-            @elseif (auth()->guard('admin')->check())
-                <li class="dropdown {{ request()->is('admin/termCondition') ? 'active' : '' }}">
-                    <a href="{{ url('/admin/term-condition') }}" class="nav-link"> <i
-                            class="fas fa-globe"></i><span>Term
-                            & Conditions</span></a>
-                </li>
-            @endif
-
-            {{-- About Us --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('AboutUs'))
-                <li class="dropdown {{ request()->is('admin/aboutus') ? 'active' : '' }}">
-                    <a href="{{ url('/admin/about-us') }}" class="nav-link"> <i class="fas fa-globe"></i><span>About
-                            Us</span></a>
-                </li>
-            @elseif (auth()->guard('admin')->check())
-                <li class="dropdown {{ request()->is('admin/aboutus') ? 'active' : '' }}">
-                    <a href="{{ url('/admin/about-us') }}" class="nav-link"> <i class="fas fa-globe"></i><span>About
-                            Us</span></a>
-                </li>
-            @endif
-
-            {{-- Help & Support --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Help & Support'))
-                <li class="dropdown {{ request()->is('admin/helpAndSupport*') ? 'active' : '' }}">
-                    <a href="{{ route('help-and-support.index') }}" class="nav-link">
-                        <i class="fa fa-info-circle"></i>
-                        <span>Help & Support</span>
-                    </a>
-                </li>
-            @elseif (auth()->guard('admin')->check())
-                <li class="dropdown {{ request()->is('admin/helpAndSupport*') ? 'active' : '' }}">
-                    <a href="{{ route('help-and-support.index') }}" class="nav-link">
-                        <i class="fa fa-info-circle"></i>
-                        <span> Help & Support</span>
-                    </a>
-                </li>
-            @endif
-
             {{-- Push Notifications --}}
             @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Notification'))
                 <li class="dropdown {{ request()->is('admin/notifications*') ? 'active' : '' }}">
@@ -231,14 +174,14 @@
 
             {{-- Driver Reviews --}}
             @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('DriverReviews'))
-                <li class="dropdown {{ request()->is('admin/driverreview*') ? 'active' : '' }}">
+                <li class="dropdown {{ request()->is('admin/driverReviews*') ? 'active' : '' }}">
                     <a href="{{ route('driverreview.index') }}" class="nav-link">
                         <i class="fas fa-bell"></i>
                         <span>Driver Ranking</span>
                     </a>
                 </li>
             @elseif (auth()->guard('admin')->check())
-                <li class="dropdown {{ request()->is('admin/driverreview*') ? 'active' : '' }}">
+                <li class="dropdown {{ request()->is('admin/driverReviews*') ? 'active' : '' }}">
                     <a href="{{ route('driverreview.index') }}" class="nav-link">
                         <i class="fas fa-star"></i>
                         <span>Driver Ranking</span>
@@ -254,13 +197,70 @@
                     </a>
                 </li>
             @elseif (auth()->guard('admin')->check())
-                <li class="dropdown {{ request()->is('admin/driverreview*') ? 'active' : '' }}">
+                <li class="dropdown {{ request()->is('admin/completedjobs*') ? 'active' : '' }}">
                     <a href="{{ route('completedjobs.index') }}" class="nav-link">
                         <i class="fas fa-check-circle"></i>
                         <span>Driver Completed Jobs</span>
                     </a>
                 </li>
             @endif
+            {{-- Privacy policies --}}
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Privacy policies'))
+                <li class="dropdown {{ request()->is('admin/Privacy-policy') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/Privacy-policy') }}" class="nav-link"> <i
+                            class="fa fa-lock"></i><span>Privacy Policy</span></a>
+                </li>
+            @elseif (auth()->guard('admin')->check())
+                <li class="dropdown {{ request()->is('admin/Privacy-policy') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/Privacy-policy') }}" class="nav-link"> <i
+                            class="fa fa-lock"></i><span>Privacy Policy</span></a>
+                </li>
+            @endif
+            {{-- Term & Conditions --}}
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Term&Conditions'))
+                <li class="dropdown {{ request()->is('admin/term-condition*') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/term-condition') }}" class="nav-link"> <i
+                            class="fas fa-globe"></i><span>Term
+                            & Conditions</span></a>
+                </li>
+            @elseif (auth()->guard('admin')->check())
+                <li class="dropdown {{ request()->is('admin/term-condition*') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/term-condition') }}" class="nav-link"> <i
+                            class="fas fa-globe"></i><span>Term
+                            & Conditions</span></a>
+                </li>
+            @endif
+
+            {{-- About Us --}}
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('AboutUs'))
+                <li class="dropdown {{ request()->is('admin/about-us*') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/about-us') }}" class="nav-link"> <i class="fas fa-globe"></i><span>About
+                            Us</span></a>
+                </li>
+            @elseif (auth()->guard('admin')->check())
+                <li class="dropdown {{ request()->is('admin/about-us*') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/about-us') }}" class="nav-link"> <i class="fas fa-globe"></i><span>About
+                            Us</span></a>
+                </li>
+            @endif
+
+            {{-- Help & Support --}}
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Help & Support'))
+                <li class="dropdown {{ request()->is('admin/help-and-support*') ? 'active' : '' }}">
+                    <a href="{{ route('help-and-support.index') }}" class="nav-link">
+                        <i class="fa fa-info-circle"></i>
+                        <span>Help & Support</span>
+                    </a>
+                </li>
+            @elseif (auth()->guard('admin')->check())
+                <li class="dropdown {{ request()->is('admin/help-and-support*') ? 'active' : '' }}">
+                    <a href="{{ route('help-and-support.index') }}" class="nav-link">
+                        <i class="fa fa-info-circle"></i>
+                        <span> Help & Support</span>
+                    </a>
+                </li>
+            @endif
+
             {{-- <li class="dropdown {{ request()->is('admin/otp*') ? 'active' : '' }}">
                 <a href="{{ route('otp.index') }}" class="nav-link">
                     <i class="fas fa-bell"></i>
