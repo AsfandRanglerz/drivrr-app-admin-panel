@@ -98,7 +98,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         Route::post('/update-permissions/{user}',  'updatePermissions')->name('update.user.permissions')->middleware('permission:SubAdmin');
     });
 
-    Route::resource('vehicle', VehicleController::class)->middleware('permission:Vehicles');
+    Route::resource('/drivers/vehicle', VehicleController::class)->middleware('permission:Vehicles');
     // ############## Busniess Owner ############
     Route::controller(BusinessOwnerController::class)->group(function () {
         Route::get('/busniessOwner',  'busniessOwnerIndex')->name('busniessOwner.index')->middleware('permission:Business Owner');
@@ -123,22 +123,21 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     });
     // ############## Documents ############
     Route::controller(DocumentController::class)->group(function () {
-        Route::get('document/{id}',  'indexDocument')->name('document.index');
+        Route::get('/drivers/document/{id}',  'indexDocument')->name('document.index');
         Route::get('documentData/{id}',  'getDocument')->name('document.get');
         Route::post('document-create/{id}',  'createDocument')->name('document.create');
         Route::get('document-show/{id}',  'showDocument')->name('document.show');
         Route::post('document-update/{id}',  'updateDocument')->name('document.update');
         Route::get('document-destroy/{id}',  'deleteDocument')->name('document.delete');
-
     });
     // ############## Drivers Vehicles ############
     Route::controller(DriverVehicleController::class)->group(function () {
-        Route::get('driver-vehicle/{id}',  'index')->name('driver-vehicle.index');
-        Route::get('driver-vehicle-create/{id}',  'create')->name('driver-vehicle.create');
-        Route::post('driver-vehicle-store/{id}',  'store')->name('driver-vehicle.store');
-        Route::get('driver-vehicle-edit/{id}',  'edit')->name('driver-vehicle.edit');
-        Route::post('driver-vehicle-update/{id}',  'update')->name('driver-vehicle.update');
-        Route::delete('driver-vehicle-destroy/{id}',  'destroy')->name('driver-vehicle.destroy');
+        Route::get('drivers/driver-vehicle/{id}',  'index')->name('driver-vehicle.index');
+        Route::get('drivers/driver-vehicle-create/{id}',  'create')->name('driver-vehicle.create');
+        Route::post('drivers/driver-vehicle-store/{id}',  'store')->name('driver-vehicle.store');
+        Route::get('drivers/driver-vehicle-edit/{id}',  'edit')->name('driver-vehicle.edit');
+        Route::post('drivers/driver-vehicle-update/{id}',  'update')->name('driver-vehicle.update');
+        Route::delete('drivers/driver-vehicle-destroy/{id}',  'destroy')->name('driver-vehicle.destroy');
         // Route::delete('driver-vehicle-show/{id}',  'show')->name('driver-vehicle.show');
     });
     // ############## Lisence Approvel  ############
@@ -171,12 +170,12 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     });
     // ############## Owner Jobs  ############
     Route::controller(JobController::class)->group(function () {
-        Route::get('owner-job/{id}',  'index')->name('owner-job.index');
-        Route::get('owner-job-edit/{id}',  'edit')->name('owner-job.edit');
+        Route::get('busniessOwner/owner-job/{id}',  'index')->name('owner-job.index');
+        Route::get('busniessOwner/owner-job-edit/{id}',  'edit')->name('owner-job.edit');
         // Route::get('owner-job-show/{id}',  'show')->name('owner-job.show');
-        Route::get('/active-job',  'show');
-        Route::post('owner-job-update/{id}',  'update')->name('owner-job.update');
-        Route::delete('owner-job-destroy/{id}',  'destroy')->name('owner-job.destroy');
+        Route::get('busniessOwner/active-job',  'show');
+        Route::post('busniessOwner/owner-job-update/{id}',  'update')->name('owner-job.update');
+        Route::delete('busniessOwner/owner-job-destroy/{id}',  'destroy')->name('owner-job.destroy');
     });
     ######## Roles&Permission######
     Route::post('/add-role', [RoleController::class, 'store'])->name('addRole');
