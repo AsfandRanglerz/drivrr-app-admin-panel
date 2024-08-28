@@ -44,6 +44,10 @@ Route::get('/cache_clear', function () {
     Artisan::call('route:clear');
     return 'Application cache cleared!';
 });
+Route::get('/', function () {
+    return redirect('/admin-login');
+});
+
 Route::get('/admin-login', [AuthController::class, 'getLoginPage']);
 Route::post('/login', [AuthController::class, 'Login']);
 Route::get('/admin-forgot-password', [AdminController::class, 'forgetPassword']);
