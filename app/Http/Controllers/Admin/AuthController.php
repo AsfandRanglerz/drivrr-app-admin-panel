@@ -33,7 +33,7 @@ class AuthController extends Controller
                 return redirect('admin/dashboard')->with(['status' => true, 'message' => 'Login Successfully!']);
             } else {
                 Auth::logout();
-                return redirect('/admin/login')->with(['status' => false, 'error' => 'Only Sub Admins Can Log In.']);
+                return redirect('/admin-login')->with(['status' => false, 'error' => 'Only Sub Admins Can Log In.']);
             }
         }
 

@@ -34,18 +34,9 @@ class AdminController extends Controller
         $data['drivers']  = RoleUser::where('role_id', 3)->count();
         $data['jobs']  = Job::where('is_active', 0)->count();
         $data['requests'] = WithdrawalRequest::where('status', 0)->count();
-        // $jobs_count=Job::where('is_active', 1)->get();
-        // dd($jobs_count);
-        // dd($data);
-        // return [$users,$owners,$drivers,$admins];
         return view('admin.index', compact('data'));
     }
 
-    // public function notify()
-    // {
-    //     $user = User::find(); // Replace 1 with the actual user ID you want to notify
-    //     auth()->guard('admin')->user()->notify(new NewUser($user));
-    // }
     public function getProfile()
     {
         if (auth()->guard('web')->check()) {
@@ -53,7 +44,7 @@ class AdminController extends Controller
         } elseif (auth()->guard('admin')->check()) {
             $user = Admin::find(auth()->guard('admin')->id());
         } else {
-            return redirect()->route('/admin');
+            return redirect()->route('/admin-login');
         }
         return view('admin.auth.profile', compact('user'));
         // dd($data);
@@ -97,26 +88,7 @@ class AdminController extends Controller
     {
         return view('admin.auth.forgetPassword');
     }
-    // public function adminResetPasswordLink(Request $request)
-    // {
-    //     $request->validate([
-    //         'email' => 'required|exists:admins,email',
-    //     ]);
-    //     $exists = DB::table('password_resets')->where('email', $request->email)->first();
-    //     if ($exists) {
-    //         return back()->with('message', 'Reset Password link has been already sent');
-    //     } else {
-    //         $token = Str::random(30);
-    //         DB::table('password_resets')->insert([
-    //             'email' => $request->email,
-    //             'token' => $token,
-    //         ]);
 
-    //         $data['url'] = url('change_password', $token);
-    //         Mail::to($request->email)->send(new ResetPasswordMail($data));
-    //         return back()->with('message', 'Reset Password Link Send Successfully');
-    //     }
-    // }
     public function adminResetPasswordLink(Request $request)
     {
         // Validate the email
@@ -186,24 +158,13 @@ class AdminController extends Controller
     {
         if (auth()->guard('web')->check()) {
             Auth::guard('web')->logout();
-            return redirect('/admin/login')->with(['status' => true, 'message' => 'Log Out Successfully']);
+            return redirect('/admin-login')->with(['status' => true, 'message' => 'Log Out Successfully']);
         } elseif (auth()->guard('admin')->check()) {
             Auth::guard('admin')->logout();
-            return redirect('/admin/login')->with(['status' => true, 'message' => 'Log Out Successfully']);
+            return redirect('/admin-login')->with(['status' => true, 'message' => 'Log Out Successfully']);
         } else {
-            return redirect('/admin/login');
+            return redirect('/admin-login');
         }
     }
 
-    public function seen_notification()
-    {
-        // return Carbon::now('Asia/Karachi');
-        $notifications = Notification::where('read_at', NULL)->get();
-        foreach ($notifications as $notification) {
-            $notification->update([
-                'read_at' => Carbon::now(),
-            ]);
-        }
-        return redirect()->back();
-    }
 }

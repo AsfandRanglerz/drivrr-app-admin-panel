@@ -13,37 +13,46 @@ class HelpAndSupportController extends Controller
 {
     public function index()
     {
-        $data['owner'] = User::whereHas('roles', function ($q) {
-            $q->where('name', 'Owner');
-        })->has('question')->with('question')->orderBy('id', 'DESC')->get();
 
-        $data['driver'] = User::whereHas('roles', function ($q) {
-            $q->where('name', 'driver');
-        })->has('question')->with('question')->orderBy('id', 'DESC')->get();
-        //  return [$data['owner'],$data['driver']];
-
-        return view('admin.helpAndSupport.index', compact('data'));
+        return view('admin.helpAndSupport.index');
     }
 
-    public function send(Request $request, $uId, $qId)
+    public function getData($type)
     {
-        $user = User::find($uId);
-        $user_email = $user->email;
-        $query = Question::where('id', $qId)->where('user_id', $uId)->where('answer', NULL)->first();
-        $data['message'] = $request->message;
-        $data['question'] = $query->title;
-        if ($query->exists()) {
+        $data = Question::whereHas('user.roles', function ($query) use ($type) {
+            $query->where('name', $type);
+        })
+            ->latest()
+            ->get();
+
+        $data = $data->map(function ($question) {
+            return [
+                'id' => $question->id,
+                'fname' => $question->user->fname,
+                'lname' => $question->user->lname,
+                'email' => $question->user->email,
+                'title' => $question->title,
+                'details' => $question->details
+            ];
+        });
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function send(Request $request, $id)
+    {
+        $request->validate([
+            'answer' => 'required|string',
+        ]);
+
+        $query = Question::where('id', $id)->where('answer', NULL)->first();
+        if ($query) {
             $query->update([
-                'answer' => $request->message,
+                'answer' => $request->answer,
             ]);
-            if ($request->message == "") {
-                return redirect()->back()->with(['status' => true, 'message' => 'Your message is empty.']);
-            } else {
-                Mail::to($user_email)->send(new SendResponseToUser($data));
-            }
-            return redirect()->back()->with(['status' => true, 'message' => 'Email Sent To That User Successfully.']);
+            return response()->json(['status' => true, 'message' => 'Feedback sent successfully.']);
         } else {
-            return redirect()->back()->with(['status' => true, 'message' => 'No matching question found.']);
+            return response()->json(['status' => false, 'message' => 'No matching question found.']);
         }
     }
 }

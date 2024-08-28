@@ -177,22 +177,20 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         Route::post('busniessOwner/owner-job-update/{id}',  'update')->name('owner-job.update');
         Route::delete('busniessOwner/owner-job-destroy/{id}',  'destroy')->name('owner-job.destroy');
     });
-    ######## Roles&Permission######
-    Route::post('/add-role', [RoleController::class, 'store'])->name('addRole');
-    Route::post('/roles/assign/permissions/{role}', [RoleController::class, 'assignPermissions'])->name('roles.assign.permissions');
-    Route::put('/roles/update/permissions/{role}', [RoleController::class, 'updatePermissions'])->name('roles.update.permissions');
     ######## Help And Sppurt Controler #####
-    Route::get('help-and-support', [HelpAndSupportController::class, 'index'])->name('help-and-support.index')->middleware('permission:Help & Support');
-    Route::get('send-response/{id}/{q_id}', [HelpAndSupportController::class, 'send'])->name('send-response.send');
+    Route::controller(HelpAndSupportController::class)->group(function () {
+        Route::get('help-and-support',  'index')->name('help-and-support.index')->middleware('permission:Help & Support');
+        Route::post('/send-feedback/{id}',  'send')->name('send.feedback');
+        Route::get('/help-and-support/data/{type}',  'getData')->name('help.and.support.data');
+    });
 
     // ############## Push Notification ##############
-    Route::get('notifications', [PushNotificationController::class, 'notificationIndex'])->name('notifications.index')->middleware('permission:Notification');
-    Route::post('notifications/store', [PushNotificationController::class, 'notificationStore'])->name('notifications.store');
+    Route::controller(PushNotificationController::class)->group(function () {
+        Route::get('notifications',  'notificationIndex')->name('notifications.index')->middleware('permission:Notification');
+        Route::post('notifications/store',  'notificationStore')->name('notifications.store');
+    });
     // ############# Driver Reviews#########
     Route::get('/driverReviews', [ReviewController::class, 'reviewIndex'])->name('driverreview.index');
-    // ############# OTP #####
-    Route::get('/otp', [TwilioController::class, 'indexOtp'])->name('otp.index');
-    Route::post('/sendOtp', [TwilioController::class, 'Otp'])->name('otp.store');
     // ############# Complete Job #####
     Route::get('/completedjobs', [HandelBusinessOwnerPayments::class, 'completeJobs'])->name('completedjobs.index')->middleware('permission:CompleteJob');
 });
