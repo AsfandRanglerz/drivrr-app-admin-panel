@@ -50,7 +50,7 @@
                         @elseif (auth()->guard('admin')->check())
                             <li class="dropdown {{ request()->is('admin/drivers*') ? 'active' : '' }}">
                                 <a href="{{ route('drivers.index') }}"
-                                    class="nav-link {{ request()->is('admin/driver*') ? 'text-white' : '' }}"><i
+                                    class="nav-link {{ request()->is('admin/drivers*') ? 'text-white' : '' }}"><i
                                         data-feather="users"></i><span>Driver</span></a>
                             </li>
                         @endif
