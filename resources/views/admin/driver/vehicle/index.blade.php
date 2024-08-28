@@ -14,7 +14,7 @@
                             </div>
                             <div class="card-body table-responsive">
                                 <a class="btn btn-primary mb-3" href="{{ url()->previous() }}">Back</a>
-                                <a class="btn btn-success mb-3" href="{{ route('driver-vehicle.create', $data->id) }}">Add
+                                <a class="btn btn-dark mb-3" href="{{ route('driver-vehicle.create', $data->id) }}">Add
                                     Vehicle</a>
                                 <table class="table table-striped table-bordered text-center" id="table-1">
                                     <thead>
