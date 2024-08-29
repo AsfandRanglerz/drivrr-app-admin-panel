@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use Stripe\Stripe;
 use App\Models\User;
 use Stripe\Customer;
@@ -206,42 +207,117 @@ class OwnerGetJobREquests extends Controller
             ], 400);
         }
     }
+
+
+    // public function completeJob(Request $request, $id)
+    // {
+    //     $jobUpdated = PaymentRequest::where('id', $id)->update(['status' => 'Completed']);
+    //     if ($jobUpdated) {
+    //         $updateJobCompletion = PaymentRequest::find($id);
+    //         $driverWallet = DriverWallet::where('driver_id', $updateJobCompletion->driver_id)->firstOrFail();
+    //         $driverWallet->increment('total_earning', $updateJobCompletion->job->payment_request);
+    //         if ($updateJobCompletion) {
+    //             $title = $updateJobCompletion->owner->fname . ' ' . $updateJobCompletion->owner->lname;
+    //             $description = 'Congratulation! Your Job Is Completed';
+    //             $notificationData = [
+    //                 'job_idd' =>  $updateJobCompletion->job_id,
+    //             ];
+    //             FcmNotificationHelper::sendFcmNotification($updateJobCompletion->driver->fcm_token, $title, $description, $notificationData);
+    //             PushNotification::create([
+    //                 'title' => $title,
+    //                 'description' => $description,
+    //                 'user_name' =>  $updateJobCompletion->owner_id,
+    //                 'user_id' => $updateJobCompletion->driver_id,
+    //                 'job_id' => $updateJobCompletion->job_id,
+    //             ]);
+    //             return response()->json([
+    //                 'status' => 'success',
+    //                 'message' => 'Job completed successfully'
+    //             ], 200);
+    //         } else {
+    //             return response()->json([
+    //                 'status' => 'failed',
+    //                 'message' => 'Updated Job completed not found'
+    //             ], 400);
+    //         }
+    //     } else {
+    //         return response()->json([
+    //             'status' => 'failed',
+    //             'message' => 'Updated Job not found or status not updated'
+    //         ], 403);
+    //     }
+    // }
     public function completeJob(Request $request, $id)
     {
-        $jobUpdated = PaymentRequest::where('id', $id)->update(['status' => 'Completed']);
-        if ($jobUpdated) {
-            $updateJobCompletion = PaymentRequest::find($id);
-            $driverWallet = DriverWallet::where('driver_id', $updateJobCompletion->driver_id)->firstOrFail();
-            $driverWallet->increment('total_earning', $updateJobCompletion->job->payment_request);
-            if ($updateJobCompletion) {
-                $title = $updateJobCompletion->owner->fname . ' ' . $updateJobCompletion->owner->lname;
-                $description = 'Congratulation! Your Job Is Completed';
-                $notificationData = [
-                    'job_idd' =>  $updateJobCompletion->job_id,
-                ];
-                FcmNotificationHelper::sendFcmNotification($updateJobCompletion->driver->fcm_token, $title, $description, $notificationData);
-                PushNotification::create([
-                    'title' => $title,
-                    'description' => $description,
-                    'user_name' =>  $updateJobCompletion->owner_id,
-                    'user_id' => $updateJobCompletion->driver_id,
-                    'job_id' => $updateJobCompletion->job_id,
-                ]);
+        $paymentRequest = PaymentRequest::findOrFail($id);
+        $job = $paymentRequest->job;
+        if ($job->job_type == 'Single Delivery') {
+            $jobUpdated = $paymentRequest->update(['status' => 'Completed']);
+            if ($jobUpdated) {
+                $this->updateDriverWallet($paymentRequest);
+                $this->sendJobCompletionNotification($paymentRequest);
                 return response()->json([
                     'status' => 'success',
-                    'message' => 'Job completed successfully'
+                    'message' => 'Single delivery job completed successfully'
                 ], 200);
-            } else {
-                return response()->json([
-                    'status' => 'failed',
-                    'message' => 'Updated Job completed not found'
-                ], 400);
             }
-        } else {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Updated Job not found or status not updated'
-            ], 403);
         }
+        elseif ($job->job_type == 'Long Term') {
+            $currentDate = now();
+            $startDate = Carbon::parse($job->date);
+            $remainingDays = $job->days;
+            if ($startDate->lte($currentDate)) {
+                $daysPassed = $currentDate->diffInDays($startDate);
+                $newRemainingDays = max(0, $remainingDays - $daysPassed);
+                $job->update(['days' => $newRemainingDays]);
+                if ($newRemainingDays === 0) {
+                    $jobUpdated = $paymentRequest->update(['status' => 'Completed']);
+                    if ($jobUpdated) {
+                        $this->updateDriverWallet($paymentRequest);
+                        $this->sendJobCompletionNotification($paymentRequest);
+                        return response()->json([
+                            'status' => 'success',
+                            'message' => 'Long term job completed successfully'
+                        ], 200);
+                    }
+                } else {
+                    return response()->json([
+                        'status' => 'in_progress',
+                        'message' => 'Long term job is still in progress'
+                    ], 200);
+                }
+            }
+        }
+
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'Job not completed or status not updated'
+        ], 403);
+    }
+
+    // Helper method to update the driver's wallet
+    private function updateDriverWallet($paymentRequest)
+    {
+        $driverWallet = DriverWallet::where('driver_id', $paymentRequest->driver_id)->firstOrFail();
+        $driverWallet->increment('total_earning', $paymentRequest->job->payment_request);
+    }
+
+    // Helper method to send job completion notification
+    private function sendJobCompletionNotification($paymentRequest)
+    {
+        $title = $paymentRequest->owner->fname . ' ' . $paymentRequest->owner->lname;
+        $description = 'Congratulations! Your Job Is Completed';
+        $notificationData = [
+            'job_id' => $paymentRequest->job_id,
+        ];
+
+        FcmNotificationHelper::sendFcmNotification($paymentRequest->driver->fcm_token, $title, $description, $notificationData);
+        PushNotification::create([
+            'title' => $title,
+            'description' => $description,
+            'user_name' => $paymentRequest->owner_id,
+            'user_id' => $paymentRequest->driver_id,
+            'job_id' => $paymentRequest->job_id,
+        ]);
     }
 }
