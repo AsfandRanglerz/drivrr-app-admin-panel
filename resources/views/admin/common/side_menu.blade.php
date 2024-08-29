@@ -119,14 +119,14 @@
             @endif
             {{-- Owner Recipits --}}
             @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Payments'))
-                <li class="dropdown {{ request()->is('admin/payments*') ? 'active' : '' }}">
-                    <a href="{{ route('business-owner-payments') }}" class="nav-link"><i
-                            class="fas fa-receipt"></i><span>Payments</span></a>
+                <li class="dropdown {{ request()->is('admin/reports*') ? 'active' : '' }}">
+                    <a href="{{ route('payment.index') }}" class="nav-link"><i
+                            class="fas fa-receipt"></i><span>Report</span></a>
                 </li>
             @elseif (auth()->guard('admin')->check())
-                <li class="dropdown {{ request()->is('admin/payments*') ? 'active' : '' }}">
-                    <a href="{{ route('business-owner-payments') }}" class="nav-link"><i
-                            class="fas fa-receipt"></i><span>Payments</span></a>
+                <li class="dropdown {{ request()->is('admin/reports*') ? 'active' : '' }}">
+                    <a href="{{ route('payment.index') }}" class="nav-link"><i
+                            class="fas fa-receipt"></i><span>Report</span></a>
                 </li>
             @endif
             {{-- Vehicles --}}

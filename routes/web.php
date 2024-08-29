@@ -76,9 +76,6 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('logout', [AdminController::class, 'logout']);
     Route::get('notifications-seen', [AdminController::class, 'seen_notification'])->name('notifications-seen');
 
-    // Owner Payments
-    Route::get('payments', [HandelBusinessOwnerPayments::class, 'show_owner_payments'])->middleware('permission:Payments')->name('business-owner-payments');
-    /**driver */
     Route::get('driver/status/{id}', [DriverController::class, 'status'])->name('driver.status');
     /**owner */
     Route::get('owner/status/{id}', [BusinessOwnerController::class, 'status'])->name('owner.status');
@@ -196,5 +193,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     // ############# Driver Reviews#########
     Route::get('/driverReviews', [ReviewController::class, 'reviewIndex'])->name('driverreview.index');
     // ############# Complete Job #####
+    Route::get('/reports', [HandelBusinessOwnerPayments::class, 'report'])->name('payment.index')->middleware('permission:CompleteJob');
     Route::get('/completedjobs', [HandelBusinessOwnerPayments::class, 'completeJobs'])->name('completedjobs.index')->middleware('permission:CompleteJob');
+    Route::get('/completedJobGet', [HandelBusinessOwnerPayments::class, 'completeJobGet'])->name('completedjobs.get')->middleware('permission:CompleteJob');
 });
