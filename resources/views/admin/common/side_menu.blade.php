@@ -121,12 +121,12 @@
             @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Payments'))
                 <li class="dropdown {{ request()->is('admin/reports*') ? 'active' : '' }}">
                     <a href="{{ route('payment.index') }}" class="nav-link"><i
-                            class="fas fa-receipt"></i><span>Report</span></a>
+                            class="fas fa-receipt"></i><span>Jobs Infromation</span></a>
                 </li>
             @elseif (auth()->guard('admin')->check())
                 <li class="dropdown {{ request()->is('admin/reports*') ? 'active' : '' }}">
                     <a href="{{ route('payment.index') }}" class="nav-link"><i
-                            class="fas fa-receipt"></i><span>Report</span></a>
+                            class="fas fa-receipt"></i><span>Jobs Infromation</span></a>
                 </li>
             @endif
             {{-- Vehicles --}}

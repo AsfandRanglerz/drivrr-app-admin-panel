@@ -177,7 +177,7 @@ class JobController extends Controller
     {
         try {
             // Format the date
-            $formattedDate = Carbon::createFromFormat('d-m-Y', $request->date)->format('d-m-Y');
+            $formattedDate = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y-m-d');
 
             // Create the Job
             $job = Job::create([
@@ -195,7 +195,7 @@ class JobController extends Controller
                 'description' => $request->description,
                 'on_vehicle' => $request->on_vehicle,
                 'payment_request' => $request->payment_request,
-                'remaining_day'=>$request->days,
+                'remaining_day' => $request->days,
             ]);
 
             // Send Notifications to Drivers

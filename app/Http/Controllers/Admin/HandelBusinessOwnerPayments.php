@@ -15,12 +15,13 @@ class HandelBusinessOwnerPayments extends Controller
         $paymentRequests = PaymentRequest::with([
             'owner:id,fname,lname,email',
             'driver:id,fname,lname,email',
-            'job:id,job_type,days,remaining_day,drop_off_location,pick_up_location,last_completion_date,price_per_hour'
+            'job:id,job_type,days,remaining_day,drop_off_location,pick_up_location,last_completion_date,price_per_hour,job_price,date'
         ])
-        ->whereIn('status', ['Accepted', 'Completed'])
-        ->latest()
-        ->get();
-        return response()->json(['data' => $data]);
+            ->whereIn('status', ['Accepted', 'Completed'])
+            ->latest()
+            ->get();
+        $json_data["data"] = $paymentRequests;
+        return json_encode($json_data);
     }
 
     public function report()
@@ -30,9 +31,9 @@ class HandelBusinessOwnerPayments extends Controller
             'driver:id,fname,lname,email',
             'job:id,job_type,job_price,days,remaining_day,drop_off_location,pick_up_location,last_completion_date,price_per_hour'
         ])
-        ->whereIn('status', ['Accepted', 'Completed'])
-        ->latest()
-        ->get();
+            ->whereIn('status', ['Accepted', 'Completed'])
+            ->latest()
+            ->get();
 
         // return  $paymentRequests;
         return view('admin.payments.index', compact('paymentRequests'));

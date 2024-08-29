@@ -11,12 +11,12 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="col-12">
-                                    <h4>Reports</h4>
+                                    <h4>Jobs Infromation</h4>
                                 </div>
                             </div>
                             <div class="card-body table-responsive">
 
-                                <table class="responsive table table-striped table-bordered reportsData">
+                                <table class="responsive table table-striped table-bordered example">
                                     <thead>
                                         <tr>
                                             <th>Sr.</th>
@@ -53,12 +53,13 @@
             var dataTable = $('.example').DataTable();
             dataTable.ajax.reload();
         }
+
         $(document).ready(function() {
             // Initialize DataTable with options
             var dataTable = $('.example').DataTable({
                 "ajax": {
-                    "url": "{{ route('drivers.get') }}",
-                    "type": "POST",
+                    "url": "{{ route('completedjobs.get') }}",
+                    "type": "GET",
                     "data": {
                         "_token": "{{ csrf_token() }}"
                     }
@@ -70,14 +71,14 @@
                         }
                     },
                     {
-                        "data": "fname"
+                        "data": null,
+                        "render": function(data, type, row) {
+                            return data.owner.fname + ' ' + data.owner.lname;
+                        }
                     },
                     {
-                        "data": "lname"
-                    },
-                    {
-                        "data": "email",
-                        "render": function(data, type, full, meta) {
+                        "data": "owner.email",
+                        "render": function(data, type) {
                             if (type === 'display') {
                                 return '<a href="mailto:' + data + '">' + data + '</a>';
                             } else {
@@ -86,82 +87,71 @@
                         }
                     },
                     {
-                        "data": "phone",
+                        "data": null,
                         "render": function(data, type, row) {
-                            if (data == null) {
-                                return "No Number";
+                            return data.driver.fname + ' ' + data.driver.lname;
+                        }
+                    },
+                    {
+                        "data": "driver.email",
+                        "render": function(data, type) {
+                            if (type === 'display') {
+                                return '<a href="mailto:' + data + '">' + data + '</a>';
                             } else {
                                 return data;
                             }
-                        },
+                        }
                     },
                     {
-                        "data": "image",
+                        "data": "job.job_type"
+                    },
+                    {
+                        "data": "job.price_per_hour",
+                        "render": function(data, type) {
+                            return data ? '£' + data : 'No Data Found!';
+                        }
+                    },
+                    {
+                        "data": "job.job_price",
+                        "render": function(data, type) {
+                            return data ? '£' + data : 'No Data Found!';
+                        }
+                    },
+                    {
+                        "data": "job.drop_off_location"
+                    },
+                    {
+                        "data": "job.pick_up_location"
+                    },
+                    {
+                        "data": "job.date",
+                        "render": function(data, type) {
+                            return data ? data : 'No Data Found!';
+                        }
+                    },
+                    {
+                        "data": "job.days"
+                    },
+                    {
+                        "data": "job.remaining_day"
+                    },
+                    {
+                        "data": "job.last_completion_date",
+                        "render": function(data, type) {
+                            return data ? new Date(data).toLocaleDateString() : 'No Data Found!';
+                        }
+                    },
+                    {
+                        "data": "status",
                         "render": function(data, type, row) {
-                            if (data) {
-                                if (data.startsWith("http")) {
-                                    return '<img src="' + data +
-                                        '" alt="Image" style="width: 50px; height: 50px;">';
-                                } else {
-                                    return '<img src="https://ranglerzwp.xyz/drivrrapp/' + data +
-                                        '" alt="Image" style="width: 50px; height: 50px;">';
-                                }
+                            if (data == "Accepted") {
+                                return '<span class="text-danger">In Process</span>';
                             } else {
-                                return '<img src="https://ranglerzwp.xyz/drivrrapp/public/admin/assets/images/approve/owner.jpg" alt="Image" style="width: 50px; height: 50px;">';
+                                return '<span class="text-success">Completed</span>';
                             }
-                        }
-                    },
-
-                    {
-                        "data": null,
-                        "render": function(data, type, row) {
-                            var buttonClass = row.is_active == '0' ? 'btn-danger' : 'btn-success';
-                            var buttonText = row.is_active == '0' ? 'Blocked' : 'Active';
-                            return '<button id="update-status" class="btn ' + buttonClass +
-                                '" data-userid="' + row
-                                .id + '">' + buttonText + '</button>';
                         },
-
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return '<a href="' +
-                                "{{ route('document.index', ['id' => ':id']) }}"
-                                .replace(':id', row.id) +
-                                '" class="btn btn-primary mb-3 text-white"><i class="fas fa-file-alt"></i></a>';
-                        },
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return '<a href="' +
-                                "{{ route('driver-vehicle.index', ['id' => ':id']) }}"
-                                .replace(':id', row.id) +
-                                '" class="btn btn-primary mb-3 text-white"><i class="fas fa-car"></i></a>';
-                        },
-                    },
-                    {
-                        "data": null,
-                        "render": function(data, type, row) {
-                            return '<button class="btn btn-success mb-3 mr-3 text-white editDriverBtn" data-id="' +
-                                row.id + '"><i class="fa fa-edit"></i></button>' +
-                                '<button class="btn btn-danger mb-3 mr-3 text-white deleteDriverBtn" data-id="' +
-                                row.id + '"><i class="fa fa-trash"></i></button>';
-                        }
                     }
-                ],
-
-            });
-            $('.example').on('click', '.editDriverBtn', function() {
-                var driverId = $(this).data('id');
-                editDriver(driverId);
-            });
-            $('.example').on('click', '.deleteDriverBtn', function() {
-                var driverId = $(this).data('id');
-                deleteDriverModal(driverId);
-            });
-            $('.example').on('click', '.DriverBankInfoModal', function() {
-                var driverId = $(this).data('id');
-                DriverBankInfoModal(driverId);
+                ]
             });
         });
     </script>
