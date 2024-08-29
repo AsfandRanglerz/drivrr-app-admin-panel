@@ -195,6 +195,7 @@ class JobController extends Controller
                 'description' => $request->description,
                 'on_vehicle' => $request->on_vehicle,
                 'payment_request' => $request->payment_request,
+                'remaining_day'=>$request->days,
             ]);
 
             // Send Notifications to Drivers

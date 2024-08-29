@@ -251,39 +251,57 @@ class OwnerGetJobREquests extends Controller
     {
         $paymentRequest = PaymentRequest::findOrFail($id);
         $job = $paymentRequest->job;
+
         if ($job->job_type == 'Single Delivery') {
             $jobUpdated = $paymentRequest->update(['status' => 'Completed']);
             if ($jobUpdated) {
                 $this->updateDriverWallet($paymentRequest);
-                $this->sendJobCompletionNotification($paymentRequest);
+                $statusMessage = 'Single delivery job completed successfully';
+                $this->sendJobCompletionNotification($paymentRequest, $statusMessage);
                 return response()->json([
                     'status' => 'success',
-                    'message' => 'Single delivery job completed successfully'
+                    'message' => $statusMessage
                 ], 200);
             }
-        }
-        elseif ($job->job_type == 'Long Term') {
+        } elseif ($job->job_type == 'Long Term') {
             $currentDate = now();
             $startDate = Carbon::parse($job->date);
-            $remainingDays = $job->days;
+            $remainingDays = $job->remaining_day;
+            $lastCompletionDate = $job->last_completion_date ? Carbon::parse($job->last_completion_date) : null;
+            if ($lastCompletionDate && $lastCompletionDate->isToday()) {
+                $statusMessage = "Job already marked completed for today. {$remainingDays} days left for the long term job.";
+                return response()->json([
+                    'status' => 'in_progress',
+                    'message' => $statusMessage
+                ], 200);
+            }
+
             if ($startDate->lte($currentDate)) {
-                $daysPassed = $currentDate->diffInDays($startDate);
+                $daysPassed = max(1, $currentDate->diffInDays($startDate) + 1);
                 $newRemainingDays = max(0, $remainingDays - $daysPassed);
-                $job->update(['days' => $newRemainingDays]);
+
+                $job->update([
+                    'remaining_day' => $newRemainingDays,
+                    'last_completion_date' => $currentDate
+                ]);
+
                 if ($newRemainingDays === 0) {
                     $jobUpdated = $paymentRequest->update(['status' => 'Completed']);
                     if ($jobUpdated) {
                         $this->updateDriverWallet($paymentRequest);
-                        $this->sendJobCompletionNotification($paymentRequest);
+                        $statusMessage = 'Long term job completed successfully';
+                        $this->sendJobCompletionNotification($paymentRequest, $statusMessage);
                         return response()->json([
                             'status' => 'success',
-                            'message' => 'Long term job completed successfully'
+                            'message' => $statusMessage
                         ], 200);
                     }
                 } else {
+                    $statusMessage = "{$daysPassed} day job completed. {$newRemainingDays} day left for the long term job.";
+                    $this->sendJobCompletionNotification($paymentRequest, $statusMessage);
                     return response()->json([
                         'status' => 'in_progress',
-                        'message' => 'Long term job is still in progress'
+                        'message' => $statusMessage
                     ], 200);
                 }
             }
@@ -295,23 +313,24 @@ class OwnerGetJobREquests extends Controller
         ], 403);
     }
 
-    // Helper method to update the driver's wallet
     private function updateDriverWallet($paymentRequest)
     {
         $driverWallet = DriverWallet::where('driver_id', $paymentRequest->driver_id)->firstOrFail();
         $driverWallet->increment('total_earning', $paymentRequest->job->payment_request);
     }
-
-    // Helper method to send job completion notification
-    private function sendJobCompletionNotification($paymentRequest)
+    private function sendJobCompletionNotification($paymentRequest, $statusMessage)
     {
         $title = $paymentRequest->owner->fname . ' ' . $paymentRequest->owner->lname;
-        $description = 'Congratulations! Your Job Is Completed';
+        $description = $statusMessage;
         $notificationData = [
             'job_id' => $paymentRequest->job_id,
         ];
-
-        FcmNotificationHelper::sendFcmNotification($paymentRequest->driver->fcm_token, $title, $description, $notificationData);
+        FcmNotificationHelper::sendFcmNotification(
+            $paymentRequest->driver->fcm_token,
+            $title,
+            $description,
+            $notificationData
+        );
         PushNotification::create([
             'title' => $title,
             'description' => $description,
@@ -320,4 +339,5 @@ class OwnerGetJobREquests extends Controller
             'job_id' => $paymentRequest->job_id,
         ]);
     }
+
 }
