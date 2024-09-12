@@ -2,23 +2,52 @@
 
 namespace App\Models;
 
-use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory;
-    use HasApiTokens, Notifiable, HasRoles;
+    use  Notifiable, HasRoles;
     // protected $guard = 'web';
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
 
+    /**
+     * Return a key-value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
     protected $fillable = [
-        'name', 'fname', 'maiden_name', 'lname', 'email', 'image', 'password', 'designation', 'is_active', 'address', 'role_id', 'phone', 'document', 'company_name', 'location',
-        'company_info','latitude','longitude'
+        'name',
+        'fname',
+        'maiden_name',
+        'lname',
+        'email',
+        'image',
+        'password',
+        'designation',
+        'is_active',
+        'address',
+        'role_id',
+        'phone',
+        'document',
+        'company_name',
+        'location',
+        'company_info',
+        'latitude',
+        'longitude'
     ];
 
     public function usercompany()
