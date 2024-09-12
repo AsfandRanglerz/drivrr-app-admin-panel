@@ -142,6 +142,7 @@ class AuthController extends Controller
                 ->where('email', $request->email)
                 ->where('otp', $request->otp)
                 ->first();
+
             if (!$user_otp) {
                 return response()->json([
                     'message' => 'OTP verification failed.',
@@ -177,6 +178,8 @@ class AuthController extends Controller
         }
     }
 
+
+
     public function resendOtp(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -210,33 +213,21 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         try {
-            $user = Auth::user();  // Retrieve authenticated user
+            $user = $request->user();
+            if ($user) {
+                $user->fcm_token = null;
+                $user->save();
+                $request->user()->currentAccessToken()->delete();
 
-            if (!$user) {
-                Log::info('No authenticated user found.');  // Debug log
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'No authenticated user found.',
-                ], 401);
-            }
-
-            // Set FCM token to null
-            $user->fcm_token = NULL;
-            $user->save();
-
-            // Retrieve the current access token and delete it
-            $token = $request->user()->currentAccessToken();
-            if ($token) {
-                $token->delete();
                 return response()->json([
                     'status' => 'success',
-                    'message' => 'Logged out successfully.',
+                    'message' => 'Logout Successfully.',
                 ]);
             } else {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'No current access token found.',
-                ], 404);
+                    'message' => 'No authenticated user found.',
+                ], 401);
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -246,6 +237,9 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
+
+
 
     public function getLocation(Request $request, $id)
     {
