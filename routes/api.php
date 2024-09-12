@@ -34,6 +34,12 @@ use App\Http\Controllers\Api\PushNotificationController as ApiPushNotificationCo
 |
 */
 
+Route::middleware('jwt.auth')->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('driver-vehicle-index/{id}', 'Api\DriverVehicleController@index');
+});
+
+
 Route::group(['namespace' => 'Api'], function () {
     Route::post('login', 'AuthController@login')->name('login');
     // Route::post('register/{id}', 'AuthController@register');
@@ -58,9 +64,7 @@ Route::post('edit-profile/{id}', 'Api\ProfileController@update');
 Route::get('users-imageget/{id}', 'Api\ProfileController@getImage');
 Route::post('users-imageupdate/{id}', 'Api\ProfileController@updateImage');
 
-Route::middleware('auth:api')->group(function () {
-    Route::post('logout', [AuthController::class, 'logout']);
-});
+
 
 
 //user-documents
@@ -68,7 +72,6 @@ Route::get('document-index/{id}', 'Api\DocumentController@index');
 Route::post('document-store/{id}', 'Api\DocumentController@store');
 //user-vehicles
 Route::get('vehicles', 'Api\DriverVehicleController@getVehicles');
-Route::get('driver-vehicle-index/{id}', 'Api\DriverVehicleController@index');
 Route::get('driver-vehicle-show/{id}', 'Api\DriverVehicleController@show');
 Route::post('driver-vehicle-add/{id}', 'Api\DriverVehicleController@store');
 Route::put('/driver-vehicle/{id}/update-status', 'Api\DriverVehicleController@updateStatus');

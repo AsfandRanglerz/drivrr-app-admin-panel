@@ -213,25 +213,46 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         try {
-            // Get the currently authenticated user
-            $user = auth()->user();
-
-            if ($user) {
-                // Set the FCM token to null if needed
-                $user->fcm_token = null;
-                $user->save();
-
-                // Invalidate the JWT token
-                auth()->logout();
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Logout Successfully.',
-                ]);
+            $token = $request->bearerToken();
+            if ($token) {
+                try {
+                    $user = JWTAuth::setToken($token)->authenticate();
+                    if ($user) {
+                        $user->update([
+                            'fcm_token' => NULL,
+                        ]);
+                        JWTAuth::setToken($token)->invalidate();
+                        return response()->json([
+                            'status' => 'success',
+                            'message' => 'Logout Successfully!',
+                        ], 200);
+                    } else {
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => 'Invalid Token.',
+                        ], 401);
+                    }
+                } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Token expired.',
+                    ], 401);
+                } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Invalid Token.',
+                    ], 401);
+                } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Token authentication failed.',
+                        'error' => $e->getMessage(),
+                    ], 500);
+                }
             } else {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'No authenticated user found.',
+                    'message' => 'No Token Found',
                 ], 401);
             }
         } catch (\Exception $e) {
