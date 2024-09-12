@@ -58,23 +58,10 @@ Route::get('users-imageget/{id}', 'Api\ProfileController@getImage');
 Route::post('users-imageupdate/{id}', 'Api\ProfileController@updateImage');
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    //edit-user-profile
-    //user-documents
-    // Route::get('document-index/{id}', 'Api\DocumentController@index');
-    // Route::get('document-index/{id}', 'Api\DocumentController@index');
-    // //user-vehicles
-    // Route::get('driver-vehicle-index/{id}', 'Api\DriverVehicleController@index');
-    // Route::get('driver-vehicle-create/{id}', 'Api\DriverVehicleController@create');
-    // Route::post('driver-vehicle-add/{id}', 'Api\DriverVehicleController@store');
-    // //owner-jobs
-    // Route::post('owners-jobs/{id}', 'Api\JobController@jobStore');
-
-    //get owners jobs
-    // Route::get('owners-jobs-show/{id}', 'Api\OwnerJobsController@index');
+    Route::post('logout', 'Api\AuthController@logout');
 });
-// ############## Twilio SMS #################
-Route::get('/smsOtp', 'Api\TwilioController@otp');
-// ############## Twilio SMS End #################
+
+
 //user-documents
 Route::get('document-index/{id}', 'Api\DocumentController@index');
 Route::post('document-store/{id}', 'Api\DocumentController@store');
