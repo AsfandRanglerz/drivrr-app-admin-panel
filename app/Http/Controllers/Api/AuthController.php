@@ -54,7 +54,7 @@ class AuthController extends Controller
 
             $user->save();
             $user->roles()->sync([$request->role_id]);
-            $token = $user->createToken('authToken')->plainTextToken;
+            $token = $user->createToken($request->email)->plainTextToken;
             auth()->login($user);
             $response = [
                 'status' => 'success',
@@ -160,8 +160,7 @@ class AuthController extends Controller
             $user->fcm_token = $request->fcm_token;
             $user->save();
             DB::table('user_login_with_otps')->where('id', $user_otp->id)->delete();
-            $token = $user->createToken('authToken')->plainTextToken;
-            auth()->login($user);
+            $token = $user->createToken($request->email)->plainTextToken;
             return response()->json([
                 'message' => 'OTP verified successfully.',
                 'status' => 'Success',
@@ -215,7 +214,7 @@ class AuthController extends Controller
         try {
             $user = $request->user();
             if ($user) {
-                $user->fcm_token = null;
+                $user->fcm_token = NULL;
                 $user->save();
                 $request->user()->currentAccessToken()->delete();
 
