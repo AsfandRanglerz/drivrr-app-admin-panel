@@ -12,10 +12,11 @@ use Illuminate\Http\Request;
 use App\Mail\ActiveUserStatus;
 use App\Mail\LoginUserWithOtp;
 use Illuminate\Support\Facades\DB;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -54,7 +55,7 @@ class AuthController extends Controller
 
             $user->save();
             $user->roles()->sync([$request->role_id]);
-            $token = $user->createToken($request->email)->plainTextToken;
+            $token = JWTAuth::fromUser($user);
             auth()->login($user);
             $response = [
                 'status' => 'success',
@@ -160,7 +161,7 @@ class AuthController extends Controller
             $user->fcm_token = $request->fcm_token;
             $user->save();
             DB::table('user_login_with_otps')->where('id', $user_otp->id)->delete();
-            $token = $user->createToken($request->email)->plainTextToken;
+            $token = JWTAuth::fromUser($user);
             return response()->json([
                 'message' => 'OTP verified successfully.',
                 'status' => 'Success',
@@ -212,11 +213,16 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         try {
-            $user = $request->user();
+            // Get the currently authenticated user
+            $user = auth()->user();
+
             if ($user) {
-                $user->fcm_token = NULL;
+                // Set the FCM token to null if needed
+                $user->fcm_token = null;
                 $user->save();
-                $request->user()->currentAccessToken()->delete();
+
+                // Invalidate the JWT token
+                auth()->logout();
 
                 return response()->json([
                     'status' => 'success',
@@ -236,6 +242,7 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
 
 
 
