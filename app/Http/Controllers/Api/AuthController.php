@@ -161,6 +161,7 @@ class AuthController extends Controller
         try {
             $loginType = $request->login_type;
             $user = User::firstOrNew(['email' => $request->email]);
+
             if (!$user->exists) {
                 $user->fname = $request->fname;
                 $user->lname = $request->lname;
@@ -172,20 +173,30 @@ class AuthController extends Controller
                 if (empty($user->fname)) $user->fname = $request->fname;
                 if (empty($user->lname)) $user->lname = $request->lname;
             }
-            $socialIdField = "{$loginType}_social_id";
-            $user->$socialIdField = $request->$socialIdField;
+
+            if (!empty($loginType)) {
+                $socialIdField = "{$loginType}_social_id";
+                if ($request->has($socialIdField)) {
+                    $user->$socialIdField = $request->$socialIdField;
+                }
+            }
+
             if ($request->has('image')) $user->image = $request->image;
             if ($request->has('fcm_token')) $user->fcm_token = $request->fcm_token;
+
             $user->save();
             $user->roles()->sync([$request->role_id]);
+
             auth()->login($user);
             $token = auth()->user()->createToken($request->email)->plainTextToken;
+
             $response = [
                 'status' => 'success',
                 'message' => 'User Logged In Successfully',
                 'token' => $token,
                 'data' => $user,
             ];
+
             if ($user->role_id == 3) {
                 // Create or update driver wallet
                 $wallet = DriverWallet::firstOrNew(['driver_id' => $user->id]);
@@ -201,6 +212,7 @@ class AuthController extends Controller
                     'message' => 'Invalid role_id',
                 ], 400);
             }
+
             return response()->json($response, 200);
         } catch (ValidationException $e) {
             return response()->json([
@@ -210,6 +222,7 @@ class AuthController extends Controller
             ], 422);
         }
     }
+
 
     ##### Registration code And Social Login Code End ########
     public function checkEmailExists(Request $request)
@@ -318,18 +331,7 @@ class AuthController extends Controller
 
     public function user_otp_login_verify(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'otp' => 'required',
-            'fcm_token' => 'required'
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validation failed',
-                'status' => 'Failed',
-                'errors' => $validator->errors(),
-            ], 422);
-        }
+
         $user_otp = DB::table('user_login_with_otps')
             ->where('email', $request->email)
             ->where('otp', $request->otp)
