@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\DriverShowJobsController;
 use App\Http\Controllers\Api\DriverJobRequestController;
 use App\Http\Controllers\admin\PushNotificationController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PushNotificationController as ApiPushNotificationController;
 
 /*
@@ -57,8 +58,8 @@ Route::post('edit-profile/{id}', 'Api\ProfileController@update');
 Route::get('users-imageget/{id}', 'Api\ProfileController@getImage');
 Route::post('users-imageupdate/{id}', 'Api\ProfileController@updateImage');
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('logout', 'Api\AuthController@logout');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
 });
 
 

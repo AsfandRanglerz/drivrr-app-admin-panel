@@ -12,10 +12,12 @@ use Illuminate\Http\Request;
 use App\Mail\ActiveUserStatus;
 use App\Mail\LoginUserWithOtp;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -53,6 +55,7 @@ class AuthController extends Controller
             $user->save();
             $user->roles()->sync([$request->role_id]);
             $token = $user->createToken('authToken')->plainTextToken;
+            auth()->login($user);
             $response = [
                 'status' => 'success',
                 'message' => 'User Logged In Successfully',
@@ -135,37 +138,29 @@ class AuthController extends Controller
     public function user_otp_login_verify(Request $request)
     {
         try {
-            // Attempt to find the OTP record for the provided email and OTP
             $user_otp = DB::table('user_login_with_otps')
                 ->where('email', $request->email)
                 ->where('otp', $request->otp)
                 ->first();
-
-            // If OTP is not found, return an error response
             if (!$user_otp) {
                 return response()->json([
                     'message' => 'OTP verification failed.',
                     'status' => 'Failed',
                 ], 400);
             }
-
-            // Retrieve user_id from OTP record and find the corresponding user
             $user_id = $user_otp->user_id;
             $user = User::find($user_id);
-
-            // If user is not found, return an error response
             if (!$user) {
                 return response()->json([
                     'message' => 'User not found.',
                     'status' => 'Failed',
                 ], 404);
             }
-
-            // Update user's FCM token
             $user->fcm_token = $request->fcm_token;
             $user->save();
             DB::table('user_login_with_otps')->where('id', $user_otp->id)->delete();
             $token = $user->createToken('authToken')->plainTextToken;
+            auth()->login($user);
             return response()->json([
                 'message' => 'OTP verified successfully.',
                 'status' => 'Success',
@@ -181,8 +176,6 @@ class AuthController extends Controller
             ], 500);
         }
     }
-
-
 
     public function resendOtp(Request $request)
     {
@@ -217,38 +210,42 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         try {
-            $user = $request->user();  // Retrieve authenticated user
+            $user = Auth::user();  // Retrieve authenticated user
 
-            if ($user) {
-                // Set FCM token to null
-                $user->fcm_token = null;
-                $user->save();
-
-                // Revoke current access token using Sanctum
-                $user->currentAccessToken()->delete();
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Logged out successfully.',
-                ]);
-            } else {
-                // If no authenticated user found
+            if (!$user) {
+                Log::info('No authenticated user found.');  // Debug log
                 return response()->json([
                     'status' => 'error',
                     'message' => 'No authenticated user found.',
                 ], 401);
             }
+
+            // Set FCM token to null
+            $user->fcm_token = NULL;
+            $user->save();
+
+            // Retrieve the current access token and delete it
+            $token = $request->user()->currentAccessToken();
+            if ($token) {
+                $token->delete();
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Logged out successfully.',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'No current access token found.',
+                ], 404);
+            }
         } catch (\Exception $e) {
-            // Catch and handle any errors
             return response()->json([
                 'status' => 'error',
                 'message' => 'Logout failed. Please try again.',
-                'error' => $e->getMessage(),  // Return error message in response
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
-
-
 
     public function getLocation(Request $request, $id)
     {
