@@ -2,32 +2,60 @@
 
 namespace App\Helpers;
 
-use Illuminate\Support\Facades\Http;
+use Google\Client;
+use Illuminate\Support\Facades\Log;
+use GuzzleHttp\Client as GuzzleClient;
 
 class FcmNotificationHelper
 {
-    public static function sendFcmNotification($fcmToken, $title, $description, $notificationData = [])
+    private static function getGoogleAccessToken()
     {
+        $client = new Client();
+        $client->setAuthConfig(storage_path('app/drivrr-b3f38-firebase-adminsdk-7e8al-90f96d5ec4.json'));
+        $client->addScope('https://www.googleapis.com/auth/cloud-platform');
 
-        $response = Http::withHeaders([
-            'Authorization' => 'key=AAAAerlut_I:APA91bHPRL6PQ0T1Mbb1EtU-SHFxb2XkMylJfNPSAWsjq4NF9ib3no_t3RZfniHVWMOXHAkI3nfYyLHqcNaqrKUyCkUuJEc6fhs9KKUOCNFbHE_V1bekRONfyIEY1arm0JavFKO6vv-_',
-            'Content-Type' => 'application/json',
-        ])->post('https://fcm.googleapis.com/fcm/send', [
-            'to' => $fcmToken,
-            'notification' => [
-                'title' => $title,
-                'body' => $description,
+        $accessToken = $client->fetchAccessTokenWithAssertion();
+        Log::info('Access Token: ' . $accessToken['access_token']);
+        return $accessToken['access_token'];
+    }
+
+    public static function sendFcmNotification($fcmToken, $title, $body, $notificationData = [])
+    {
+        Log::info('Device Token: ' . $fcmToken);
+
+        $accessToken = self::getGoogleAccessToken();
+        $message = [
+            'message' => [
+                'token' => $fcmToken,
+                'notification' => [
+                    'title' => $title,
+                    'body' => $body,
+                ],
+                'data' => $notificationData
             ],
-            'data' => $notificationData
-        ]);
-        if ($response->successful()) {
-            return response()->json([
-                'message' => 'Notifications Sent Successfully',
-                'fcm' => $notificationData
+        ];
 
+        $client = new GuzzleClient();
+        try {
+            $response = $client->post('https://fcm.googleapis.com/v1/projects/drivrr-b3f38/messages:send', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $accessToken,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $message,
+            ]);
+
+            Log::info('FCM Response: ' . $response->getBody()->getContents());
+            return response()->json([
+                'message' => 'Notification Sent Successfully',
+                'fcm' => $notificationData,  // Return the notification data in the response
             ], 200);
-        } else {
-            return response()->json(['error' => 'Notifications Send Unsuccessfully'], 400);
+        } catch (\Exception $e) {
+            Log::error('FCM Error: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'Notification Send Unsuccessfully',
+                'message' => $e->getMessage(),
+            ], 400);
         }
     }
 }
