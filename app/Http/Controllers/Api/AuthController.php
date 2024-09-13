@@ -106,18 +106,14 @@ class AuthController extends Controller
 
     public function user_otp_login_send(Request $request)
     {
-        // Validate input fields
-        $request->validate([
-            'email' => 'required|email',
-            'role_id' => 'required|integer',
-        ]);
+      
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
             return response()->json(['message' => 'The user is not registered.', 'status' => 'failed'], 401);
         }
         $roleId = $user->roles_id;
-        if ($roleId == $request->role_id && $user->email === $request->email) {
+        if ($roleId == $request->role_id && $user->email == $request->email) {
             DB::table('user_login_with_otps')->where('email', $request->email)->delete();
             $loginOtp = random_int(1000, 9999);
             $token = Str::random(30);
