@@ -1,25 +1,12 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\Controllers\JobController;
-use App\Controllers\ReviewController;
+
 use Illuminate\Support\Facades\Route;
-use App\Controllers\ProfileController;
-use App\Controllers\DocumentController;
-use App\Controllers\OwnerJobsController;
-use App\Controllers\BankAccountController;
-use App\Controllers\DriverWalletController;
-use App\Controllers\DriverVehicleController;
-use App\Controllers\HelpAndSupportController;
-use App\Http\Controllers\Api\StripeController;
-use App\Http\Controllers\Api\TwilioController;
-use App\Http\Controllers\Admin\WalletController;
+
 use App\Http\Controllers\Api\MyBookingContoller;
-use App\Http\Controllers\Api\OwnerGetJobREquests;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\DriverShowJobsController;
-use App\Http\Controllers\Api\DriverJobRequestController;
-use App\Http\Controllers\admin\PushNotificationController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PushNotificationController as ApiPushNotificationController;
 

@@ -106,14 +106,18 @@ class AuthController extends Controller
 
     public function user_otp_login_send(Request $request)
     {
-
+        // Validate input fields
+        $request->validate([
+            'email' => 'required|email',
+            'role_id' => 'required|integer',
+        ]);
         $user = User::where('email', $request->email)->first();
+
         if (!$user) {
             return response()->json(['message' => 'The user is not registered.', 'status' => 'failed'], 401);
         }
-        $roleId = $user->roles->pluck('id')->first();
-
-        if (in_array($roleId, [2, 3]) && $user->email === $request->email) {
+        $roleId = $user->roles_id;
+        if ($roleId == $request->role_id && $user->email === $request->email) {
             DB::table('user_login_with_otps')->where('email', $request->email)->delete();
             $loginOtp = random_int(1000, 9999);
             $token = Str::random(30);
@@ -124,7 +128,6 @@ class AuthController extends Controller
                 'user_id' => $user->id,
             ]);
             Mail::to($request->email)->send(new LoginUserWithOtp($loginOtp));
-
             return response()->json([
                 'message' => "Login OTP sent to your email successfully for roleId {$roleId}.",
                 'status' => 'success',
@@ -132,9 +135,10 @@ class AuthController extends Controller
                 'id' => $user->id,
             ], 200);
         } else {
-            return response()->json(['message' => 'You are not allowed to send OTP.', 'status' => 'failed'], 401);
+            return response()->json(['message' => 'You are not allowed to send OTP. Email or role_id mismatch.', 'status' => 'failed'], 401);
         }
     }
+    
 
     public function user_otp_login_verify(Request $request)
     {
@@ -144,30 +148,33 @@ class AuthController extends Controller
                 ->where('otp', $request->otp)
                 ->first();
 
-            if (!$user_otp) {
+            if ($user_otp) {
+                $user_id = $user_otp->user_id;
+                $user = User::find($user_id);
+                if (!$user) {
+                    return response()->json([
+                        'message' => 'User not found.',
+                        'status' => 'Failed',
+                    ], 404);
+                }
+                $user->fcm_token = $request->fcm_token;
+                $user->save();
+                DB::table('user_login_with_otps')->where('id', $user_otp->id)->delete();
+                $token = JWTAuth::fromUser($user);
+                return response()->json([
+                    'message' => 'OTP verified successfully.',
+                    'status' => 'Success',
+                    'token' => $token,
+                    'data' => $user,
+                ], 200);
+            
+            }else{
                 return response()->json([
                     'message' => 'OTP verification failed.',
                     'status' => 'Failed',
                 ], 400);
             }
-            $user_id = $user_otp->user_id;
-            $user = User::find($user_id);
-            if (!$user) {
-                return response()->json([
-                    'message' => 'User not found.',
-                    'status' => 'Failed',
-                ], 404);
-            }
-            $user->fcm_token = $request->fcm_token;
-            $user->save();
-            DB::table('user_login_with_otps')->where('id', $user_otp->id)->delete();
-            $token = JWTAuth::fromUser($user);
-            return response()->json([
-                'message' => 'OTP verified successfully.',
-                'status' => 'Success',
-                'token' => $token,
-                'data' => $user,
-            ], 200);
+       
         } catch (\Exception $e) {
             // Catch any exceptions and return a generic error response
             return response()->json([
