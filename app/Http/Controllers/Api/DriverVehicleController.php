@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\DriverVehicle;
-use Illuminate\Support\Facades\Validator;
 use App\Models\Vehicle;
+use Illuminate\Http\Request;
+use App\Models\DriverVehicle;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class DriverVehicleController extends Controller
 {
@@ -16,6 +17,7 @@ class DriverVehicleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+   
     public function index($id)
     {
         $vehicles = User::with('driverVehicle', 'roles')->find($id);
@@ -47,9 +49,7 @@ class DriverVehicleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
-    {
-    }
+    public function create($id) {}
 
     /**
      * Store a newly created resource in storage.
