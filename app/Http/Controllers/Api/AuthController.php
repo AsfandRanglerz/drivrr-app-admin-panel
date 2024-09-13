@@ -106,7 +106,7 @@ class AuthController extends Controller
 
     public function user_otp_login_send(Request $request)
     {
-      
+
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
@@ -134,7 +134,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'You are not allowed to send OTP. Email or role_id mismatch.', 'status' => 'failed'], 401);
         }
     }
-    
+
 
     public function user_otp_login_verify(Request $request)
     {
@@ -163,14 +163,12 @@ class AuthController extends Controller
                     'token' => $token,
                     'data' => $user,
                 ], 200);
-            
-            }else{
+            } else {
                 return response()->json([
                     'message' => 'OTP verification failed.',
                     'status' => 'Failed',
                 ], 400);
             }
-       
         } catch (\Exception $e) {
             // Catch any exceptions and return a generic error response
             return response()->json([
