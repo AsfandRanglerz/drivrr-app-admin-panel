@@ -136,7 +136,6 @@
                         $('.loading-spinner').hide();
                         $('#submit').prop('disabled', false);
                         $('#notificationModal').modal('hide');
-                        location.reload();
                     },
                     error: function(error) {
                         $('.loading-spinner').hide();
