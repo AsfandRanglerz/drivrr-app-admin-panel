@@ -109,7 +109,7 @@ class AuthController extends Controller
         if (!$user) {
             return response()->json(['message' => 'The user is not registered.', 'status' => 'failed'], 401);
         }
-        $roleId = $user->roles_id;
+        $roleId = $user->role_id;
         if ($roleId == $request->role_id && $user->email == $request->email) {
             DB::table('user_login_with_otps')->where('email', $request->email)->delete();
             $loginOtp = random_int(1000, 9999);
@@ -176,8 +176,6 @@ class AuthController extends Controller
         }
     }
 
-
-
     public function resendOtp(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -207,7 +205,6 @@ class AuthController extends Controller
             'status' => 'success',
         ], 200);
     }
-
     public function logout(Request $request)
     {
         try {
@@ -261,11 +258,6 @@ class AuthController extends Controller
             ], 500);
         }
     }
-
-
-
-
-
     public function getLocation(Request $request, $id)
     {
 
@@ -357,6 +349,14 @@ class AuthController extends Controller
             'status' => 'error',
             'message' => 'Invalid login type',
         ], 400);
+    }
+
+    public function refresh()
+    {
+        $user = JWTAuth::user();
+        $token = JWTAuth::refresh();
+
+        return response()->json(['token' => $token]);
     }
 }
     ############ OTP CODE End ###########################
