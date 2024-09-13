@@ -42,14 +42,12 @@ class AuthController extends Controller
                 if (empty($user->fname)) $user->fname = $request->fname;
                 if (empty($user->lname)) $user->lname = $request->lname;
             }
-
             if (!empty($loginType)) {
                 $socialIdField = "{$loginType}_social_id";
                 if ($request->has($socialIdField)) {
                     $user->$socialIdField = $request->$socialIdField;
                 }
             }
-
             if ($request->has('image')) $user->image = $request->image;
             if ($request->has('fcm_token')) $user->fcm_token = $request->fcm_token;
 
@@ -63,7 +61,6 @@ class AuthController extends Controller
                 'token' => $token,
                 'data' => $user,
             ];
-
             if (empty($loginType)) {
                 if ($user->role_id == 3) {
                     $wallet = DriverWallet::firstOrNew(['driver_id' => $user->id]);
