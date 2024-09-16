@@ -28,24 +28,29 @@ class PushNotificationController extends Controller
     }
     public function notificationStore(Request $request)
     {
+        // Validate incoming request data
         $request->validate([
             'title' => 'required|string',
             'description' => 'required|string',
         ]);
-
         $userRoles = $request->input('user_name');
         $users = User::whereIn('role_id', $userRoles)->get();
         foreach ($users as $user) {
-            $fcmToken = $user->user->fcm_token->whereNotNull();
-            FcmNotificationHelper::sendFcmNotification($fcmToken, $request->input('title'), $request->input('description'));
-            PushNotification::create([
-                'title' => $request->input('title'),
-                'description' => $request->input('description'),
-                'user_name' => $user->role->id,
-                'user_id' => $user->user->id,
-                'admin' => 'Admin'
-            ]);
+            $fcmToken = $user->fcm_token;
+
+            if (!is_null($fcmToken)) {
+                FcmNotificationHelper::sendFcmNotification($fcmToken, $request->input('title'), $request->input('description'));
+                PushNotification::create([
+                    'title' => $request->input('title'),
+                    'description' => $request->input('description'),
+                    'user_name' => $user->fname . ' ' . $user->lname,
+                    'user_id' => $user->id,
+                    'admin' => 'Admin', // Static value for admin
+                ]);
+            }
         }
+
+        // Return response after successful operation
         return back()->with(['status' => true, 'message' => 'Notification Sent Successfully']);
     }
 }
