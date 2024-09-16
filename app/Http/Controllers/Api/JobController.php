@@ -44,8 +44,14 @@ class JobController extends Controller
     {
         try {
             $owner = User::find($id);
-            $stripe = new StripeClient('sk_test_51OZ9CNH4pKZw8NygRAES6G6JbKVPxg1q96ViQV5PCKWPizBNIWSbUWW56TjAVFrAycu8nMCJ7TtSZe0B2Q9JdiOm00NZ6ir3uP');
-            Stripe::setApiKey('sk_test_51OZ9CNH4pKZw8NygRAES6G6JbKVPxg1q96ViQV5PCKWPizBNIWSbUWW56TjAVFrAycu8nMCJ7TtSZe0B2Q9JdiOm00NZ6ir3uP');
+            if (!$owner) {
+                return response()->json([
+                    'message' => 'User not found.',
+                    'status' => 'failed',
+                ], 404);
+            }
+            $stripe = new \Stripe\StripeClient('sk_test_51OZ9CNH4pKZw8NygRAES6G6JbKVPxg1q96ViQV5PCKWPizBNIWSbUWW56TjAVFrAycu8nMCJ7TtSZe0B2Q9JdiOm00NZ6ir3uP');
+            \Stripe\Stripe::setApiKey('sk_test_51OZ9CNH4pKZw8NygRAES6G6JbKVPxg1q96ViQV5PCKWPizBNIWSbUWW56TjAVFrAycu8nMCJ7TtSZe0B2Q9JdiOm00NZ6ir3uP');
             $amountToUse = $this->getAmountToUse($request);
             $customer = $this->createCustomer($stripe, $owner->email);
             $ephemeralKey = $this->createEphemeralKey($stripe, $customer->id);
