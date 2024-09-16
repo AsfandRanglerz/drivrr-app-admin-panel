@@ -37,7 +37,6 @@ class PushNotificationController extends Controller
         $users = User::whereIn('role_id', $userRoles)->get();
         foreach ($users as $user) {
             $fcmToken = $user->fcm_token;
-
             if (!is_null($fcmToken)) {
                 FcmNotificationHelper::sendFcmNotification($fcmToken, $request->input('title'), $request->input('description'));
                 PushNotification::create([
