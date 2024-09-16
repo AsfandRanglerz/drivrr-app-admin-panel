@@ -50,8 +50,8 @@ class JobController extends Controller
                     'status' => 'failed',
                 ], 404);
             }
-            $stripe = new \Stripe\StripeClient('sk_test_51OZ9CNH4pKZw8NygRAES6G6JbKVPxg1q96ViQV5PCKWPizBNIWSbUWW56TjAVFrAycu8nMCJ7TtSZe0B2Q9JdiOm00NZ6ir3uP');
-            \Stripe\Stripe::setApiKey('sk_test_51OZ9CNH4pKZw8NygRAES6G6JbKVPxg1q96ViQV5PCKWPizBNIWSbUWW56TjAVFrAycu8nMCJ7TtSZe0B2Q9JdiOm00NZ6ir3uP');
+            $stripe = new StripeClient('sk_test_51OZ9CNH4pKZw8NygRAES6G6JbKVPxg1q96ViQV5PCKWPizBNIWSbUWW56TjAVFrAycu8nMCJ7TtSZe0B2Q9JdiOm00NZ6ir3uP');
+            Stripe::setApiKey('sk_test_51OZ9CNH4pKZw8NygRAES6G6JbKVPxg1q96ViQV5PCKWPizBNIWSbUWW56TjAVFrAycu8nMCJ7TtSZe0B2Q9JdiOm00NZ6ir3uP');
             $amountToUse = $this->getAmountToUse($request);
             $customer = $this->createCustomer($stripe, $owner->email);
             $ephemeralKey = $this->createEphemeralKey($stripe, $customer->id);
@@ -111,8 +111,8 @@ class JobController extends Controller
     {
         try {
             // Format the date
-            $formattedDate = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y-m-d');
-
+            $formattedDate = Carbon::createFromFormat('d-m-Y', $request->date)->format('d-m-Y');
+            // return $formattedDate;
             // Create the Job
             $job = Job::create([
                 'user_id' => $id,
@@ -165,6 +165,9 @@ class JobController extends Controller
                 'message' => 'Job created successfully.',
             ], 200);
         } catch (\Exception $e) {
+            // Log detailed exception message
+            Log::error('Error creating job: ' . $e->getMessage());
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Error creating job.',
@@ -172,7 +175,6 @@ class JobController extends Controller
             ], 500);
         }
     }
-
     public function jobUpdate(Request $request, $userId, $jobId)
     {
         try {

@@ -42,8 +42,8 @@ Route::middleware('jwt.verify')->group(function () {
 
     //owner-jobs
     Route::get('owners-jobs-data/{userId}', 'Api\JobController@getJobsByUserId');
-    Route::post('jobPayment/{id}', 'Api\JobController@jobPayment');
     Route::post('job-store/{id}', 'Api\JobController@jobStore');
+
 
     Route::post('owners-jobs-update/{userId}/{jobId}', 'Api\JobController@jobUpdate');
 
@@ -96,6 +96,7 @@ Route::middleware('jwt.verify')->group(function () {
     Route::get('/readNotifications/{userId}', [ApiPushNotificationController::class, 'userRecevied']);
 });
 
+Route::post('jobPayment/{id}', 'Api\JobController@jobPayment');
 Route::group(['namespace' => 'Api'], function () {
     Route::post('login', 'AuthController@login')->name('login');
     // Route::post('register/{id}', 'AuthController@register');
