@@ -142,18 +142,16 @@ class JobController extends Controller
 
             foreach ($drivers as $driverVehicle) {
                 $fcmToken = $driverVehicle->user->fcm_token;
-
-                // Send FCM Notification
-                FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description, $notificationData);
-
-                // Save Notification to Database
-                PushNotification::create([
-                    'title' => $title,
-                    'description' => $description,
-                    'user_name' => $title,
-                    'user_id' => $driverVehicle->user->id,
-                    'job_id' => $job->id,
-                ]);
+                if (!is_null($fcmToken)) {
+                    FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description, $notificationData);
+                    PushNotification::create([
+                        'title' => $title,
+                        'description' => $description,
+                        'user_name' => $title,
+                        'user_id' => $driverVehicle->user->id,
+                        'job_id' => $job->id,
+                    ]);
+                }
             }
 
             return response()->json([

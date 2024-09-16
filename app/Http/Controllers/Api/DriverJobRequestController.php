@@ -44,7 +44,7 @@ class DriverJobRequestController extends Controller
                 $job->update([
                     'active_job' => '1',
                 ]);
-            
+
                 $driver_job_request->load('owner', 'driver', 'job');
                 // ########## Send Notification Code ######
                 $title = $driver->fname . ' ' . $driver->lname;
@@ -52,14 +52,16 @@ class DriverJobRequestController extends Controller
                 $notificationData = [
                     'job_id' => $job->id,
                 ];
-                FcmNotificationHelper::sendFcmNotification($owner->fcm_token, $title, $description, $notificationData);
-                PushNotification::create([
-                    'title' => $title,
-                    'description' => $description,
-                    'user_name' => $driver->id,
-                    'user_id' => $owner_id,
-                    'job_id' => $job_id,
-                ]);
+                if (!is_null($owner->fcm_token)) {
+                    FcmNotificationHelper::sendFcmNotification($owner->fcm_token, $title, $description, $notificationData);
+                    PushNotification::create([
+                        'title' => $title,
+                        'description' => $description,
+                        'user_name' => $driver->id,
+                        'user_id' => $owner_id,
+                        'job_id' => $job_id,
+                    ]);
+                }
                 return response()->json([
                     'message' => 'Your request is sent successfully.',
                     'status' => 'success',
@@ -239,14 +241,16 @@ class DriverJobRequestController extends Controller
                     'job_idd' =>  $cancelRequest->job->id,
                 ];
                 $fcmToken = $cancelRequest->owner->fcm_token;
-                FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description, $notificationData);
-                PushNotification::create([
-                    'title' =>  $title,
-                    'description' => $description,
-                    'user_name' =>  $title,
-                    'user_id' => $cancelRequest->owner->id,
-                    'job_id' =>  $cancelRequest->job->id,
-                ]);
+                if (!is_null($fcmToken)) {
+                    FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description, $notificationData);
+                    PushNotification::create([
+                        'title' =>  $title,
+                        'description' => $description,
+                        'user_name' =>  $title,
+                        'user_id' => $cancelRequest->owner->id,
+                        'job_id' =>  $cancelRequest->job->id,
+                    ]);
+                }
                 return response()->json([
                     'message' => 'Job request successfully deleted',
                     'status' => 'success'

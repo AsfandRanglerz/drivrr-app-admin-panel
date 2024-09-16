@@ -76,6 +76,13 @@ class AuthController extends Controller
                         'message' => 'Invalid role_id',
                     ], 400);
                 }
+            } else {
+                if ($user->role_id == 3) {
+                    $wallet = DriverWallet::firstOrNew(['driver_id' => $user->id]);
+                    $wallet->total_earning = $wallet->total_earning ?? 0;
+                    $wallet->save();
+                    $response['driver_wallet'] = $wallet;
+                }
             }
 
             return response()->json($response, 200);

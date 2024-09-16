@@ -139,14 +139,16 @@ class OwnerGetJobREquests extends Controller
                 $notificationData = [
                     'job_idd' =>  $job->id,
                 ];
-                FcmNotificationHelper::sendFcmNotification($driver->fcm_token, $title, $description, $notificationData);
-                PushNotification::create([
-                    'title' => $title,
-                    'description' => $description,
-                    'user_name' =>  $owner->id,
-                    'user_id' => $driver->id,
-                    'job_id' => $job->id,
-                ]);
+                if (!is_null($driver->fcm_token)) {
+                    FcmNotificationHelper::sendFcmNotification($driver->fcm_token, $title, $description, $notificationData);
+                    PushNotification::create([
+                        'title' => $title,
+                        'description' => $description,
+                        'user_name' =>  $owner->id,
+                        'user_id' => $driver->id,
+                        'job_id' => $job->id,
+                    ]);
+                }
             }
 
             return response()->json([
@@ -187,14 +189,16 @@ class OwnerGetJobREquests extends Controller
                 $notificationData = [
                     'job_idd' => $job_request->job_id,
                 ];
-                FcmNotificationHelper::sendFcmNotification($driver->fcm_token, $title, $description, $notificationData);
-                PushNotification::create([
-                    'title' => $title,
-                    'description' => $description,
-                    'user_name' =>  $owner->id,
-                    'user_id' => $driver->id,
-                    'job_id' => $job_request->job_id,
-                ]);
+                if (!is_null($driver->fcm_token)) {
+                    FcmNotificationHelper::sendFcmNotification($driver->fcm_token, $title, $description, $notificationData);
+                    PushNotification::create([
+                        'title' => $title,
+                        'description' => $description,
+                        'user_name' =>  $owner->id,
+                        'user_id' => $driver->id,
+                        'job_id' => $job_request->job_id,
+                    ]);
+                }
             }
             return response()->json([
                 'message' => 'This request has been canceled',
@@ -325,19 +329,20 @@ class OwnerGetJobREquests extends Controller
         $notificationData = [
             'job_id' => $paymentRequest->job_id,
         ];
-        FcmNotificationHelper::sendFcmNotification(
-            $paymentRequest->driver->fcm_token,
-            $title,
-            $description,
-            $notificationData
-        );
-        PushNotification::create([
-            'title' => $title,
-            'description' => $description,
-            'user_name' => $paymentRequest->owner_id,
-            'user_id' => $paymentRequest->driver_id,
-            'job_id' => $paymentRequest->job_id,
-        ]);
+        if (!is_null($paymentRequest->driver->fcm_token)) {
+            FcmNotificationHelper::sendFcmNotification(
+                $paymentRequest->driver->fcm_token,
+                $title,
+                $description,
+                $notificationData
+            );
+            PushNotification::create([
+                'title' => $title,
+                'description' => $description,
+                'user_name' => $paymentRequest->owner_id,
+                'user_id' => $paymentRequest->driver_id,
+                'job_id' => $paymentRequest->job_id,
+            ]);
+        }
     }
-
 }
