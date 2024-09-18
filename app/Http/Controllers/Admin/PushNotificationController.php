@@ -35,10 +35,13 @@ class PushNotificationController extends Controller
         ]);
         $userRoles = $request->input('user_name');
         $users = User::whereIn('role_id', $userRoles)->get();
+        $notificationData = [
+            'job_id' => $request->input('title'),
+        ];
         foreach ($users as $user) {
             $fcmToken = $user->fcm_token;
             if (!is_null($fcmToken)) {
-                FcmNotificationHelper::sendFcmNotification($fcmToken, $request->input('title'), $request->input('description'));
+                FcmNotificationHelper::sendFcmNotification($fcmToken, $request->input('title'), $request->input('description'), $notificationData);
                 PushNotification::create([
                     'title' => $request->input('title'),
                     'description' => $request->input('description'),
