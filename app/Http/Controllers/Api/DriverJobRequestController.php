@@ -150,8 +150,8 @@ class DriverJobRequestController extends Controller
     public function getJobRequestsByJob($driver_id)
     {
         try {
-            $jobRequests = PaymentRequest::where('driver_id', $driver_id)
-                ->with('job.vehicle', 'owner', 'driver')
+            $jobRequests = PaymentRequest::where('driver_id', $driver_id)->select('id', 'owner_id', 'driver_id', 'job_id', 'payment_amount', 'location', 'status')
+                ->with('job.vehicle', 'owner:id,fname,lname,phone,image','driver:id,fname,lname,image,email')
                 ->get();
 
             $buttonEnabledJobRequests = $jobRequests->filter(function ($jobRequest) {

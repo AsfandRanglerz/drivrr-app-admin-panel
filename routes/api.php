@@ -72,7 +72,7 @@ Route::middleware('jwt.verify')->group(function () {
     //driver request for job
     Route::post('add-job-request-without-counter/{owner_id}/{driver_id}/{job_id}', 'Api\DriverJobRequestController@add_job_request_without_counter');
     Route::post('add-job-request-with-counter/{owner_id}/{driver_id}/{job_id}', 'Api\DriverJobRequestController@add_job_request_counter');
-    Route::get('/job-requests/{job_id}', 'Api\DriverJobRequestController@getJobRequestsByJob');
+
     Route::get('/job-requestsbyOwner/{job_id}', 'Api\DriverJobRequestController@getJobRequestsByOwner');
     Route::delete('/cancel-job/{id}', 'Api\DriverJobRequestController@cancelJob');
     Route::put('/updateRequestStatus/{id}', 'Api\DriverJobRequestController@updateStatus');
@@ -113,3 +113,4 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('verify-otp', 'AuthController@verify_code');
     Route::post('change-password', 'AuthController@change_password');
 });
+Route::get('/job-requests/{job_id}', 'Api\DriverJobRequestController@getJobRequestsByJob');
