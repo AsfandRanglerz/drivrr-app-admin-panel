@@ -170,10 +170,10 @@
                         "data": "image",
                         "render": function(data, type, row) {
                             if (data) {
-                                return '<img src="https://ranglerzwp.xyz/drivrrapp/' + data +
+                                return '<img src="https://admin.drivrr.co.uk/' + data +
                                     '" alt="Image" style="width: 50px; height: 50px;">';
                             } else {
-                                return '<img src="https://ranglerzwp.xyz/drivrrapp/public/admin/assets/images/users/admin.png" alt="Image" style="width: 50px; height: 50px;">';
+                                return '<img src="https://admin.drivrr.co.uk/public/admin/assets/images/users/admin.png" alt="Image" style="width: 50px; height: 50px;">';
                             }
                         }
                     },
@@ -276,7 +276,7 @@
                 success: function(response) {
                     $('#editDocument .is_active').val(response.is_active);
                     var imageUrl = response.image;
-                    var baseUrl = 'https://ranglerzwp.xyz/drivrrapp/';
+                    var baseUrl = 'https://admin.drivrr.co.uk/';
                     var responseImage = baseUrl + response.image;
                     if (imageUrl) {
                         $('#imagePreview').attr('src', responseImage).show();

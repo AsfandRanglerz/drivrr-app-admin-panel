@@ -138,8 +138,8 @@
                             return `
                     <div id="animated-thumbnails" class="clearfix">
                         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <a href="https://ranglerzwp.xyz/drivrrapp/${data}" data-sub-html="Lisence Image">
-                                <img src="https://ranglerzwp.xyz/drivrrapp/${data}" class="img-responsive thumbnail" alt="Lisence Image" style="width: 50px; height: 50px;">
+                            <a href="https://admin.drivrr.co.uk/${data}" data-sub-html="Lisence Image">
+                                <img src="https://admin.drivrr.co.uk/${data}" class="img-responsive thumbnail" alt="Lisence Image" style="width: 50px; height: 50px;">
                             </a>
                         </div>
                     </div>

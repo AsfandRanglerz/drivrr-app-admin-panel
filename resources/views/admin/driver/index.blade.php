@@ -266,11 +266,11 @@
                                     return '<img src="' + data +
                                         '" alt="Image" style="width: 50px; height: 50px;">';
                                 } else {
-                                    return '<img src="https://ranglerzwp.xyz/drivrrapp/' + data +
+                                    return '<img src="https://admin.drivrr.co.uk/' + data +
                                         '" alt="Image" style="width: 50px; height: 50px;">';
                                 }
                             } else {
-                                return '<img src="https://ranglerzwp.xyz/drivrrapp/public/admin/assets/images/approve/owner.jpg" alt="Image" style="width: 50px; height: 50px;">';
+                                return '<img src="https://admin.drivrr.co.uk/public/admin/assets/images/approve/owner.jpg" alt="Image" style="width: 50px; height: 50px;">';
                             }
                         }
                     },
