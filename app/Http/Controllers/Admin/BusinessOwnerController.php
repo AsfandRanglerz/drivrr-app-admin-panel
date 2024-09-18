@@ -70,13 +70,11 @@ class BusinessOwnerController extends Controller
                 $data['ownername'] =  $busniessOwner->fname . ' ' .  $busniessOwner->lname;
                 $data['owneremail'] =  $busniessOwner->email;
                 Mail::to($busniessOwner->email)->send(new ownerRegistration($data));
-                return response()->json(['alert' => 'success', 'message' => 'Busniess Owner Created Successfully!']);
-            } else {
-                return response()->json(['alert' => 'error', 'message' => 'Busniess Owner Not Created!']);
             }
-            return response()->json(['alert' => 'success', 'message' => 'Busniess Owner Created Successfully!']);
+            return response()->json(['alert' => 'success', 'message' => 'Business Owner Created Successfully!'], 201);
         } catch (\Exception $e) {
-            return response()->json(['alert' => 'error', 'message' => 'An error occurred while Creating Busniess Owner!' . $e->getMessage()], 500);
+            // Return error response with exception details
+            return response()->json(['alert' => 'error', 'message' => 'An error occurred while creating the Business Owner: ' . $e->getMessage()], 500);
         }
     }
 

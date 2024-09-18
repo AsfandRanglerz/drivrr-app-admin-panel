@@ -388,9 +388,14 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                    toastr.success('BusniessOwner Created Successfully!')
-                    $('#createBusniessOwnerModal').modal('hide');
-                    reloadDataTable();
+                    if (response.alert === 'error') {
+                        toastr.error(response.message);
+                        $('#createBusniessOwnerModal').modal('hide');
+                    } else {
+                        toastr.success(response.message);
+                        $('#createBusniessOwnerModal').modal('hide');
+                        reloadDataTable(); // Reload the DataTable or refresh the page content
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);
