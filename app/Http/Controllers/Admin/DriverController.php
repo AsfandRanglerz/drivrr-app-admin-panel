@@ -75,7 +75,6 @@ class DriverController  extends Controller
                 $wallet->save();
                 $data['drivername'] =  $driver->fname . ' ' .  $driver->lname;
                 $data['driveremail'] =  $driver->email;
-                $data['password'] = $request->password;
                 Mail::to($driver->email)->send(new driverRegistration($data));
                 return response()->json(['alert' => 'success', 'message' => 'Driver Created Successfully!']);
             } else {

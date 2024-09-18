@@ -50,7 +50,6 @@ class BusinessOwnerController extends Controller
                 'fname' => 'required|string|max:255',
                 'lname' => 'required|string|max:255',
                 'email' => 'required|email|unique:users|max:255',
-                'password' => 'required|string|min:8|max:255',
                 'image' => 'nullable|image|mimes:jpeg,jpg,png|max:1048'
             ]);
 
@@ -70,7 +69,6 @@ class BusinessOwnerController extends Controller
                 $busniessOwner->roles()->sync(2);
                 $data['ownername'] =  $busniessOwner->fname . ' ' .  $busniessOwner->lname;
                 $data['owneremail'] =  $busniessOwner->email;
-                $data['password'] = $request->password;
                 Mail::to($busniessOwner->email)->send(new ownerRegistration($data));
                 return response()->json(['alert' => 'success', 'message' => 'Busniess Owner Created Successfully!']);
             } else {
@@ -78,7 +76,7 @@ class BusinessOwnerController extends Controller
             }
             return response()->json(['alert' => 'success', 'message' => 'Busniess Owner Created Successfully!']);
         } catch (\Exception $e) {
-            return response()->json(['alert' => 'error', 'message' => 'An error occurred while Creating Busniess Owner!'], 500);
+            return response()->json(['alert' => 'error', 'message' => 'An error occurred while Creating Busniess Owner!' . $e->getMessage()], 500);
         }
     }
 
@@ -114,7 +112,7 @@ class BusinessOwnerController extends Controller
             $busniessOwner->save();
             return response()->json(['alert' => 'success', 'message' => 'Busniess Owner Updated Successfully!']);
         } catch (\Exception $e) {
-            return response()->json(['alert' => 'error', 'message' => 'An error occurred while updating User'], 500);
+            return response()->json(['alert' => 'error', 'message' => 'An error occurred while updating User' . $e->getMessage()], 500);
         }
     }
     public function deleteBusniessOwner($id)
