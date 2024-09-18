@@ -103,7 +103,11 @@
                         }
                     },
                     {
-                        "data": "job.job_type"
+                        "data": "job.job_type",
+                        "render": function(data, type) {
+                            return data ? data : 'No Data Found!';
+                        }
+
                     },
                     {
                         "data": "job.price_per_hour",
@@ -130,10 +134,16 @@
                         }
                     },
                     {
-                        "data": "job.days"
+                        "data": "job.days",
+                        "render": function(data, type) {
+                            return data ? data : 'No Data Found!';
+                        }
                     },
                     {
-                        "data": "job.remaining_day"
+                        "data": "job.remaining_day",
+                        "render": function(data, type) {
+                            return data ? data : 'No Data Found!';
+                        }
                     },
                     {
                         "data": "job.last_completion_date",
