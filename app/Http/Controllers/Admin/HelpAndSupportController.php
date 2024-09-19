@@ -6,8 +6,10 @@ use App\Models\User;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Mail\SendResponseToUser;
+use App\Models\PushNotification;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use App\Helpers\FcmNotificationHelper;
 
 class HelpAndSupportController extends Controller
 {
@@ -45,14 +47,35 @@ class HelpAndSupportController extends Controller
             'answer' => 'required|string',
         ]);
 
-        $query = Question::where('id', $id)->where('answer', NULL)->first();
-        if ($query) {
-            $query->update([
-                'answer' => $request->answer,
-            ]);
-            return response()->json(['status' => true, 'message' => 'Feedback sent successfully.']);
-        } else {
-            return response()->json(['status' => false, 'message' => 'No matching question found.']);
+        try {
+            $query = Question::where('id', $id)->with('user')->first();
+            if ($query) {
+                $query->update([
+                    'answer' => $request->answer,
+                ]);
+                $fcmToken = $query->user->fcm_token;
+                $notificationData = [
+                    'job_id' => 'Help & Support',
+                ];
+
+                if (!is_null($fcmToken)) {
+                    FcmNotificationHelper::sendFcmNotification($fcmToken, 'Help & Support', 'The Admin has responded to your query.', $notificationData);
+                    PushNotification::create([
+                        'title' => 'Help & Support',
+                        'description' => 'The Admin has responded to your query.',
+                        'user_name' => $query->user->fname . ' ' . $query->user->lname,
+                        'user_id' => $query->user->id,
+                        'admin' => 'Admin',
+                    ]);
+                }
+
+                return response()->json(['status' => true, 'message' => 'Feedback sent successfully.']);
+            } else {
+                return response()->json(['status' => false, 'error' => 'No matching question found.'], 500);
+            }
+        } catch (\Exception $e) {
+
+            return response()->json(['status' => false, 'error' => 'An error occurred while sending the feedback.' . $e->getMessage()], 500);
         }
     }
 }

@@ -148,11 +148,13 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
+                        toastr.success(response.message);
                         $('#answerModal').modal('hide');
                         dataTable.ajax.reload();
-                        toastr.success(response.message);
+                        $('#answer').val('');
                     },
                     error: function(xhr) {
+                        console.log(xhr);
                         toastr.error('An error occurred while sending feedback.');
                     }
                 });
