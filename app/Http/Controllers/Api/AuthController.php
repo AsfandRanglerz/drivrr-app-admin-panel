@@ -163,7 +163,7 @@ class AuthController extends Controller
                 $token = JWTAuth::fromUser($user);
                 return response()->json([
                     'message' => 'OTP verified successfully.',
-                    'status' => 'Success',
+                    'status' => 'success',
                     'token' => $token,
                     'data' => $user,
                 ], 200);

@@ -19,7 +19,7 @@
                 (auth()->guard('web')->check() &&
                     (auth()->guard('web')->user()->can('Business Owner') ||
                         auth()->guard('web')->user()->can('Driver') ||
-                        auth()->guard('web')->user()->can('SubAdmin'))) ||
+                        auth()->guard('web')->user()->can('Sub Admin'))) ||
                     auth()->guard('admin')->check())
                 <li class="dropdown">
                     <a href="#" class="menu-toggle nav-link has-dropdown"><i class="fa fa-users"></i>
@@ -56,7 +56,7 @@
                         @endif
 
                         {{-- Sub Admin --}}
-                        @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('SubAdmin'))
+                        @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Sub Admin'))
                             <li class="dropdown {{ request()->is('admin/subadmin*') ? 'active' : '' }}">
                                 <a href="{{ route('subadmin.index') }}"
                                     class="nav-link {{ request()->is('admin/subadmin*') ? 'text-white' : '' }}"><i
@@ -75,7 +75,7 @@
                 </li>
             @endif
             {{-- Withdrawal Requests --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('WithdrawRequest'))
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Withdrawal Request'))
                 <li class="dropdown {{ request()->is('admin/paymentRequest*') ? 'active' : '' }}">
                     <a href="{{ route('paymentRequest.index') }}" class="nav-link">
                         <i class="fab fa-twitch"></i>
@@ -97,16 +97,28 @@
                 </li>
             @endif
             {{-- Lisence Approvel Request --}}
-            <li class="dropdown {{ request()->is('admin/lisenceApprovel*') ? 'active' : '' }}">
-                <a href="{{ route('lisenceApprovel.index') }}" class="nav-link"><i
-                        class="fas fa-receipt"></i><span>License Approvals</span>
-                    <div id="lisenceApprovel"
-                        class="badge {{ request()->is('admin/lisenceApprovel*') ? 'bg-white text-dark' : 'bg-dark text-white' }} rounded-circle ">
-                    </div>
-                </a>
-            </li>
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('License Approval'))
+                <li class="dropdown {{ request()->is('admin/lisenceApprovel*') ? 'active' : '' }}">
+                    <a href="{{ route('lisenceApprovel.index') }}" class="nav-link"><i
+                            class="fas fa-receipt"></i><span>License Approvals</span>
+                        <div id="lisenceApprovel"
+                            class="badge {{ request()->is('admin/lisenceApprovel*') ? 'bg-white text-dark' : 'bg-dark text-white' }} rounded-circle ">
+                        </div>
+                    </a>
+                </li>
+            @elseif(auth()->guard('admin')->check())
+                <li class="dropdown {{ request()->is('admin/lisenceApprovel*') ? 'active' : '' }}">
+                    <a href="{{ route('lisenceApprovel.index') }}" class="nav-link"><i
+                            class="fas fa-receipt"></i><span>License Approvals</span>
+                        <div id="lisenceApprovel"
+                            class="badge {{ request()->is('admin/lisenceApprovel*') ? 'bg-white text-dark' : 'bg-dark text-white' }} rounded-circle ">
+                        </div>
+                    </a>
+                </li>
+            @endif
+
             {{-- Driver Wallet --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('DriverWallets'))
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Driver Wallet'))
                 <li class="dropdown {{ request()->is('admin/paymentHistory*') ? 'active' : '' }}">
                     <a href="{{ route('paymentHistory.index') }}" class="nav-link"><i
                             class="fas fa-wallet"></i><span>Driver Wallets</span></a>
@@ -118,15 +130,15 @@
                 </li>
             @endif
             {{-- Owner Recipits --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Payments'))
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Jobs Information'))
                 <li class="dropdown {{ request()->is('admin/reports*') ? 'active' : '' }}">
-                    <a href="{{ route('payment.index') }}" class="nav-link"><i
-                            class="fas fa-receipt"></i><span>Jobs Infromation</span></a>
+                    <a href="{{ route('payment.index') }}" class="nav-link"><i class="fas fa-receipt"></i><span>Jobs
+                            Infromation</span></a>
                 </li>
             @elseif (auth()->guard('admin')->check())
                 <li class="dropdown {{ request()->is('admin/reports*') ? 'active' : '' }}">
-                    <a href="{{ route('payment.index') }}" class="nav-link"><i
-                            class="fas fa-receipt"></i><span>Jobs Infromation</span></a>
+                    <a href="{{ route('payment.index') }}" class="nav-link"><i class="fas fa-receipt"></i><span>Jobs
+                            Infromation</span></a>
                 </li>
             @endif
             {{-- Vehicles --}}
@@ -156,7 +168,7 @@
             @endif --}}
 
             {{-- Push Notifications --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Notification'))
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Notifcations'))
                 <li class="dropdown {{ request()->is('admin/notifications*') ? 'active' : '' }}">
                     <a href="{{ route('notifications.index') }}" class="nav-link">
                         <i class="fas fa-bell"></i>
@@ -173,7 +185,7 @@
             @endif
 
             {{-- Driver Reviews --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('DriverReviews'))
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Driver Ranking'))
                 <li class="dropdown {{ request()->is('admin/driverReviews*') ? 'active' : '' }}">
                     <a href="{{ route('driverreview.index') }}" class="nav-link">
                         <i class="fas fa-bell"></i>
@@ -189,7 +201,7 @@
                 </li>
             @endif
             {{-- Completed Jobs --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('CompleteJob'))
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Driver Completed Job'))
                 <li class="dropdown {{ request()->is('admin/completedjobs*') ? 'active' : '' }}">
                     <a href="{{ route('completedjobs.index') }}" class="nav-link">
                         <i class="fas fa-check-circle"></i>
@@ -205,7 +217,7 @@
                 </li>
             @endif
             {{-- Privacy policies --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Privacy policies'))
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Privacy Policy'))
                 <li class="dropdown {{ request()->is('admin/Privacy-policy') ? 'active' : '' }}">
                     <a href="{{ url('/admin/Privacy-policy') }}" class="nav-link"> <i
                             class="fa fa-lock"></i><span>Privacy Policy</span></a>
@@ -217,7 +229,7 @@
                 </li>
             @endif
             {{-- Term & Conditions --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Term&Conditions'))
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Terms & Condation'))
                 <li class="dropdown {{ request()->is('admin/term-condition*') ? 'active' : '' }}">
                     <a href="{{ url('/admin/term-condition') }}" class="nav-link"> <i
                             class="fas fa-globe"></i><span>Term
@@ -232,7 +244,7 @@
             @endif
 
             {{-- About Us --}}
-            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('AboutUs'))
+            @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('About Us'))
                 <li class="dropdown {{ request()->is('admin/about-us*') ? 'active' : '' }}">
                     <a href="{{ url('/admin/about-us') }}" class="nav-link"> <i class="fas fa-globe"></i><span>About
                             Us</span></a>
