@@ -62,14 +62,14 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('dashboard', [AdminController::class, 'getdashboard']);
     Route::get('profile', [AdminController::class, 'getProfile']);
     Route::post('update-profile', [AdminController::class, 'update_profile']);
-    Route::get('Privacy-policy', [SecurityController::class, 'PrivacyPolicy'])->middleware('permission:Privacy policies');
-    Route::get('privacy-policy-edit', [SecurityController::class, 'PrivacyPolicyEdit']);
-    Route::post('privacy-policy-update', [SecurityController::class, 'PrivacyPolicyUpdate']);
-    Route::get('term-condition', [SecurityController::class, 'TermCondition'])->middleware('permission:Term&Conditions');
-    Route::get('term-condition-edit', [SecurityController::class, 'TermConditionEdit']);
-    Route::post('term-condition-update', [SecurityController::class, 'TermConditionUpdate']);
+    Route::get('Privacy-policy', [SecurityController::class, 'PrivacyPolicy'])->middleware('permission:Privacy Policy');
+    Route::get('privacy-policy-edit', [SecurityController::class, 'PrivacyPolicyEdit'])->middleware('permission:Privacy Policy');
+    Route::post('privacy-policy-update', [SecurityController::class, 'PrivacyPolicyUpdate'])->middleware('permission:Privacy Policy');
+    Route::get('term-condition', [SecurityController::class, 'TermCondition'])->middleware('permission:Terms & Condation');
+    Route::get('term-condition-edit', [SecurityController::class, 'TermConditionEdit'])->middleware('permission:Terms & Condation');
+    Route::post('term-condition-update', [SecurityController::class, 'TermConditionUpdate'])->middleware('permission:Terms & Condation');
 
-    Route::get('about-us', [SecurityController::class, 'AboutUs'])->middleware('permission:AboutUs');
+    Route::get('about-us', [SecurityController::class, 'AboutUs'])->middleware('permission:About Us');
     Route::get('about-us-edit', [SecurityController::class, 'AboutUsEdit']);
     Route::post('about-us-update', [SecurityController::class, 'AboutUsUpdate']);
 
@@ -89,14 +89,14 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/role-permission', [RoleController::class, 'index'])->name('roles-permission.index')->middleware('permission:Roles & Permissions');
     #######SubAdmin#######
     Route::controller(SubadminController::class)->group(function () {
-        Route::get('/subadmin',  'subadminIndex')->name('subadmin.index')->middleware('permission:SubAdmin');
-        Route::post('/subadmin-create',  'subadminCreate')->name('subadmin.create')->middleware('permission:SubAdmin');
-        Route::get('/subadminData',  'subadminData')->name('subadmin.get')->middleware('permission:SubAdmin');
-        Route::get('/subadmin/{id}',  'showSubAdmin')->name('subadmin.show')->middleware('permission:SubAdmin');
-        Route::post('/subadminUpdate/{id}',  'updateAdmin')->name('subadmin.update')->middleware('permission:SubAdmin');
-        Route::get('/subadmin/delete/{id}',  'deleteSubadmin')->name('subadmin.delete')->middleware('permission:SubAdmin');
-        Route::get('/get-permissions/{user}',  'fetchUserPermissions')->name('get.permissions')->middleware('permission:SubAdmin');
-        Route::post('/update-permissions/{user}',  'updatePermissions')->name('update.user.permissions')->middleware('permission:SubAdmin');
+        Route::get('/subadmin',  'subadminIndex')->name('subadmin.index')->middleware('permission:Sub Admin');
+        Route::post('/subadmin-create',  'subadminCreate')->name('subadmin.create')->middleware('permission:Sub Admin');
+        Route::get('/subadminData',  'subadminData')->name('subadmin.get')->middleware('permission:Sub Admin');
+        Route::get('/subadmin/{id}',  'showSubAdmin')->name('subadmin.show')->middleware('permission:Sub Admin');
+        Route::post('/subadminUpdate/{id}',  'updateAdmin')->name('subadmin.update')->middleware('permission:Sub Admin');
+        Route::get('/subadmin/delete/{id}',  'deleteSubadmin')->name('subadmin.delete')->middleware('permission:Sub Admin');
+        Route::get('/get-permissions/{user}',  'fetchUserPermissions')->name('get.permissions')->middleware('permission:Sub Admin');
+        Route::post('/update-permissions/{user}',  'updatePermissions')->name('update.user.permissions')->middleware('permission:Sub Admin');
     });
 
     Route::resource('/drivers/vehicle', VehicleController::class)->middleware('permission:Vehicles');
@@ -143,12 +143,12 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     });
     // ############## Lisence Approvel  ############
     Route::controller(LisenceApprovelController::class)->group(function () {
-        Route::get('/lisenceApprovel',  'lisenceApprovelIndex')->name('lisenceApprovel.index');
-        Route::post('/lisenceApprovel-create',  'lisenceApprovelCreate')->name('lisenceApprovel.create');
-        Route::post('/lisenceApprovelData',  'lisenceApprovelData')->name('lisenceApprovel.get');
-        Route::get('/lisenceApprovel/{id}/status',  'getStatus')->name('lisenceApprovel.status');
-        Route::post('/lisenceApprovel/{id}/update-is_active',  'updateStatus')->name('orders.update-is_active');
-        Route::get('/lisenceApprovel/counter',  'getlisenceApprovelCount')->name('lisenceApprovel.count');
+        Route::get('/lisenceApprovel',  'lisenceApprovelIndex')->name('lisenceApprovel.index')->middleware('permission:License Approval');
+        Route::post('/lisenceApprovel-create',  'lisenceApprovelCreate')->name('lisenceApprovel.create')->middleware('permission:License Approval');
+        Route::post('/lisenceApprovelData',  'lisenceApprovelData')->name('lisenceApprovel.get')->middleware('permission:License Approval');
+        Route::get('/lisenceApprovel/{id}/status',  'getStatus')->name('lisenceApprovel.status')->middleware('permission:License Approval');
+        Route::post('/lisenceApprovel/{id}/update-is_active',  'updateStatus')->name('orders.update-is_active')->middleware('permission:License Approval');
+        Route::get('/lisenceApprovel/counter',  'getlisenceApprovelCount')->name('lisenceApprovel.count')->middleware('permission:License Approval');
         // Route::delete('driver-vehicle-show/{id}',  'show')->name('driver-vehicle.show');
     });
     // ############## With Drawal Request  ############

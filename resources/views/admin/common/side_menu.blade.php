@@ -29,7 +29,7 @@
                         {{-- Business Owner --}}
                         @if (auth()->guard('web')->check() && auth()->guard('web')->user()->can('Business Owner'))
                             <li class="dropdown {{ request()->is('admin/busniessOwner*') ? 'active' : '' }}">
-                                <a href="{{ route('usniessOwner.index') }}"
+                                <a href="{{ route('busniessOwner.index') }}"
                                     class="nav-link {{ request()->is('admin/busniessOwner*') ? 'text-white' : '' }}"><i
                                         data-feather="users"></i><span>Business Owner</span></a>
                             </li>

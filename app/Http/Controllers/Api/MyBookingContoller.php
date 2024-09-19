@@ -86,9 +86,9 @@ class MyBookingContoller extends Controller
                 ->with([
                     'driver:id,fname,lname',
                     'job:id,description,date,time,job_price,price_per_hour,vehicle_id',
-                    'owner:id,fname,lname',
+                    'owner:id,fname,lname,image,email',
                     'driver.driverRewiews'
-                ])->select('owner_id', 'driver_id', 'job_id', 'payment_amount', 'location', 'status')
+                ])->select('id','owner_id', 'driver_id', 'job_id', 'payment_amount', 'location', 'status')
                 ->get();
 
             // Initialize result array
