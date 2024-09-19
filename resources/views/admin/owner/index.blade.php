@@ -392,7 +392,7 @@
                         toastr.error(response.message);
                         $('#createBusniessOwnerModal').modal('hide');
                     } else {
-                        toastr.success(response.message);
+                        toastr.success('Busniess Owner Created Successfully!');
                         $('#createBusniessOwnerModal').modal('hide');
                         reloadDataTable(); // Reload the DataTable or refresh the page content
                     }
@@ -452,7 +452,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                    toastr.success('BusniessOwner Updated Successfully!')
+                    toastr.success('Busniess Owner Updated Successfully!')
                     $('#editBusniessOwnerModal').modal('hide');
                     reloadDataTable();
                 },
@@ -484,7 +484,7 @@
                     BusniessOwnerId),
                 type: 'GET',
                 success: function(response) {
-                    toastr.success('BusniessOwner Deleted Successfully!')
+                    toastr.success('Busniess Owner Deleted Successfully!')
                     $('#deleteBusniessOwnerModal').modal('hide');
                     reloadDataTable();
                 },
@@ -525,7 +525,7 @@
         function updateStatus(button, userId, newStatus, blockReason) {
             button.prop('disabled', true);
             $.ajax({
-                url: '{{ route('driversBlock.update', ['id' => ':userId']) }}'.replace(':userId', userId),
+                url: '{{ route('busniessOwnerBlock.update', ['id' => ':userId']) }}'.replace(':userId', userId),
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',

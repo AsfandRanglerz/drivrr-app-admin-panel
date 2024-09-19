@@ -88,9 +88,7 @@ Route::middleware('jwt.verify')->group(function () {
 
     // ##################MY Booking###################
     Route::get('myBooking/{ownerId}', [MyBookingContoller::class, 'get']);
-    // ############ PERMISIONS ############
-    Route::post('addPermission', [PermissionController::class, 'store']);
-    Route::post('updatePermission', [PermissionController::class, 'update']);
+
     //  ############### Push Notifications #############
     Route::get('getNotificationCount/{userId}', [ApiPushNotificationController::class, 'getNotificationCount']);
     Route::get('/readNotifications/{userId}', [ApiPushNotificationController::class, 'userRecevied']);
@@ -114,3 +112,6 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('change-password', 'AuthController@change_password');
 });
 Route::get('/job-requests/{job_id}', 'Api\DriverJobRequestController@getJobRequestsByJob');
+// ############ PERMISIONS ############
+Route::post('addPermission', [PermissionController::class, 'store']);
+Route::post('updatePermission', [PermissionController::class, 'update']);
