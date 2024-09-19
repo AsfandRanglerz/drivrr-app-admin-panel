@@ -153,7 +153,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     });
     // ############## With Drawal Request  ############
     Route::controller(WithDrawalController::class)->group(function () {
-        Route::post('/paymentRequestData',  'paymentRequestData')->name('paymentRequest.get')->middleware('permission:WithDrawal Request');
+        Route::post('/paymentRequestData',  'paymentRequestData')->name('paymentRequest.get')->middleware('permission:Withdrawal Request');
         Route::get('/paymentRequest',  'paymentRequestIndex')->name('paymentRequest.index')->middleware('permission:Withdrawal Request');
         Route::post('/paymentRequest-create',  'paymentRequestCreate')->name('paymentRequest.create')->middleware('permission:Withdrawal Request');
         Route::get('/paymentRequest/{id}',  'showPaymentRequest')->name('paymentRequest.show')->middleware('permission:Withdrawal Request');

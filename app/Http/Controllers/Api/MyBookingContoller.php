@@ -84,7 +84,7 @@ class MyBookingContoller extends Controller
             $ownerBooking = PaymentRequest::where('owner_id', $ownerId)
                 ->whereIn('status', ['Accepted', 'CancelRide', 'Completed'])
                 ->with([
-                    'driver:id,fname,lname',
+                    'driver:id,fname,lname,phone',
                     'job:id,description,date,time,job_price,price_per_hour,vehicle_id',
                     'owner:id,fname,lname,image,email',
                     'driver.driverRewiews'
