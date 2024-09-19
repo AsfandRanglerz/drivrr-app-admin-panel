@@ -14,7 +14,7 @@ class LisenceApprovelController extends Controller
 {
     public function lisenceApprovelData()
     {
-        $lisenceApprovels = Document::with('user')->latest()->get();
+        $lisenceApprovels = Document::with('user')->whereIn('is_active',['0','1'])->latest()->get();
         $json_data["data"] =  $lisenceApprovels;
         return json_encode($json_data);
     }
