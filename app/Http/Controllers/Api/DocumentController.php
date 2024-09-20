@@ -18,7 +18,7 @@ class DocumentController extends Controller
      */
     public function index($id)
     {
-        $data = Document::where('user_id', $id)->get();
+        $data = Document::where('user_id', $id)->whereIn('is_active',['0','1'])->get();
         return response()->json([
             'document' => $data,
             'status' => "success",
