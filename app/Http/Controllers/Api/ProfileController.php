@@ -39,8 +39,10 @@ class ProfileController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            $firstError = $validator->errors()->first();
+            return response()->json(['status'=>'error','message' => $firstError],422);
         }
+
 
         $user = User::find($id);
 
