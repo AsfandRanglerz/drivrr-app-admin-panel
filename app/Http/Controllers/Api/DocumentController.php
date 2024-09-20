@@ -18,9 +18,9 @@ class DocumentController extends Controller
      */
     public function index($id)
     {
-        $data = User::with('document')->find($id);
+        $data = Document::where('user_id', $id)->get();
         return response()->json([
-            'user' => $data,
+            'document' => $data,
             'status' => "success",
         ], 200);
     }
