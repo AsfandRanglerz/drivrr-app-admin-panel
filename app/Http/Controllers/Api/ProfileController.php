@@ -35,14 +35,11 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'fname' => 'required',
-            'lname' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|max:255|unique:users,email,' . $id,
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError($validator->errors()->first());
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
         $user = User::find($id);
@@ -60,7 +57,18 @@ class ProfileController extends Controller
             'company_name' => $request->company_name,
             'company_info' => $request->company_info,
         ]);
-
+        if ($request->hasFile('image')) {
+            $oldImagePath = $user->image;
+            if ($user->image &&  File::exists($oldImagePath)) {
+                File::delete($oldImagePath);
+            }
+            $image = $request->file('image');
+            $thumbnail_name = time() . '.' . $image->getClientOriginalExtension();
+            $thumbnail_path = 'public/admin/assets/images/users/' . $thumbnail_name;
+            $image->move(public_path('admin/assets/images/users'), $thumbnail_name);
+            $user->image = $thumbnail_path;
+            $user->save();
+        }
         // Fetch the updated user data
         $updatedUser = User::with('roles')->find($id);
         if ($updatedUser) {
