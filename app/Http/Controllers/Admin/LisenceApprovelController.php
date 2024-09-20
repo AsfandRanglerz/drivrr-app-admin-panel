@@ -4,17 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Document;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Models\PushNotification;
 use App\Mail\driverLisenceApprovel;
+use App\Http\Controllers\Controller;
 use App\Mail\driverLisenceRejection;
 use Illuminate\Support\Facades\Mail;
+use App\Helpers\FcmNotificationHelper;
 use Illuminate\Support\Facades\Validator;
 
 class LisenceApprovelController extends Controller
 {
     public function lisenceApprovelData()
     {
-        $lisenceApprovels = Document::with('user')->whereIn('is_active',['0','1'])->latest()->get();
+        $lisenceApprovels = Document::with('user')->whereIn('is_active', ['0', '1'])->latest()->get();
         $json_data["data"] =  $lisenceApprovels;
         return json_encode($json_data);
     }
@@ -52,9 +54,23 @@ class LisenceApprovelController extends Controller
                 $data['rejection_reason'] =  $lisenceApprovel->rejection_reason;
                 Mail::to($lisenceApprovel->user->email)->send(new driverLisenceRejection($data));
             } else {
-                $data['drivername'] =  $lisenceApprovel->user->fname . ' ' .  $lisenceApprovel->user->lname;
-                $data['driveremail'] =  $lisenceApprovel->user->email;
-                Mail::to($lisenceApprovel->user->email)->send(new driverLisenceApprovel($data));
+                $fcmToken = $lisenceApprovel->user->fcm_token;
+                $notificationData = [
+                    'job_id' => 'Document Activation Status',
+                ];
+                if (!is_null($fcmToken)) {
+                    FcmNotificationHelper::sendFcmNotification($fcmToken, 'Document Activation Status', 'Congartulations! your License has been approved.', $notificationData);
+                    PushNotification::create([
+                        'title' => 'Document Activation Status',
+                        'description' => 'Congartulations! your License has been approved.',
+                        'user_name' => $lisenceApprovel->user->fname . ' ' . $lisenceApprovel->user->lname,
+                        'user_id' => $lisenceApprovel->user->id,
+                        'admin' => 'Admin', // Static value for admin
+                    ]);
+                }
+                // $data['drivername'] =  $lisenceApprovel->user->fname . ' ' .  $lisenceApprovel->user->lname;
+                // $data['driveremail'] =  $lisenceApprovel->user->email;
+                // Mail::to($lisenceApprovel->user->email)->send(new driverLisenceApprovel($data));
             }
             $lisenceApprovel->save();
             return response()->json(['alert' => 'success', 'message' => 'Status updated successfully']);
