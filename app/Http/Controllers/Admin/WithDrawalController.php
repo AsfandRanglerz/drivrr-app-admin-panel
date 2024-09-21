@@ -6,9 +6,11 @@ use App\Models\User;
 use App\Mail\paymentProof;
 use App\Models\DriverWallet;
 use Illuminate\Http\Request;
+use App\Models\PushNotification;
 use App\Models\WithdrawalRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use App\Helpers\FcmNotificationHelper;
 use Illuminate\Support\Facades\Validator;
 
 class WithDrawalController extends Controller
@@ -79,6 +81,20 @@ class WithDrawalController extends Controller
                 ->decrement('total_earning', $paymentRequest->withdrawal_amount);
             $paymentRequest->save();
             if ($paymentRequest) {
+                $notificationData = [
+                    'job_id' => 'Withdrawal Request Approved',
+                ];
+                $fcmToken =  $paymentRequest->user->fcm_token;
+                if (!is_null($fcmToken)) {
+                    FcmNotificationHelper::sendFcmNotification($fcmToken, 'Withdrawal Request Approved', 'Your withdrawal request has been approved. The funds will be transferred to your account shortly.', $notificationData);
+                    PushNotification::create([
+                        'title' => 'Withdrawal Request Approved',
+                        'description' => 'Your withdrawal request has been approved. The funds will be transferred to your account shortly.',
+                        'user_name' => $paymentRequest->user->fname . ' ' . $paymentRequest->user->lname,
+                        'user_id' => $paymentRequest->user->id,
+                        'admin' => 'Admin', // Static value for admin
+                    ]);
+                }
                 $data['username'] =  $paymentRequest->user->fname . ' ' .  $paymentRequest->user->lname;
                 $data['useremail'] =  $paymentRequest->user->email;
                 $data['withdrawal_amount'] =  $paymentRequest->withdrawal_amount;
