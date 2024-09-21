@@ -31,7 +31,7 @@ class DriverWalletController extends Controller
                 'withdrawal_amount' => $request->withdrawal_amount,
                 'account_id' => $active_account->id,
             ]);
-     
+
             return response()->json([
                 'message' => 'Request Send successfully.',
                 'status' => 'Success.',
@@ -46,8 +46,7 @@ class DriverWalletController extends Controller
     }
     public function getWalletDetails($walletId)
     {
-        $driverWallet = DriverWallet::with('driver')
-            ->where('driver_id', $walletId)
+        $driverWallet = DriverWallet::where('driver_id', $walletId)
             ->first();
         if ($driverWallet) {
             return response()->json([
