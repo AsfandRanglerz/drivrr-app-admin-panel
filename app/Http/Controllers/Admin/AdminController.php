@@ -149,22 +149,26 @@ class AdminController extends Controller
         } elseif ($admin) {
             $admin->update(['password' => $password]);
             DB::table('password_resets')->where('email', $request->email)->delete();
-            return redirect('admin-login')->with([ 'message' => 'Password reset successfully']);
+            return redirect('admin-login')->with(['message' => 'Password reset successfully']);
         }
 
         return back()->with(['error' => 'Invalid email or user not found']);
     }
-    public function logout()
+    public function logout(Request $request)
     {
-        if (auth()->guard('web')->check()) {
+        if (Auth::guard('web')->check()) {
             Auth::guard('web')->logout();
-            return redirect('/admin-login')->with(['status' => true, 'message' => 'Log Out Successfully']);
-        } elseif (auth()->guard('admin')->check()) {
-            Auth::guard('admin')->logout();
-            return redirect('/admin-login')->with(['status' => true, 'message' => 'Log Out Successfully']);
-        } else {
-            return redirect('/admin-login');
         }
-    }
 
+        if (Auth::guard('admin')->check()) {
+            Auth::guard('admin')->logout();
+        }
+
+        // Invalidate session and regenerate token for security
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Redirect to login page with a message
+        return redirect('/admin-login')->with(['status' => true, 'message' => 'Log Out Successfully']);
+    }
 }
