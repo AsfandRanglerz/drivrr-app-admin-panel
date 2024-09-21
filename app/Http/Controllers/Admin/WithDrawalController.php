@@ -17,7 +17,7 @@ class WithDrawalController extends Controller
 {
     public function paymentRequestData()
     {
-        $paymentRequests = WithdrawalRequest::with('user.driverWallet')->latest()->get();
+        $paymentRequests = WithdrawalRequest::with('user.driverWallet')->where('status','0')->latest()->get();
         $json_data["data"] =  $paymentRequests;
         return json_encode($json_data);
     }
