@@ -9,6 +9,7 @@
             <div class="section-body">
                 <div class="row">
                     <div class="col-12 col-md-12 col-lg-12">
+                        <a class="btn btn-dark mb-3" href="{{ route('busniessOwner.index') }}">Back</a>
                         <div class="card">
                             <div class="card-header">
                                 <div class="col-12">
@@ -16,7 +17,6 @@
                                 </div>
                             </div>
                             <div class="card-body table-responsive">
-                                <a class="btn btn-primary mb-3" href="{{ url()->previous() }}">Back</a>
                                 {{-- <a class="btn btn-success mb-3" href="{{ route('driver-vehicle.create',$data->id) }}">Add Vehicle</a> --}}
                                 <table class="table table-striped table-bordered  text-center" id="table-1">
                                     <thead>
