@@ -159,16 +159,11 @@ class AdminController extends Controller
         if (Auth::guard('web')->check()) {
             Auth::guard('web')->logout();
         }
-
         if (Auth::guard('admin')->check()) {
             Auth::guard('admin')->logout();
         }
-
-        // Invalidate session and regenerate token for security
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        // Redirect to login page with a message
         return redirect('/admin-login')->with(['status' => true, 'message' => 'Log Out Successfully']);
     }
 }
