@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\PushNotificationController as ApiPushNotificationCo
 Route::middleware('jwt.verify')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refreshToken', [AuthController::class, 'refresh']);
+    Route::post('singleChat', [AuthController::class, 'singleChat']);
     Route::get('user-profile/{id}', 'Api\ProfileController@show');
     Route::post('edit-profile/{id}', 'Api\ProfileController@update');
     Route::get('users-imageget/{id}', 'Api\ProfileController@getImage');
