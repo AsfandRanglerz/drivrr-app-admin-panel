@@ -66,7 +66,7 @@ class DriverWalletController extends Controller
     public function showWithDrawalInfo($userId)
     {
         $driverRequest = WithdrawalRequest::where('driver_id', $userId)->select('id', 'driver_id', 'withdrawal_amount', 'status')->get();
-        if ($driverRequest->isNotEmpty()) {
+        if ($driverRequest->isEmpty()) {
             return response()->json([
                 'status' => 'failed',
                 'message' => 'No Request found!',
@@ -74,7 +74,7 @@ class DriverWalletController extends Controller
         } else {
             return response()->json([
                 'status' => 'Success',
-                ' driverRequest' =>    $driverRequest,
+                'driverRequest' => $driverRequest,
             ], 200);
         }
     }
