@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use App\Mail\paymentProof;
+use App\Models\DriverWallet;
 use Illuminate\Http\Request;
 use App\Models\WithdrawalRequest;
 use App\Http\Controllers\Controller;
@@ -74,6 +75,8 @@ class WithDrawalController extends Controller
                 ], 400);
             }
             $paymentRequest->status = 1;
+            DriverWallet::where('driver_id', $paymentRequest->driver_id)
+                ->decrement('total_earning', $paymentRequest->withdrawal_amount);
             $paymentRequest->save();
             if ($paymentRequest) {
                 $data['username'] =  $paymentRequest->user->fname . ' ' .  $paymentRequest->user->lname;
