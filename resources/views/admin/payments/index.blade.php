@@ -31,9 +31,9 @@
                                             <th>Price Per Hour</th>
                                             <th>Total Days</th>
                                             <th>Hours</th>
-                                            <th>Single Job Price</th>
-                                            <th>Total Amount</th>
-                                            <th>Remaining Days</th>
+                                            <th>Total Price Per Hour</th>
+                                            <th>Total Single Job Price</th>
+                                            <th>Long Term Job Remaining Days</th>
                                             <th>Last Completion Date</th>
                                             <th>Status</th>
                                         </tr>
@@ -126,33 +126,43 @@
                     {
                         "data": "job.price_per_hour",
                         "render": function(data, type) {
-                            return data ? '£' + data : 'No Data Found!';
+                            return data ? '£' + data : '£0';
                         }
                     },
 
                     {
                         "data": "job.days",
                         "render": function(data, type) {
-                            return data ? data : 'No Data Found!';
+                            return data ? data + 'days' : '£0';
                         }
                     },
                     {
                         "data": "job.hours",
                         "render": function(data, type) {
-                            return (data == null) ?
-                                'No Data Found!' : data;
+                            return data ? data + 'hours' : '£0';
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function(data, type, row) {
+                            if (data.job.job_type == 'Long Term') {
+                                let pricePerHour = data.job.price_per_hour ? data.job
+                                    .price_per_hour : 0;
+                                let hours = data.job.hours ? data.job.hours : 0;
+                                let days = data.job.days ? data.job.days : 0;
+                                let totalPrice = pricePerHour * hours * days;
+
+                                // Display the formula in text form
+                                return `(${pricePerHour} x ${hours}) x ${days} = £${totalPrice}`;
+                            } else {
+                                return 'No Data Found!';
+                            }
                         }
                     },
                     {
                         "data": "job.job_price",
                         "render": function(data, type) {
-                            return data ? '£' + data : 'No Data Found!';
-                        }
-                    },
-                    {
-                        "data": "payment_amount",
-                        "render": function(data, type) {
-                            return data ? '£' + data : 'No Data Found!';
+                            return data ? '£' + data : '£0';
                         }
                     },
                     {
