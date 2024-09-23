@@ -196,4 +196,5 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/reports', [HandelBusinessOwnerPayments::class, 'report'])->name('payment.index')->middleware('permission:Driver Completed Job');
     Route::get('/completedjobs', [HandelBusinessOwnerPayments::class, 'completeJobs'])->name('completedjobs.index')->middleware('permission:Driver Completed Job');
     Route::get('/completedJobGet', [HandelBusinessOwnerPayments::class, 'completeJobGet'])->name('completedjobs.get')->middleware('permission:Driver Completed Job');
+    Route::get('/completedJobGetIndex', [HandelBusinessOwnerPayments::class, 'completeJobsIndex'])->name('completedjobsIndex.get')->middleware('permission:Driver Completed Job');
 });

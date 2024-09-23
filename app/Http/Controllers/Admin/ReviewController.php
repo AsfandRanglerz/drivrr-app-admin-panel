@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Log;
 use App\Models\User;
 use App\Models\Review;
+use App\Models\RoleUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\RoleUser;
 
 class ReviewController extends Controller
 {
@@ -33,9 +34,14 @@ class ReviewController extends Controller
                 $reviewsForDriver = Review::where('driver_id', $driverId)->get();
                 $driverReviews[$driverId]['reviews'] = $reviewsForDriver->toArray();
             } else {
-                echo "Driver with ID {$driverId} not found.\n";
+                // Log or handle the case where the driver does not exist
+                // For example, log the missing driver and continue with other drivers.
+                Log::warning("Driver with ID {$driverId} not found.");
+                continue; // Skip to the next iteration if driver is not found
             }
         }
+
+        // Sort the array by averageRating in descending order
         usort($driverReviews, function ($a, $b) {
             return $b['averageRating'] <=> $a['averageRating'];
         });
