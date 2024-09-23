@@ -25,12 +25,14 @@
                                             <th>Driver Name</th>
                                             <th>Driver Email</th>
                                             <th>Job Type</th>
-                                            <th>Price Per Hour</th>
-                                            <th>Single Job Price</th>
+                                            <th>Date</th>
                                             <th>Drop off location</th>
                                             <th>Pick up location</th>
-                                            <th>Date</th>
+                                            <th>Price Per Hour</th>
                                             <th>Total Days</th>
+                                            <th>Hours</th>
+                                            <th>Single Job Price</th>
+                                            <th>Total Amount</th>
                                             <th>Remaining Days</th>
                                             <th>Last Completion Date</th>
                                             <th>Status</th>
@@ -110,15 +112,9 @@
 
                     },
                     {
-                        "data": "job.price_per_hour",
+                        "data": "job.date",
                         "render": function(data, type) {
-                            return data ? '£' + data : 'No Data Found!';
-                        }
-                    },
-                    {
-                        "data": "job.job_price",
-                        "render": function(data, type) {
-                            return data ? '£' + data : 'No Data Found!';
+                            return data ? data : 'No Data Found!';
                         }
                     },
                     {
@@ -128,15 +124,35 @@
                         "data": "job.pick_up_location"
                     },
                     {
-                        "data": "job.date",
+                        "data": "job.price_per_hour",
+                        "render": function(data, type) {
+                            return data ? '£' + data : 'No Data Found!';
+                        }
+                    },
+
+                    {
+                        "data": "job.days",
                         "render": function(data, type) {
                             return data ? data : 'No Data Found!';
                         }
                     },
                     {
-                        "data": "job.days",
+                        "data": "job.hours",
                         "render": function(data, type) {
-                            return data ? data : 'No Data Found!';
+                            return (data == null) ?
+                                'No Data Found!' : data;
+                        }
+                    },
+                    {
+                        "data": "job.job_price",
+                        "render": function(data, type) {
+                            return data ? '£' + data : 'No Data Found!';
+                        }
+                    },
+                    {
+                        "data": "payment_amount",
+                        "render": function(data, type) {
+                            return data ? '£' + data : 'No Data Found!';
                         }
                     },
                     {

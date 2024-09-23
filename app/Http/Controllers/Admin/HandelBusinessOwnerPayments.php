@@ -15,7 +15,7 @@ class HandelBusinessOwnerPayments extends Controller
         $paymentRequests = PaymentRequest::with([
             'owner:id,fname,lname,email',
             'driver:id,fname,lname,email',
-            'job:id,job_type,days,remaining_day,drop_off_location,pick_up_location,last_completion_date,price_per_hour,job_price,date'
+            'job:id,job_type,days,remaining_day,drop_off_location,pick_up_location,last_completion_date,price_per_hour,job_price,date,hours'
         ])
             ->whereIn('status', ['Accepted', 'Completed'])
             ->latest()
