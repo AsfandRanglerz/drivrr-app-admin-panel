@@ -155,7 +155,7 @@
                                 // Display the formula in text form
                                 return `(${pricePerHour} x ${hours}) x ${days} = £${totalPrice}`;
                             } else {
-                                return 'No Data Found!';
+                                return '£0';
                             }
                         }
                     },
