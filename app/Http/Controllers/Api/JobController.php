@@ -130,6 +130,11 @@ class JobController extends Controller
                 'on_vehicle' => $request->on_vehicle,
                 'payment_request' => $request->payment_request,
                 'remaining_day' => $request->days,
+                'pick_up_long'=>$request->pick_up_long,
+                'pick_up_late'=>$request->pick_up_late,
+                'drop_off_long'=>$request->drop_off_long,
+                'drop_off_late'=>$request->drop_off_late
+
             ]);
 
             // Send Notifications to Drivers
