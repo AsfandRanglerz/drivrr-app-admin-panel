@@ -36,7 +36,7 @@ class HandelBusinessOwnerPayments extends Controller
             ->get();
 
         // return  $paymentRequests;
-        return view('admin.payments.index', compact('paymentRequests'));
+        return view('admin.jobinformation.index', compact('paymentRequests'));
     }
     public function completeJobs()
     {
