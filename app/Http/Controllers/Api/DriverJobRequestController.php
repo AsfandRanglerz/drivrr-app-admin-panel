@@ -30,9 +30,9 @@ class DriverJobRequestController extends Controller
             $driver = User::find($driver_id);
             $job = Job::find($job_id);
             $location = User::where('id', $driver_id)->value('location');
-            $approve_document = Document::where('user_id', $driver_id)->value('is_active');
+            $approve_document = Document::where('user_id', $driver_id)->where('is_active', 1);
             // return  $approve_document;
-            if ($approve_document == 1) {
+            if ($approve_document) {
                 $driver_job_request = PaymentRequest::create([
                     'owner_id' => $owner_id,
                     'driver_id' => $driver_id,
@@ -151,7 +151,7 @@ class DriverJobRequestController extends Controller
     {
         try {
             $jobRequests = PaymentRequest::where('driver_id', $driver_id)->select('id', 'owner_id', 'driver_id', 'job_id', 'payment_amount', 'location', 'status')
-                ->with('job.vehicle', 'owner:id,fname,lname,phone,image','driver:id,fname,lname,image,email')
+                ->with('job.vehicle', 'owner:id,fname,lname,phone,image', 'driver:id,fname,lname,image,email')
                 ->get();
 
             $buttonEnabledJobRequests = $jobRequests->filter(function ($jobRequest) {
