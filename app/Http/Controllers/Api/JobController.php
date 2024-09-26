@@ -22,7 +22,7 @@ class JobController extends Controller
     public function getJobsByUserId($user_id)
     {
         try {
-            $jobs = Job::where('user_id', $user_id)
+            $jobs = Job::where('user_id', $user_id)->where('active_job',0)
                 ->with('vehicle')
                 ->get();
 
