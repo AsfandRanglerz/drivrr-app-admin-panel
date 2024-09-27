@@ -82,7 +82,6 @@ class MyBookingContoller extends Controller
         try {
             // Fetch booking data with relationships
             $ownerBooking = PaymentRequest::where('owner_id', $ownerId)
-                ->where('status', 'Accepted')
                 ->with([
                     'driver:id,fname,lname,phone,image',
                     'job:id,description,date,time,job_price,price_per_hour,vehicle_id',
