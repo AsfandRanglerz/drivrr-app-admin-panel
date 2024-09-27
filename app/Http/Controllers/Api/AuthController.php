@@ -366,7 +366,7 @@ class AuthController extends Controller
 
         return response()->json(['token' => $token]);
     }
-    
+
     public function singleChat(Request $request)
     {
         try {
@@ -374,6 +374,29 @@ class AuthController extends Controller
             if ($user) {
                 $notificationData = [
                     'chat_id' => $request->chat_id,
+                    'receiver_id' => $request->receiver_id,
+                    'image' => $user->image,
+                ];
+                $title = $request->title;
+                $description = $request->body;
+                $fcmToken = $user->fcm_token;
+                FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description, $notificationData);
+                return response()->json(['success' => 'Notification sent successfully.']);
+            } else {
+                return response()->json(['error' => 'User not found.'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
+    public function ownerChat(Request $request)
+    {
+        try {
+            $user = User::find($request->receiver_id);
+            if ($user) {
+                $notificationData = [
+                    'owner_id' => $request->owner_id,
                     'receiver_id' => $request->receiver_id,
                     'image' => $user->image,
                 ];
