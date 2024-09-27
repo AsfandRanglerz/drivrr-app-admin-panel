@@ -35,27 +35,37 @@ class FcmNotificationHelper
             ],
         ];
 
-        $client = new GuzzleClient();
-        try {
-            $response = $client->post('https://fcm.googleapis.com/v1/projects/drivrr-b3f38/messages:send', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $accessToken,
-                    'Content-Type' => 'application/json',
-                ],
-                'json' => $message,
-            ]);
+        $url = 'https://fcm.googleapis.com/v1/projects/drivrr-b3f38/messages:send';
+        $headers = [
+            'Authorization: Bearer ' . $accessToken,
+            'Content-Type: application/json',
+        ];
 
-            Log::info('FCM Response: ' . $response->getBody()->getContents());
-            return response()->json([
-                'message' => 'Notification Sent Successfully',
-                'fcm' => $notificationData,  // Return the notification data in the response
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('FCM Error: ' . $e->getMessage());
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => json_encode($message),
+            CURLOPT_HTTPHEADER => $headers,
+        ]);
+
+        $response = curl_exec($curl);
+        $error = curl_error($curl);
+        curl_close($curl);
+
+        if ($error) {
+            Log::error('CURL Error: ' . $error);
             return response()->json([
                 'error' => 'Notification Send Unsuccessfully',
-                'message' => $e->getMessage(),
+                'message' => $error,
             ], 400);
         }
+
+        Log::info('FCM Response: ' . $response);
+        return response()->json([
+            'message' => 'Notification Sent Successfully',
+            'fcm' => $notificationData,
+        ], 200);
     }
 }
