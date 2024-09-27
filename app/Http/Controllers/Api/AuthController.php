@@ -375,7 +375,7 @@ class AuthController extends Controller
                 $notificationData = [
                     'chat_id' => $request->chat_id,
                     'receiver_id' => $request->receiver_id,
-                    'image' => $user->image,
+                    'image' => $request->image,
                 ];
                 $title = $request->title;
                 $description = $request->body;
@@ -398,7 +398,7 @@ class AuthController extends Controller
                 $notificationData = [
                     'owner_id' => $request->owner_id,
                     'receiver_id' => $request->receiver_id,
-                    'image' => $user->image,
+                    'image' => $request->image,
                 ];
                 $title = $request->title;
                 $description = $request->body;

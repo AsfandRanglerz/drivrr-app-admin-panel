@@ -54,10 +54,15 @@ class HelpAndSupportController extends Controller
                     'answer' => $request->answer,
                 ]);
                 $fcmToken = $query->user->fcm_token;
-                $notificationData = [
-                    'job_id' => 'Help & Support',
-                ];
-
+                if ($query->user->role_id == 2) {
+                    $notificationData = [
+                        'type' => 'Owner',
+                    ];
+                } else {
+                    $notificationData = [
+                        'type' => 'Driver',
+                    ];
+                }
                 if (!is_null($fcmToken)) {
                     FcmNotificationHelper::sendFcmNotification($fcmToken, 'Help & Support', 'The Admin has responded to your query.', $notificationData);
                     PushNotification::create([
