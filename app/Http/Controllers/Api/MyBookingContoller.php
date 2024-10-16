@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use App\Models\PaymentRequest;
@@ -18,7 +19,7 @@ class MyBookingContoller extends Controller
             $ownerBooking = PaymentRequest::where('owner_id', $ownerId)
                 ->with([
                     'driver:id,fname,lname,phone,image',
-                    'job:id,description,date,time,job_price,price_per_hour,vehicle_id',
+                    'job:id,description,days,date,time,job_price,price_per_hour,vehicle_id,pick_up_long,pick_up_late,drop_off_long,drop_off_late,drop_off_location,pick_up_location',
                     'owner:id,fname,lname,image,email',
                     'driver.driverRewiews'
                 ])->select('id', 'owner_id', 'driver_id', 'job_id', 'payment_amount', 'location', 'status')
@@ -32,22 +33,17 @@ class MyBookingContoller extends Controller
                 $driver = $data->driver;
                 $job = $data->job;
                 $owner = $data->owner;
-
-                // Filter driver vehicles by job's vehicle_id
-                $filteredDriverVehicles = $driver->driverVehicle // Assuming the relationship is named driverVehicles
+                $filteredDriverVehicles = $driver->driverVehicle
                     ->where('vehicle_id', $job->vehicle_id)
                     ->values()
                     ->all();
-
-                // Calculate days left and check if the job is today
-                $daysLeft = now()->diffInDays($job->date, false);
-                $isToday = now()->isSameDay($job->date);
-
+                $jobEndDate = Carbon::parse($job->date)->addDays($job->days - 1);
+                $isToday = now()->between($job->date, $jobEndDate);
                 $result[] = [
                     'payment_request' => $data,
                     'filtered_driver_vehicles' => $filteredDriverVehicles,
                     'owner_details' => $owner,
-                    'days_left' => $daysLeft,
+                    'days_left' => now()->diffInDays($jobEndDate, false),
                     'is_today' => $isToday,
                 ];
             }
