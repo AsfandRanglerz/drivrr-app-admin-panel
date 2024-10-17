@@ -277,7 +277,7 @@ class OwnerGetJobREquests extends Controller
                 return response()->json([
                     'status' => 'in_progress',
                     'message' => $statusMessage
-                ], 200);
+                ], 400);
             }
 
             if ($startDate->lte($currentDate)) {
