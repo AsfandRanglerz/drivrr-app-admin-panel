@@ -337,7 +337,7 @@ class AuthController extends Controller
                 }
 
                 // Generate token
-                $token = $user->createToken($user->email)->plainTextToken;
+                $token = JWTAuth::fromUser($user);
 
                 return response()->json([
                     'status' => 'ok',
