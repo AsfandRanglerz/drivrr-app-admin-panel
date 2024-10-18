@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 class MyBookingContoller extends Controller
 {
 
+
     // public function get($ownerId)
     // {
     //     try {
@@ -33,17 +34,27 @@ class MyBookingContoller extends Controller
     //             $driver = $data->driver;
     //             $job = $data->job;
     //             $owner = $data->owner;
+
     //             $filteredDriverVehicles = $driver->driverVehicle
     //                 ->where('vehicle_id', $job->vehicle_id)
     //                 ->values()
     //                 ->all();
-    //             $jobEndDate = Carbon::parse($job->date)->addDays($job->days - 1);
-    //             $isToday = now()->between($job->date, $jobEndDate);
+
+    //             $jobStartDate = Carbon::parse($job->date);
+    //             $jobEndDate = $jobStartDate->copy()->addDays($job->days - 1);
+    //             $today = now();
+
+    //             // Calculate days left until job starts
+    //             $daysLeft = $today->diffInDays($jobStartDate, false); // Returns positive if job starts in the future
+
+    //             // Check if today is the job date
+    //             $isToday = $today->isToday() && $today->isBetween($jobStartDate, $jobEndDate);
+
     //             $result[] = [
     //                 'payment_request' => $data,
     //                 'filtered_driver_vehicles' => $filteredDriverVehicles,
     //                 'owner_details' => $owner,
-    //                 'days_left' => now()->diffInDays($jobEndDate, false),
+    //                 'days_left' => $daysLeft >= 0 ? $daysLeft : 0, // Set to 0 if the job has already started
     //                 'is_today' => $isToday,
     //             ];
     //         }
@@ -121,14 +132,19 @@ class MyBookingContoller extends Controller
                 // Calculate days left until job starts
                 $daysLeft = $today->diffInDays($jobStartDate, false); // Returns positive if job starts in the future
 
-                // Check if today is the job date
-                $isToday = $today->isToday() && $today->isBetween($jobStartDate, $jobEndDate);
+                // Check if job is exactly today
+                $isToday = $today->isSameDay($jobStartDate);
+
+                // Set daysLeft to null if the job is today
+                if ($isToday) {
+                    $daysLeft = null;
+                }
 
                 $result[] = [
                     'payment_request' => $data,
                     'filtered_driver_vehicles' => $filteredDriverVehicles,
                     'owner_details' => $owner,
-                    'days_left' => $daysLeft >= 0 ? $daysLeft : 0, // Set to 0 if the job has already started
+                    'days_left' => $daysLeft >= 0 ? $daysLeft : 0, // Set to 0 if the job has already started, except if today
                     'is_today' => $isToday,
                 ];
             }
