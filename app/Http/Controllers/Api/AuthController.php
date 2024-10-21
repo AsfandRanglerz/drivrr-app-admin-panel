@@ -54,7 +54,7 @@ class AuthController extends Controller
 
             $user->save();
             $user->roles()->sync([$request->role_id]);
-            $token = JWTAuth::fromUser($user);
+            $token = $user->createToken('loginToken')->plainTextToken;
             auth()->login($user);
             $response = [
                 'status' => 'success',
@@ -161,7 +161,7 @@ class AuthController extends Controller
                 $user->fcm_token = $request->fcm_token;
                 $user->save();
                 DB::table('user_login_with_otps')->where('id', $user_otp->id)->delete();
-                $token = JWTAuth::fromUser($user);
+                $token = $user->createToken('loginToken')->plainTextToken;
                 return response()->json([
                     'message' => 'OTP verified successfully.',
                     'status' => 'success',
@@ -216,46 +216,20 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         try {
-            $token = $request->bearerToken();
-            if ($token) {
-                try {
-                    $user = JWTAuth::setToken($token)->authenticate();
-                    if ($user) {
-                        $user->update([
-                            'fcm_token' => NULL,
-                        ]);
-                        JWTAuth::setToken($token)->invalidate();
-                        return response()->json([
-                            'status' => 'success',
-                            'message' => 'Logout Successfully!',
-                        ], 200);
-                    } else {
-                        return response()->json([
-                            'status' => 'error',
-                            'message' => 'Invalid Token.',
-                        ], 401);
-                    }
-                } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Token expired.',
-                    ], 401);
-                } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Invalid Token.',
-                    ], 401);
-                } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Token authentication failed.',
-                        'error' => $e->getMessage(),
-                    ], 500);
-                }
+            $user = $request->user();
+            if ($user) {
+                $user->update([
+                    'fcm_token' => NULL,
+                ]);
+                $request->user()->currentAccessToken()->delete();
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Logout Successfully!',
+                ], 200);
             } else {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'No Token Found',
+                    'message' => 'Invalid Token.',
                 ], 401);
             }
         } catch (\Exception $e) {
@@ -337,7 +311,7 @@ class AuthController extends Controller
                 }
 
                 // Generate token
-                $token = JWTAuth::fromUser($user);
+                $token = $user->createToken('loginToken')->plainTextToken;
 
                 return response()->json([
                     'status' => 'ok',
@@ -359,13 +333,6 @@ class AuthController extends Controller
         ], 400);
     }
 
-    public function refresh()
-    {
-        $user = JWTAuth::user();
-        $token = JWTAuth::refresh();
-
-        return response()->json(['token' => $token]);
-    }
 
     public function singleChat(Request $request)
     {
