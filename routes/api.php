@@ -21,7 +21,7 @@ use App\Http\Controllers\Api\PushNotificationController as ApiPushNotificationCo
 |
 */
 
-Route::middleware('jwt.verify')->group(function () {
+Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refreshToken', [AuthController::class, 'refresh']);
     Route::post('singleChat', [AuthController::class, 'singleChat']);
