@@ -5,17 +5,19 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 
-use Illuminate\Support\Str;
+use App\Models\admin;
 
+use Illuminate\Support\Str;
 use App\Models\DriverWallet;
 use Illuminate\Http\Request;
+use App\Mail\accountDeletion;
 use App\Mail\ActiveUserStatus;
 use App\Mail\LoginUserWithOtp;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
+
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Helpers\FcmNotificationHelper;
@@ -372,6 +374,23 @@ class AuthController extends Controller
                 $fcmToken = $user->fcm_token;
                 FcmNotificationHelper::sendFcmNotification($fcmToken, $title, $description, $notificationData);
                 return response()->json(['success' => 'Notification sent successfully.']);
+            } else {
+                return response()->json(['error' => 'User not found.'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
+    public function deleteAccount($userId)
+    {
+
+        try {
+            $admin = admin::firstOrFail();
+            $user = User::firstOrFail($userId);
+            if ($user) {
+                Mail::to($admin->email)->send(new accountDeletion($user));
+                return response()->json(['success' => 'Request for account deletion sent successfully']);
             } else {
                 return response()->json(['error' => 'User not found.'], 404);
             }
