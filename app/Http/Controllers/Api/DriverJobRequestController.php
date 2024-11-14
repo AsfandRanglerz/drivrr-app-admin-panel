@@ -147,15 +147,49 @@ class DriverJobRequestController extends Controller
             ], 500);
         }
     }
+    // public function getJobRequestsByJob($driver_id)
+    // {
+    //     try {
+    //         $jobRequests = PaymentRequest::where('driver_id', $driver_id)->select('id', 'owner_id', 'driver_id', 'job_id', 'payment_amount', 'location', 'status')
+    //             ->with('job.vehicle', 'owner:id,fname,lname,phone,image', 'driver:id,fname,lname,image,email')
+    //             ->get();
+
+    //         $buttonEnabledJobRequests = $jobRequests->filter(function ($jobRequest) {
+    //             return $jobRequest->job->date == now()->format('d-m-Y') && $jobRequest->status == 'Accepted';
+    //         });
+
+    //         $responseJobRequests = $jobRequests->map(function ($jobRequest) use ($buttonEnabledJobRequests) {
+    //             return [
+    //                 'jobRequest' => $jobRequest,
+    //                 'buttonCondition' => $buttonEnabledJobRequests->contains($jobRequest),
+    //             ];
+    //         });
+
+    //         return response()->json([
+    //             'message' => 'Job requests fetched successfully.',
+    //             'status' => 'success',
+    //             'jobRequests' => $responseJobRequests,
+    //         ], 200);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'message' => 'Error fetching job requests.',
+    //             'status' => 'Error',
+    //             'error' => $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
     public function getJobRequestsByJob($driver_id)
     {
         try {
-            $jobRequests = PaymentRequest::where('driver_id', $driver_id)->select('id', 'owner_id', 'driver_id', 'job_id', 'payment_amount', 'location', 'status')
+            $jobRequests = PaymentRequest::where('driver_id', $driver_id)
+                ->select('id', 'owner_id', 'driver_id', 'job_id', 'payment_amount', 'location', 'status')
                 ->with('job.vehicle', 'owner:id,fname,lname,phone,image', 'driver:id,fname,lname,image,email')
                 ->get();
 
             $buttonEnabledJobRequests = $jobRequests->filter(function ($jobRequest) {
-                return $jobRequest->job->date == now()->format('d-m-Y') && $jobRequest->status == 'Accepted';
+                return $jobRequest->job && // Check if job exists
+                    $jobRequest->job->date == now()->format('d-m-Y') &&
+                    $jobRequest->status == 'Accepted';
             });
 
             $responseJobRequests = $jobRequests->map(function ($jobRequest) use ($buttonEnabledJobRequests) {
@@ -178,6 +212,7 @@ class DriverJobRequestController extends Controller
             ], 500);
         }
     }
+
 
     public function getJobRequestsByOwner($job_id)
     {
