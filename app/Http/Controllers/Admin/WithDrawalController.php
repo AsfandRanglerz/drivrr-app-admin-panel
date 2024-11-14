@@ -77,8 +77,6 @@ class WithDrawalController extends Controller
                 ], 400);
             }
             $paymentRequest->status = 1;
-            DriverWallet::where('driver_id', $paymentRequest->driver_id)
-                ->decrement('total_earning', $paymentRequest->withdrawal_amount);
             $paymentRequest->save();
             if ($paymentRequest) {
                 $notificationData = [
