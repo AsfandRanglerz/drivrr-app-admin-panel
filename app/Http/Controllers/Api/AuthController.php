@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 
-use App\Models\admin;
+use App\Models\Admin;
 
 use Illuminate\Support\Str;
 use App\Models\DriverWallet;
@@ -387,7 +387,7 @@ class AuthController extends Controller
 
         try {
             $admin = admin::firstOrFail();
-            $user = User::firstOrFail($userId);
+            $user = User::findOrFail($userId);
             if ($user) {
                 Mail::to($admin->email)->send(new accountDeletion($user));
                 return response()->json(['success' => 'Request for account deletion sent successfully']);

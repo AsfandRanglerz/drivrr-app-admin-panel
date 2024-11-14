@@ -26,7 +26,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('refreshToken', [AuthController::class, 'refresh']);
     Route::post('singleChat', [AuthController::class, 'singleChat']);
     Route::post('ownerChat', [AuthController::class, 'ownerChat']);
-    Route::post('account-delete/{userId}', [AuthController::class, 'deleteAccount']);
+    Route::get('account-delete/{userId}', [AuthController::class, 'deleteAccount']);
     Route::get('user-profile/{id}', 'Api\ProfileController@show');
     Route::post('edit-profile/{id}', 'Api\ProfileController@update');
     Route::get('users-imageget/{id}', 'Api\ProfileController@getImage');
