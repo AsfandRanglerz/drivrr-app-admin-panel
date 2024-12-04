@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Exception;
 use App\Models\Job;
+use App\Models\User;
 use App\Models\Driver;
 use App\Models\Review;
 use App\Models\Document;
@@ -16,11 +17,12 @@ use Illuminate\Http\Request;
 use App\Mail\VerifyDriverEmail;
 use App\Mail\driverRegistration;
 use App\Mail\SignupPasswordSend;
+use App\Models\PushNotification;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Helpers\FcmNotificationHelper;
 use Illuminate\Support\Facades\storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -146,6 +148,21 @@ class DriverController  extends Controller
                 $data['driveremail'] =  $driver->email;
                 $data['block_reason'] = $blockReason;
                 Mail::to($driver->email)->send(new driverBlock($data));
+                $title = 'Admin';
+                $description = 'Your Are Blocked!';
+                $notificationData = [
+                    'job_idd' =>  $driver->id,
+                ];
+                if (!is_null($driver->fcm_token)) {
+                    FcmNotificationHelper::sendFcmNotification($driver->fcm_token, $title, $description, $notificationData);
+                    PushNotification::create([
+                        'title' => $title,
+                        'description' => $description,
+                        'user_name' =>  $driver->id,
+                        'user_id' => $driver->id,
+
+                    ]);
+                }
             } else {
                 return response()->json(['alert' => 'info', 'message' => 'Driver status is already updated or cannot be updated.']);
             }

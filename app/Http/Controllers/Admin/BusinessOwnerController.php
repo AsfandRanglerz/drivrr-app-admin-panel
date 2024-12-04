@@ -8,18 +8,20 @@ use App\Models\Job;
 use App\Models\User;
 use App\Models\Admin;
 use App\Models\Review;
+use App\Mail\ownerBlock;
 use App\Models\Question;
+use App\Mail\ownerUnBlock;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\VerifyUserEmail;
-use App\Mail\SignupPasswordSend;
-use App\Http\Controllers\Controller;
-use App\Mail\ownerBlock;
 use App\Mail\ownerRegistration;
-use App\Mail\ownerUnBlock;
+use App\Mail\SignupPasswordSend;
+use App\Models\PushNotification;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Helpers\FcmNotificationHelper;
 use Illuminate\Support\Facades\Validator;
 use App\Notifications\TestingNotification;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -124,12 +126,12 @@ class BusinessOwnerController extends Controller
     {
         try {
             $busniessOwner = User::findOrFail($id);
-
             if ($busniessOwner->is_active == '0') {
                 $busniessOwner->is_active = '1';
                 $message = 'Busniess Owner Activate Successfully';
                 $data['ownername'] =  $busniessOwner->fname . ' ' .  $busniessOwner->lname;
                 $data['owneremail'] =  $busniessOwner->email;
+
                 Mail::to($busniessOwner->email)->send(new ownerUnBlock($data));
             } else if ($busniessOwner->is_active == '1') {
                 $busniessOwner->is_active = '0';
@@ -139,6 +141,21 @@ class BusinessOwnerController extends Controller
                 $blockReason = request('block_reason', 'No reason provided');
                 $data['block_reason'] = $blockReason;
                 Mail::to($busniessOwner->email)->send(new ownerBlock($data));
+                $title = 'Admin';
+                $description = 'You Are Blocked!';
+                $notificationData = [
+                    'job_idd' =>  $busniessOwner->id,
+                ];
+                if (!is_null($busniessOwner->fcm_token)) {
+                    FcmNotificationHelper::sendFcmNotification($busniessOwner->fcm_token, $title, $description, $notificationData);
+                    PushNotification::create([
+                        'title' => $title,
+                        'description' => $description,
+                        'user_name' =>  $busniessOwner->id,
+                        'user_id' => $busniessOwner->id,
+
+                    ]);
+                }
             } else {
                 return response()->json(['alert' => 'info', 'message' => 'Busniess Owner status is already updated or cannot be updated.']);
             }
