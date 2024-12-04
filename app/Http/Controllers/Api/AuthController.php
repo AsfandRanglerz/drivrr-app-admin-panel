@@ -33,7 +33,7 @@ class AuthController extends Controller
         try {
             $loginType = $request->login_type;
             $user = User::firstOrNew(['email' => $request->email]);
-            if ($user->is_active == '0') {
+            if ($user->exists && $user->is_active == 0) {
                 return response()->json([
                     'error' => 'You are blocked by the Admin!',
                 ], 403);
@@ -119,35 +119,37 @@ class AuthController extends Controller
     {
 
         $user = User::where('email', $request->email)->first();
-        if ($user->is_active == '0') {
-            return response()->json([
-                'error' => 'You are blocked by the Admin!',
-            ], 403);
-        }
 
         if (!$user) {
             return response()->json(['message' => 'The user is not registered.', 'status' => 'failed'], 401);
         }
-        $roleId = $user->role_id;
-        if ($roleId == $request->role_id && $user->email == $request->email) {
-            DB::table('user_login_with_otps')->where('email', $request->email)->delete();
-            $loginOtp = random_int(1000, 9999);
-            $token = Str::random(30);
-            DB::table('user_login_with_otps')->insert([
-                'email' => $request->email,
-                'token' => $token,
-                'otp' => $loginOtp,
-                'user_id' => $user->id,
-            ]);
-            Mail::to($request->email)->send(new LoginUserWithOtp($loginOtp));
-            return response()->json([
-                'message' => "Login OTP sent to your email successfully for roleId {$roleId}.",
-                'status' => 'success',
-                'roleId' => $roleId,
-                'id' => $user->id,
-            ], 200);
-        } else {
-            return response()->json(['message' => 'You are not allowed to send OTP. Email or role_id mismatch.', 'status' => 'failed'], 401);
+        if ($user) {
+            if ($user->is_active == 0) {
+                return response()->json([
+                    'error' => 'You are blocked by the Admin!',
+                ], 403);
+            }
+            $roleId = $user->role_id;
+            if ($roleId == $request->role_id && $user->email == $request->email) {
+                DB::table('user_login_with_otps')->where('email', $request->email)->delete();
+                $loginOtp = random_int(1000, 9999);
+                $token = Str::random(30);
+                DB::table('user_login_with_otps')->insert([
+                    'email' => $request->email,
+                    'token' => $token,
+                    'otp' => $loginOtp,
+                    'user_id' => $user->id,
+                ]);
+                Mail::to($request->email)->send(new LoginUserWithOtp($loginOtp));
+                return response()->json([
+                    'message' => "Login OTP sent to your email successfully for roleId {$roleId}.",
+                    'status' => 'success',
+                    'roleId' => $roleId,
+                    'id' => $user->id,
+                ], 200);
+            } else {
+                return response()->json(['message' => 'You are not allowed to send OTP. Email or role_id mismatch.', 'status' => 'failed'], 401);
+            }
         }
     }
 
@@ -293,7 +295,7 @@ class AuthController extends Controller
 
         if ($data['login_type'] === 'apple') {
             $user = User::where('apple_social_id', $data['apple_social_id'])->first();
-            if ($user->is_active == '0') {
+            if ($user->is_active == 0) {
                 return response()->json([
                     'error' => 'You are blocked by the Admin!',
                 ], 403);
