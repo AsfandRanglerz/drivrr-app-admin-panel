@@ -33,7 +33,11 @@ class AuthController extends Controller
         try {
             $loginType = $request->login_type;
             $user = User::firstOrNew(['email' => $request->email]);
-
+            if ($user->is_active == '0') {
+                return response()->json([
+                    'error' => 'You are blocked by the Admin!',
+                ], 403);
+            }
             if (!$user->exists) {
                 $user->fname = $request->fname;
                 $user->lname = $request->lname;
@@ -115,6 +119,11 @@ class AuthController extends Controller
     {
 
         $user = User::where('email', $request->email)->first();
+        if ($user->is_active == '0') {
+            return response()->json([
+                'error' => 'You are blocked by the Admin!',
+            ], 403);
+        }
 
         if (!$user) {
             return response()->json(['message' => 'The user is not registered.', 'status' => 'failed'], 401);
@@ -284,7 +293,11 @@ class AuthController extends Controller
 
         if ($data['login_type'] === 'apple') {
             $user = User::where('apple_social_id', $data['apple_social_id'])->first();
-
+            if ($user->is_active == '0') {
+                return response()->json([
+                    'error' => 'You are blocked by the Admin!',
+                ], 403);
+            }
             if ($user) {
                 $user->fcm_token = $data['fcm_token'];
                 $user->save();
