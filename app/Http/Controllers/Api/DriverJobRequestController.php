@@ -181,8 +181,8 @@ class DriverJobRequestController extends Controller
     public function getJobRequestsByJob(Request $request, $driver_id)
     {
         try {
-            $page = $request->input('page', 1);
-            $perPage = 2;
+            $page = $request->query('page', 1);
+            $perPage = $request->query('limit');
             $offset = ($page - 1) * $perPage;
             $jobRequests = PaymentRequest::where('driver_id', $driver_id)
                 ->select('id', 'owner_id', 'driver_id', 'job_id', 'payment_amount', 'location', 'status')

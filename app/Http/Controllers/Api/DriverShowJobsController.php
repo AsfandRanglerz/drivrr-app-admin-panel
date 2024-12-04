@@ -12,8 +12,11 @@ use Illuminate\Support\Facades\Validator;
 
 class DriverShowJobsController extends Controller
 {
-    public function get($userId)
+    public function get(Request $request,$userId)
     {
+        $page = $request->query('page', 1); // Default to page 1 if not provided
+        $perPage = $request->query('limit'); // Default to 10 items per page if not provided
+        $offset = ($page - 1) * $perPage;
         $getJobData = null;
 
         $userInDriverVehicles = DB::table('driver_vehicles')
@@ -28,14 +31,20 @@ class DriverShowJobsController extends Controller
                 ->where('driver_vehicles.user_id', $userId)
                 ->where('driver_vehicles.is_active', '=', '1')
                 ->where('jobs.on_vehicle', '=', '1')
+                ->where('jobs.active_job', '=', '0')
                 ->select('jobs.*', 'users.fname', 'users.lname', 'users.email', 'users.image', 'vehicles.name')
+                ->skip($offset)
+                ->take($perPage)
                 ->get();
         } else {
             $getJobData = Job::select('jobs.*', 'users.*', 'vehicles.*')
                 ->join('users', 'jobs.user_id', '=', 'users.id')
                 ->join('vehicles', 'jobs.vehicle_id', '=', 'vehicles.id')
                 ->where('jobs.on_vehicle', '=', '0')
+                ->where('jobs.active_job', '=', '0')
                 ->select('jobs.*', 'users.fname', 'users.lname', 'users.email', 'users.image', 'vehicles.name')
+                ->skip($offset)
+                ->take($perPage)
                 ->get();
         }
 

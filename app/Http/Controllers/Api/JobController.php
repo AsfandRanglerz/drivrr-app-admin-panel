@@ -19,11 +19,16 @@ use Illuminate\Support\Facades\Validator;
 
 class JobController extends Controller
 {
-    public function getJobsByUserId($user_id)
+    public function getJobsByUserId(Request $request, $user_id)
     {
         try {
-            $jobs = Job::where('user_id', $user_id)->where('active_job',0)
+            $page = $request->query('page', 1); // Default to page 1 if not provided
+            $perPage = $request->query('limit'); // Default to 10 items per page if not provided
+            $offset = ($page - 1) * $perPage;
+            $jobs = Job::where('user_id', $user_id)->where('active_job', 0)
                 ->with('vehicle')
+                ->skip($offset)
+                ->take($perPage)
                 ->get();
 
             return response()->json([
@@ -130,10 +135,10 @@ class JobController extends Controller
                 'on_vehicle' => $request->on_vehicle,
                 'payment_request' => $request->payment_request,
                 'remaining_day' => $request->days,
-                'pick_up_long'=>$request->pick_up_long,
-                'pick_up_late'=>$request->pick_up_late,
-                'drop_off_long'=>$request->drop_off_long,
-                'drop_off_late'=>$request->drop_off_late
+                'pick_up_long' => $request->pick_up_long,
+                'pick_up_late' => $request->pick_up_late,
+                'drop_off_long' => $request->drop_off_long,
+                'drop_off_late' => $request->drop_off_late
 
             ]);
 

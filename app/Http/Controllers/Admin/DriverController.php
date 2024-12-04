@@ -151,7 +151,7 @@ class DriverController  extends Controller
                 $title = 'Admin';
                 $description = 'Your Are Blocked!';
                 $notificationData = [
-                    'job_idd' =>  $driver->role_id,
+                    'role_id' =>  $driver->role_id,
                 ];
                 if (!is_null($driver->fcm_token)) {
                     FcmNotificationHelper::sendFcmNotification($driver->fcm_token, $title, $description, $notificationData);

@@ -101,8 +101,8 @@ class MyBookingContoller extends Controller
     public function get(Request $request, $ownerId)
     {
         try {
-            $page = $request->input('page', 1);
-            $perPage = 2;
+            $page = $request->query('page', 1);
+            $perPage = $request->query('limit');
             $offset = ($page - 1) * $perPage;
             $ownerBooking = PaymentRequest::where('owner_id', $ownerId)
                 ->with([

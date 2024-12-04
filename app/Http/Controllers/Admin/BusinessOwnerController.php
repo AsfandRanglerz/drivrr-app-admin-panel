@@ -144,7 +144,7 @@ class BusinessOwnerController extends Controller
                 $title = 'Admin';
                 $description = 'You Are Blocked!';
                 $notificationData = [
-                    'job_idd' =>  $busniessOwner->role_id,
+                    'role_id' =>  $busniessOwner->role_id,
                 ];
                 if (!is_null($busniessOwner->fcm_token)) {
                     FcmNotificationHelper::sendFcmNotification($busniessOwner->fcm_token, $title, $description, $notificationData);
