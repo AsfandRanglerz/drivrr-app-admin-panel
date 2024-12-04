@@ -178,12 +178,17 @@ class DriverJobRequestController extends Controller
     //         ], 500);
     //     }
     // }
-    public function getJobRequestsByJob($driver_id)
+    public function getJobRequestsByJob(Request $request, $driver_id)
     {
         try {
+            $page = $request->input('page', 1);
+            $perPage = 2;
+            $offset = ($page - 1) * $perPage;
             $jobRequests = PaymentRequest::where('driver_id', $driver_id)
                 ->select('id', 'owner_id', 'driver_id', 'job_id', 'payment_amount', 'location', 'status')
                 ->with('job.vehicle', 'owner:id,fname,lname,phone,image', 'driver:id,fname,lname,image,email')
+                ->skip($offset)
+                ->take($perPage)
                 ->get();
 
             $buttonEnabledJobRequests = $jobRequests->filter(function ($jobRequest) {

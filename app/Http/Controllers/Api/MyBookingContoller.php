@@ -98,10 +98,12 @@ class MyBookingContoller extends Controller
     //         ], 500);
     //     }
     // }
-    public function get($ownerId)
+    public function get(Request $request, $ownerId)
     {
         try {
-            // Fetch booking data with relationships
+            $page = $request->input('page', 1);
+            $perPage = 2;
+            $offset = ($page - 1) * $perPage;
             $ownerBooking = PaymentRequest::where('owner_id', $ownerId)
                 ->with([
                     'driver:id,fname,lname,phone,image',
@@ -109,6 +111,8 @@ class MyBookingContoller extends Controller
                     'owner:id,fname,lname,image,email',
                     'driver.driverRewiews'
                 ])->select('id', 'owner_id', 'driver_id', 'job_id', 'payment_amount', 'location', 'status')
+                ->skip($offset)
+                ->take($perPage)
                 ->get();
 
             // Initialize result array
