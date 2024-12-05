@@ -149,7 +149,7 @@ class DriverController  extends Controller
                 $data['block_reason'] = $blockReason;
                 Mail::to($driver->email)->send(new driverBlock($data));
                 $title = 'Admin';
-                $description = 'Your Are Blocked!';
+                $description = 'You Are Blocked!';
                 $notificationData = [
                     'role_id' =>  $driver->role_id,
                 ];
