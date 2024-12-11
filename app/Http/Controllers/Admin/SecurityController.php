@@ -79,4 +79,8 @@ class SecurityController extends Controller
         $data=TermCondition::first();
         return view('security.termcondition',compact('data'));
     }
+    public function contactUs()
+    {
+        return view('admin.contactus.index');
+    }
 }
